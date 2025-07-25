@@ -8,7 +8,11 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const app = express();
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://vsm-pantnagar.vercel.app'
+  ],
 }));
 app.use(express.json());
 
