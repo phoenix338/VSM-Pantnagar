@@ -98,7 +98,7 @@ function Home() {
     }, []);
 
     useEffect(() => {
-        fetch('http://localhost:3002/impact')
+        fetch((process.env.REACT_APP_API_URL || 'http://localhost:3002') + '/impact')
             .then(res => res.json())
             .then(data => {
                 setImpact(data);

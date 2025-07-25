@@ -14,7 +14,8 @@ function AddBook() {
         setLoading(true);
         setMessage('');
         try {
-            const res = await fetch(process.env.REACT_APP_API_URL + '/books', {
+            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+            const res = await fetch(`${API_URL}/books`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form),

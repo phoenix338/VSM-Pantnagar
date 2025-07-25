@@ -4,7 +4,8 @@ function Books() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(process.env.REACT_APP_API_URL + '/books')
+        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+        fetch(`${API_URL}/books`)
             .then(res => res.json())
             .then(data => {
                 setBooks(data);
