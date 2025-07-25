@@ -1,0 +1,76 @@
+.our-impact-root {
+    width: 100vw;
+    min-height: 100vh;
+    background: #fff;
+}
+
+.our-impact-hero {
+    width: 100vw;
+    min-height: 60vh;
+    background: #FFE7D7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 0 48px 0;
+}
+
+.our-impact-gif {
+    max-width: 700px;
+    width: 60vw;
+    height: auto;
+    display: block;
+}
+
+.our-impact-heading-section {
+    width: 100vw;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 0 32px 0;
+}
+
+.our-impact-heading {
+    font-family: 'Tangerine', cursive;
+    font-size: 4rem;
+    color: #e68346;
+    text-align: center;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.our-impact-heading-main {
+    color: #e68346;
+    font-weight: 700;
+    margin-right: 8px;
+}
+
+.our-impact-explore-section {
+    width: 100vw;
+    background: #FFE7D7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 0 48px 0;
+}
+
+.our-impact-explore-text {
+    font-family: 'Oranienbaum', serif;
+    font-size: 2.5rem;
+    color: #222;
+    text-align: center;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+@media (max-width: 900px) {
+    .our-impact-gif {
+        max-width: 95vw;
+        width: 95vw;
+    }
+
+    .our-impact-heading {
+        font-size: 2.5rem;
+    }
+}

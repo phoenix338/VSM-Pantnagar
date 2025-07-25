@@ -1,0 +1,202 @@
+.initiative-page {
+  width: 100vw;
+  min-height: 100vh;
+  background: #fdf6f1;
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.initiative-gif-wrapper {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.initiative-gif {
+  max-width: 100vw;
+  width: 70vw;
+  margin-left: 50px;
+  height: 80vh;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  margin-top: 50px;
+}
+
+.initiative-heading {
+  font-family: 'Tangerine', cursive;
+  font-style: normal;
+  font-size: 3.5rem;
+  font-weight: 500;
+  margin-bottom: 24px;
+  margin-top: 64px;
+  letter-spacing: 1px;
+}
+
+.our-initiative-heading {
+  font-family: 'Tangerine', cursive;
+  font-size: 5rem;
+  font-weight: 500;
+  color: black;
+  text-align: center;
+  margin: 32px 0 80px 0;
+  letter-spacing: 2px;
+}
+
+.initiatives-list {
+  width: 100vw;
+}
+
+.initiative-row {
+  position: relative;
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: stretch;
+  /* Make columns fill height */
+  justify-content: center;
+  scroll-snap-align: start;
+  padding: 0;
+  background: #fdf6f1;
+  color: #1E1E1E;
+  transition: background 0.3s, color 0.3s;
+}
+
+.initiative-row.reverse {
+  flex-direction: row-reverse;
+  background: #222;
+  color: #fff;
+}
+
+.initiative-row.even {
+  background: #222;
+  color: #fff;
+}
+
+.initiative-text-col {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* Align text to top */
+  align-items: flex-start;
+  /* Align text to left */
+  padding: 0 48px;
+  font-size: 2rem;
+  font-family: 'Nunito', sans-serif;
+}
+
+.initiative-row.reverse .initiative-text-col {
+  color: #fff;
+}
+
+.initiative-row.even .initiative-text-col {
+  color: #fff;
+}
+
+.initiative-img-col {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Center image vertically */
+}
+
+.initiative-img {
+  max-width: 320px;
+  max-height: 320px;
+  width: 100%;
+  height: auto;
+  background: transparent;
+  transition: filter 0.3s;
+}
+
+/* Optional: Invert image for dark background if you don't have a white version */
+.initiative-row.reverse .initiative-img {
+  filter: invert(1) grayscale(1) brightness(1.5);
+}
+
+.initiative-row.even .initiative-img {
+  filter: none;
+}
+
+.initiative-delete-btn {
+  position: absolute;
+  bottom: 32px;
+  right: 48px;
+  color: white;
+  background: #e53935;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  z-index: 2;
+  box-shadow: 0 2px 8px #0002;
+}
+
+.admin-initiative-form {
+  margin: 48px auto 48px auto;
+  padding-bottom: 32px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #0001;
+  max-width: 70%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.admin-initiative-form h3 {
+  font-family: 'Tangerine', cursive;
+  font-size: 2.5rem;
+  color: #DD783C;
+  margin-bottom: 18px;
+  font-weight: 300;
+}
+
+.admin-initiative-form textarea,
+.admin-initiative-form input {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1.5px solid #eceae7;
+  margin-bottom: 16px;
+  font-family: 'Nunito', sans-serif;
+  background: #f7f7f7;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.admin-initiative-form textarea:focus,
+.admin-initiative-form input:focus {
+  border: 1.5px solid #DD783C;
+  outline: none;
+  box-shadow: 0 2px 8px #DD783C22;
+}
+
+.admin-initiative-form button[type='submit'] {
+  background: #DD783C;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  width: 100%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #DD783C22;
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin-initiative-form button[type='submit']:hover {
+  background: #e68346;
+  color: #fff;
+}

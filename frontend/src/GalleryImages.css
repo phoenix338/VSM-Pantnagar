@@ -1,0 +1,134 @@
+.gallery-page {
+    width: 100vw;
+    min-height: 100vh;
+    background: #fff;
+    padding: 32px 0 64px 0;
+    margin-top: 80px;
+}
+
+.gallery-heading {
+    text-align: center;
+    font-family: 'Tangerine', cursive;
+    font-style: normal;
+    font-size: 56px;
+    color: #8B8080;
+    margin-bottom: 32px;
+    font-weight: 400;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.gallery-img-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: 340px;
+    background: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px #0001;
+    overflow: hidden;
+    position: relative;
+    transition: box-shadow 0.3s;
+}
+
+.gallery-img-wrapper {
+    flex-basis: 100%;
+    flex-shrink: 0;
+    flex-grow: 0;
+    transition: flex-basis 0.7s cubic-bezier(.4, 2, .6, 1);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(.4, 2, .6, 1);
+    display: block;
+    transform: scale(1.12);
+}
+
+.gallery-img-container:hover .gallery-img-wrapper {
+    flex-basis: 60%;
+}
+
+.gallery-img-container:hover .gallery-img {
+    transform: scale(0.9995);
+}
+
+.gallery-img-overlay {
+    background: #fff;
+    opacity: 0;
+    transition: opacity 0.7s;
+    text-align: left;
+    z-index: 2;
+    box-shadow: 0 -2px 12px #0001;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    pointer-events: none;
+    padding: 12px 18px 8px 18px;
+    overflow: hidden;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+}
+
+.gallery-img-container:hover .gallery-img-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.gallery-img-overlay .gallery-name {
+    font-family: 'Nunito', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #181818;
+    margin-bottom: 4px;
+}
+
+.gallery-img-overlay .gallery-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+    color: #181818;
+    font-weight: 400;
+}
+
+.dropdown-item,
+.dropdown-item:visited {
+    text-decoration: none !important;
+    color: #181818;
+}
+
+@media (max-width: 900px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .gallery-heading {
+        font-size: 38px;
+    }
+}
+
+@media (max-width: 600px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .gallery-heading {
+        font-size: 28px;
+    }
+}
