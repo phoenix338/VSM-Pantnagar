@@ -128,7 +128,7 @@ const OurInitiative = () => {
                             key={item._id || idx}
                         >
                             <div className="initiative-text-col">
-                                <h2 className="initiative-heading">{`Initiative ${idx + 1}`}</h2>
+                                <h2 className="initiative-heading">{item.title || `Initiative ${idx + 1}`}</h2>
                                 <div className="initiative-text">{item.text}</div>
                                 {isAdmin && (
                                     <button
