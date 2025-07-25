@@ -13,6 +13,7 @@ const NewsSection = () => {
     const [formMsg, setFormMsg] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const fileInputRef = useRef();
+    const [zoomed, setZoomed] = useState(false);
 
     useEffect(() => {
         fetchNews();
@@ -103,6 +104,8 @@ const NewsSection = () => {
                                     src={news[selected].imageUrl}
                                     alt={news[selected].title}
                                     className="news-main-image"
+                                    style={{ cursor: 'zoom-in' }}
+                                    onClick={() => setZoomed(true)}
                                 />
                             </div>
                             <div className="news-main-title-placeholder">{news[selected].title}</div>
@@ -159,6 +162,15 @@ const NewsSection = () => {
                         <button type="submit" disabled={submitting}>{submitting ? 'Adding...' : 'Add News'}</button>
                         {formMsg && <div style={{ marginTop: 8, color: formMsg.startsWith('Error') ? 'red' : 'green' }}>{formMsg}</div>}
                     </form>
+                </div>
+            )}
+            {zoomed && news[selected] && (
+                <div className="news-zoom-modal" onClick={() => setZoomed(false)}>
+                    <div className="news-zoom-modal-content" onClick={e => e.stopPropagation()}>
+                        <button className="news-zoom-close" onClick={() => setZoomed(false)}>&times;</button>
+                        <img src={news[selected].imageUrl} alt={news[selected].title} className="news-zoom-image" />
+                        <div className="news-zoom-title">{news[selected].title}</div>
+                    </div>
                 </div>
             )}
         </div>
