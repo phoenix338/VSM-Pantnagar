@@ -4,7 +4,6 @@ import { auth } from './firebase';
 import './GalleryImages.css';
 
 const RENDER_API_URL = process.env.REACT_APP_API_URL;
-const LOCAL_API_URL = 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
 const GalleryImages = () => {
@@ -26,7 +25,7 @@ const GalleryImages = () => {
 
     const fetchGalleryImages = async () => {
         // Try localhost first, then fall back to Render
-        const urls = [LOCAL_API_URL, RENDER_API_URL];
+        const urls = [RENDER_API_URL];
 
         for (const url of urls) {
             try {
@@ -150,18 +149,7 @@ const GalleryImages = () => {
             <Navbar />
             <div className="gallery-page">
                 <h1 className="gallery-heading">Gallery</h1>
-                {apiUrl === LOCAL_API_URL && (
-                    <div style={{
-                        background: '#e8f5e8',
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        marginBottom: '20px',
-                        fontSize: '14px',
-                        color: '#2d5a2d'
-                    }}>
-                        🔗 Connected to localhost backend
-                    </div>
-                )}
+
                 <div className="gallery-grid">
                     {galleryImages.map((item, index) => (
                         <div className="gallery-img-container" key={item._id}>
