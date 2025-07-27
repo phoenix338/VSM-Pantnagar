@@ -11,6 +11,7 @@ import quotesFile from './assets/VSM-Quotes.xlsx';
 import HomeInitiatives from './HomeInitiatives';
 import './HomeInitiatives.css';
 import ImpactStats from './ImpactStats';
+import HinduCalendar from './HinduCalendar';
 const testimonials = [
     { name: 'Dr. J Kumar', title: 'Dean College of Agriculture, GBPUAT, Pantnagar', text: 'Initiatives like VSM help students realize their inner potential, ad value.' },
     { name: 'Dr. A Sharma', title: 'Professor, GBPUAT', text: 'VSM is a great platform for holistic development.' },
@@ -335,14 +336,7 @@ function Home() {
                             {quoteOfTheDay}
                         </div>
                         {quoteAuthor && <div style={{ fontFamily: 'Nunito, sans-serif', fontSize: 22, color: '#181818', marginTop: 8 }}>{quoteAuthor}</div>}
-                        <div style={{ fontFamily: 'Tiro Devanagari Hindi, serif', fontSize: 28, color: '#111', margin: '18px 0 0 0', lineHeight: 1.5, textAlign: 'left', display: 'inline-block' }}>
-                            तिथि: शुक्ल पक्ष नवमी<br />
-                            नक्षत्र: उत्तर फाल्गुनी<br />
-                            वार: बुधवार
-                        </div>
-                        <div style={{ fontFamily: 'Tiro Devanagari Hindi, serif', fontSize: 26, color: '#d44', margin: '10px 0 0 0', fontWeight: 700, textAlign: 'left', display: 'inline-block' }}>
-                            महेश नवमी:
-                        </div>
+                        <HinduCalendar />
                         <div style={{ fontFamily: 'Nunito, sans-serif', fontSize: 32, color: '#DD783C', fontWeight: 700, margin: '32px 0 10px 0', background: '#fff', borderRadius: 32, display: 'inline-block', padding: '10px 40px', boxShadow: '0 4px 16px #0002', letterSpacing: 2, border: '1.5px solid #eee', color: '#e53935' }}>
                             {new Date().toLocaleDateString('en-GB').replace(/\//g, ' / ')}
                         </div>

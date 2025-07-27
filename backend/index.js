@@ -25,6 +25,7 @@ const TeamMember = require('./TeamMember');
 const TimelineEvent = require('./TimelineEvent');
 const News = require('./News');
 const Review = require('./Review');
+const GalleryImage = require('./GalleryImage');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -340,6 +341,41 @@ app.delete('/reviews/:id', adminAuth, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete review' });
+  }
+});
+
+// Get all gallery images, sorted by createdAt descending
+app.get('/gallery-images', async (req, res) => {
+  try {
+    const galleryImages = await GalleryImage.find().sort({ createdAt: -1 });
+    res.json(galleryImages);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch gallery images' });
+  }
+});
+
+// Add gallery image (admin only, with image upload)
+app.post('/gallery-images', adminAuth, upload.single('image'), async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    if (!title || !description || !req.file || !req.file.path) return res.status(400).json({ error: 'Title, description and image are required' });
+    const imageUrl = req.file.path;
+    const galleryImage = new GalleryImage({ title, description, imageUrl });
+    await galleryImage.save();
+    res.status(201).json(galleryImage);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add gallery image' });
+  }
+});
+
+// Delete gallery image (admin only)
+app.delete('/gallery-images/:id', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await GalleryImage.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete gallery image' });
   }
 });
 
