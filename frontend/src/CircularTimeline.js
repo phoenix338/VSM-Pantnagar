@@ -5,36 +5,14 @@ import { auth } from './firebase';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
-const radius = 100;
-const center = 150;
-const outerRadius = 130;
-
-function polarToCartesian(cx, cy, r, angleDeg) {
-    const angle = (angleDeg - 90) * (Math.PI / 180.0);
-    return {
-        x: cx + r * Math.cos(angle),
-        y: cy + r * Math.sin(angle),
-    };
-}
-
-function describeArc(cx, cy, r, startAngle, endAngle) {
-    const start = polarToCartesian(cx, cy, r, endAngle);
-    const end = polarToCartesian(cx, cy, r, startAngle);
-    const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-    return [
-        "M", start.x, start.y,
-        "A", r, r, 0, largeArcFlag, 0, end.x, end.y
-    ].join(" ");
-}
-
-const CircularTimeline = () => {
+const HorizontalTimeline = () => {
     const [events, setEvents] = useState([]);
-    const [hoveredSector, setHoveredSector] = useState(null);
     const [user, setUser] = useState(null);
     const [form, setForm] = useState({ year: '', label: '' });
     const [loading, setLoading] = useState(false);
     const [formMsg, setFormMsg] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(0);
 
     useEffect(() => {
         fetchEvents();
@@ -103,99 +81,72 @@ const CircularTimeline = () => {
         setSubmitting(false);
     };
 
-    // If hovering, show up to hoveredSector; else show first 3
-    const visibleCount = hoveredSector !== null ? hoveredSector + 1 : 3;
-    const anglePerEvent = events.length > 0 ? 360 / events.length : 1;
-    const innerColor = "#fef5f1";
-    const arcColor = "#d3d3d3";
-    const labelBgPadding = 10;
-    const labelBgHeight = 32;
+    const handlePrev = () => {
+        setSelectedEvent(prev => prev > 0 ? prev - 1 : events.length - 1);
+    };
+
+    const handleNext = () => {
+        setSelectedEvent(prev => prev < events.length - 1 ? prev + 1 : 0);
+    };
+
+    if (loading) return <div>Loading timeline...</div>;
 
     return (
-        <div className="timeline-container">
-            {loading ? (
-                <div>Loading timeline...</div>
-            ) : (
-                <svg
-                    width="500"
-                    height="500"
-                    onMouseLeave={() => setHoveredSector(null)}
-                    style={{ cursor: 'pointer' }}
-                >
-                    {/* Inner circle */}
-                    <circle
-                        cx={center}
-                        cy={center}
-                        r={radius}
-                        fill={innerColor}
-                        stroke="black"
-                        strokeWidth="2"
-                    />
-                    {/* Outer arcs */}
-                    {events.map((event, idx) => {
-                        const startAngle = idx * anglePerEvent;
-                        const endAngle = startAngle + anglePerEvent;
-                        const path = describeArc(center, center, outerRadius, startAngle, endAngle);
-                        const labelAngle = (startAngle + endAngle) / 2;
-                        // Position the label a bit further from the line
-                        const labelPos = polarToCartesian(center, center, outerRadius + 60, labelAngle);
-                        const lineEnd = polarToCartesian(center, center, outerRadius + 30, labelAngle);
-                        const isVisible = idx < visibleCount;
-                        // Estimate label width for background
-                        const labelText = `${event.year}: ${event.label}`;
-                        const labelWidth = Math.max(120, labelText.length * 9);
-                        return (
-                            <g key={event._id || event.year}>
-                                <path
-                                    d={path}
-                                    fill="none"
-                                    stroke={arcColor}
-                                    strokeWidth={34}
-                                    opacity={isVisible ? 1 : 0.2}
-                                    onMouseEnter={() => setHoveredSector(idx)}
-                                    style={{ cursor: idx > 2 ? 'pointer' : 'default' }}
-                                />
-                                {isVisible && (
-                                    <>
-                                        <line
-                                            x1={lineEnd.x}
-                                            y1={lineEnd.y}
-                                            x2={labelPos.x}
-                                            y2={labelPos.y}
-                                            stroke="black"
-                                            strokeWidth={3}
-                                        />
-                                        {/* Label background */}
-                                        <rect
-                                            className="timeline-event-label-bg"
-                                            x={labelPos.x - (labelWidth / 2)}
-                                            y={labelPos.y - labelBgHeight / 2}
-                                            width={labelWidth}
-                                            height={labelBgHeight}
-                                            rx={12}
-                                        />
-                                        {/* Label text */}
-                                        <text
-                                            className="timeline-event-text"
-                                            x={labelPos.x}
-                                            y={labelPos.y + 6}
-                                            textAnchor="middle"
-                                            alignmentBaseline="middle"
-                                        >
-                                            {labelText}
-                                        </text>
-                                        {isAdmin && (
-                                            <foreignObject x={labelPos.x - 30} y={labelPos.y + 18} width="60" height="30">
-                                                <button className="timeline-delete-btn" onClick={e => { e.stopPropagation(); handleDelete(event._id); }}>Delete</button>
-                                            </foreignObject>
-                                        )}
-                                    </>
-                                )}
-                            </g>
-                        );
-                    })}
-                </svg>
-            )}
+        <div className="horizontal-timeline-container">
+            <div className="timeline-wrapper">
+                {/* Navigation Arrows */}
+                <button className="timeline-nav-btn timeline-nav-prev" onClick={handlePrev}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                </button>
+
+                <button className="timeline-nav-btn timeline-nav-next" onClick={handleNext}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </button>
+
+                {/* Timeline Line */}
+                <div className="timeline-line">
+                    <div className="timeline-progress" style={{ width: `${((selectedEvent + 1) / events.length) * 100}%` }}></div>
+                </div>
+
+                {/* Timeline Events */}
+                <div className="timeline-events">
+                    {events.map((event, idx) => (
+                        <div
+                            key={event._id || event.year}
+                            className={`timeline-event-dot ${idx <= selectedEvent ? 'active' : ''} ${idx === selectedEvent ? 'selected' : ''}`}
+                            onClick={() => setSelectedEvent(idx)}
+                        >
+                            <div className="timeline-event-date">{event.year}</div>
+                            {isAdmin && (
+                                <button
+                                    className="timeline-delete-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDelete(event._id);
+                                    }}
+                                >
+                                    ×
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Event Details */}
+                {events[selectedEvent] && (
+                    <div className="timeline-event-details">
+                        <div className="event-description">
+                            The event of {events[selectedEvent].year}: {events[selectedEvent].label}
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Admin Form */}
             {isAdmin && (
                 <form className="timeline-admin-form" onSubmit={handleAdd}>
                     <h3>Add Timeline Event</h3>
@@ -209,4 +160,4 @@ const CircularTimeline = () => {
     );
 };
 
-export default CircularTimeline; 
+export default HorizontalTimeline; 

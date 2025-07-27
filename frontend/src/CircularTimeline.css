@@ -1,109 +1,230 @@
-.timeline-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 80vh;
-  padding: 48px 8px 24px 8px;
-  background: white;
+/* Horizontal Timeline Styles */
+.horizontal-timeline-container {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
 }
 
-.timeline-container svg {
-  overflow: visible;
-  width: 500px;
-  height: 500px;
-  margin-bottom: 32px;
+.timeline-wrapper {
+  position: relative;
+  margin-bottom: 40px;
 }
 
-.timeline-event-label-bg {
-  fill: #fff;
-}
-
-.timeline-event-text {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.timeline-delete-btn {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 2px 14px;
-  background: #fff0f0;
-  color: #e53935;
-  border: 1px solid #e53935;
-  border-radius: 16px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  box-shadow: 0 1px 4px #e5393511;
-}
-
-.timeline-delete-btn:hover {
-  background: #e53935;
-  color: #fff;
-}
-
-.timeline-admin-form {
-  margin-top: 40px;
-  background: #fff;
-  padding: 28px 24px 20px 24px;
-  border-radius: 16px;
-  box-shadow: 0 2px 16px #0001;
-  max-width: 400px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 16px;
-}
-
-.timeline-admin-form h3 {
-  margin: 0 0 8px 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #222;
-}
-
-.timeline-admin-form input {
-  width: 94%;
-  padding: 12px 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  margin-bottom: 0;
-}
-
-.timeline-admin-form button[type="submit"] {
-  width: 100%;
-  padding: 12px 0;
-  border-radius: 8px;
-  background: #DD783C;
-  color: #fff;
-  font-weight: 700;
-  font-size: 1.1rem;
+/* Navigation Buttons */
+.timeline-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #dd783c;
+  color: white;
   border: none;
   cursor: pointer;
-  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
   transition: background 0.2s;
 }
 
-.timeline-admin-form button[type="submit"]:hover {
-  background: #f3884a;
+.timeline-nav-btn:hover {
+  background: #c6692e;
 }
 
-@media (max-width: 700px) {
-  .timeline-container svg {
-    width: 98vw;
-    height: 98vw;
-    min-width: 0;
-    min-height: 0;
-    max-width: 98vw;
-    max-height: 98vw;
+.timeline-nav-prev {
+  left: -60px;
+}
+
+.timeline-nav-next {
+  right: -60px;
+}
+
+/* Timeline Line */
+.timeline-line {
+  position: relative;
+  height: 4px;
+  background: #ddd;
+  margin: 60px 0;
+  border-radius: 2px;
+}
+
+.timeline-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: #007bff;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Timeline Events */
+.timeline-events {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.timeline-event-dot {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ddd;
+  border: 3px solid white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-event-dot.active {
+  background: #007bff;
+}
+
+.timeline-event-dot.selected {
+  background: #007bff;
+  /* transform: scale(1.2); */
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+.timeline-event-dot:hover {
+  /* transform: scale(1.1); */
+}
+
+.timeline-event-date {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Event Details */
+.timeline-event-details {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.event-description {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Delete Button */
+.timeline-delete-btn {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff4444;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.timeline-event-dot:hover .timeline-delete-btn {
+  opacity: 1;
+}
+
+.timeline-delete-btn:hover {
+  background: #cc3333;
+}
+
+/* Admin Form */
+.timeline-admin-form {
+  background: #f8f8f8;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.timeline-admin-form h3 {
+  color: #dd783c;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.timeline-admin-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.timeline-admin-form button {
+  width: 100%;
+  padding: 12px;
+  background: #dd783c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.timeline-admin-form button:hover {
+  background: #c6692e;
+}
+
+.timeline-admin-form button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .timeline-nav-prev {
+    left: 10px;
   }
 
-  .timeline-admin-form {
-    max-width: 98vw;
-    padding: 18px 4vw 14px 4vw;
+  .timeline-nav-next {
+    right: 10px;
+  }
+
+  .timeline-events {
+    flex-direction: column;
+    height: auto;
+    gap: 20px;
+  }
+
+  .timeline-event-dot {
+    margin: 10px 0;
+  }
+
+  .timeline-line {
+    display: none;
   }
 }
