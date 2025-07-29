@@ -23,9 +23,12 @@ const Initiative = require('./Initiative');
 const Impact = require('./Impact');
 const TeamMember = require('./TeamMember');
 const TimelineEvent = require('./TimelineEvent');
+const Event = require('./Event');
 const News = require('./News');
 const Review = require('./Review');
 const GalleryImage = require('./GalleryImage');
+const Genre = require('./Genre');
+const Video = require('./Video');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -72,37 +75,7 @@ app.get('/', (req, res) => {
   res.send('API is running');
 });
 
-// Add a new book (admin only - for now, no auth)
-app.post('/books', async (req, res) => {
-  try {
-    const { title, author, coverImage, description } = req.body;
-    const book = new Book({ title, author, coverImage, description });
-    await book.save();
-    res.status(201).json(book);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
 
-// Get latest 4 books
-app.get('/books/latest', async (req, res) => {
-  try {
-    const books = await Book.find().sort({ createdAt: -1 }).limit(4);
-    res.json(books);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Get all books
-app.get('/books', async (req, res) => {
-  try {
-    const books = await Book.find().sort({ createdAt: -1 });
-    res.json(books);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 // Get all initiatives
 app.get('/initiatives', async (req, res) => {
@@ -376,6 +349,208 @@ app.delete('/gallery-images/:id', adminAuth, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete gallery image' });
+  }
+});
+
+// Get all events, sorted by createdAt descending
+app.get('/events', async (req, res) => {
+  try {
+    const events = await Event.find().sort({ createdAt: -1 });
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch events' });
+  }
+});
+
+// Get upcoming events (events with date >= today)
+app.get('/events/upcoming', async (req, res) => {
+  try {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // YYYY-MM-DD format
+
+    const events = await Event.find().sort({ date: 1 });
+    const upcomingEvents = events.filter(event => {
+      // Parse event date and compare with today
+      const eventDate = new Date(event.date);
+      return eventDate >= today;
+    });
+
+    res.json(upcomingEvents);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch upcoming events' });
+  }
+});
+
+// Get previous events (events with date < today)
+app.get('/events/previous', async (req, res) => {
+  try {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // YYYY-MM-DD format
+
+    const events = await Event.find().sort({ date: -1 });
+    const previousEvents = events.filter(event => {
+      // Parse event date and compare with today
+      const eventDate = new Date(event.date);
+      return eventDate < today;
+    });
+
+    res.json(previousEvents);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch previous events' });
+  }
+});
+
+// Add event (admin only, with image upload)
+app.post('/events', adminAuth, upload.single('bannerImage'), async (req, res) => {
+  try {
+    const { title, date, venue, googleFormLink } = req.body;
+    if (!title || !date || !venue || !googleFormLink || !req.file || !req.file.path) {
+      return res.status(400).json({ error: 'All fields and banner image are required' });
+    }
+    const bannerImage = req.file.path;
+    const event = new Event({ title, date, venue, googleFormLink, bannerImage });
+    await event.save();
+    res.status(201).json(event);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add event' });
+  }
+});
+
+// Delete event (admin only)
+app.delete('/events/:id', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Event.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete event' });
+  }
+});
+
+// Get all genres
+app.get('/genres', async (req, res) => {
+  try {
+    const genres = await Genre.find().sort({ createdAt: 1 });
+    res.json(genres);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch genres' });
+  }
+});
+
+// Add genre (admin only, with image upload)
+app.post('/genres', adminAuth, upload.single('image'), async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name || !req.file || !req.file.path) {
+      return res.status(400).json({ error: 'Name and image are required' });
+    }
+    const image = req.file.path;
+    const genre = new Genre({ name, image });
+    await genre.save();
+    res.status(201).json(genre);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add genre' });
+  }
+});
+
+// Delete genre (admin only)
+app.delete('/genres/:id', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // First delete all books associated with this genre
+    await Book.deleteMany({ genre: id });
+
+    // Then delete the genre
+    await Genre.findByIdAndDelete(id);
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete genre' });
+  }
+});
+
+// Get all books with genre information
+app.get('/books', async (req, res) => {
+  try {
+    const books = await Book.find().populate('genre').sort({ createdAt: -1 });
+    res.json(books);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch books' });
+  }
+});
+
+// Get books by genre
+app.get('/books/genre/:genreId', async (req, res) => {
+  try {
+    const { genreId } = req.params;
+    const books = await Book.find({ genre: genreId }).populate('genre').sort({ createdAt: -1 });
+    res.json(books);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch books by genre' });
+  }
+});
+
+// Add book (admin only, with image upload)
+app.post('/books', adminAuth, upload.single('frontPageImage'), async (req, res) => {
+  try {
+    const { title, genre, previewDescription, isMainBook } = req.body;
+    if (!title || !genre || !previewDescription || !req.file || !req.file.path) {
+      return res.status(400).json({ error: 'All fields and front page image are required' });
+    }
+    const frontPageImage = req.file.path;
+    const book = new Book({ title, genre, previewDescription, frontPageImage, isMainBook: isMainBook === 'true' });
+    await book.save();
+    res.status(201).json(book);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add book' });
+  }
+});
+
+// Delete book (admin only)
+app.delete('/books/:id', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Book.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete book' });
+  }
+});
+
+// Get all videos
+app.get('/videos', async (req, res) => {
+  try {
+    const videos = await Video.find().sort({ createdAt: -1 });
+    res.json(videos);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch videos' });
+  }
+});
+
+// Add video (admin only)
+app.post('/videos', adminAuth, async (req, res) => {
+  try {
+    const { title, videoUrl } = req.body;
+    if (!title || !videoUrl) {
+      return res.status(400).json({ error: 'Title and video URL are required' });
+    }
+    const video = new Video({ title, videoUrl });
+    await video.save();
+    res.status(201).json(video);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add video' });
+  }
+});
+
+// Delete video (admin only)
+app.delete('/videos/:id', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Video.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete video' });
   }
 });
 

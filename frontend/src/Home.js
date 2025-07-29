@@ -12,6 +12,9 @@ import HomeInitiatives from './HomeInitiatives';
 import './HomeInitiatives.css';
 import ImpactStats from './ImpactStats';
 import HinduCalendar from './HinduCalendar';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+
 const testimonials = [
     { name: 'Dr. J Kumar', title: 'Dean College of Agriculture, GBPUAT, Pantnagar', text: 'Initiatives like VSM help students realize their inner potential, ad value.' },
     { name: 'Dr. A Sharma', title: 'Professor, GBPUAT', text: 'VSM is a great platform for holistic development.' },
@@ -33,6 +36,63 @@ function Home() {
     const [quoteOfTheDay, setQuoteOfTheDay] = useState('');
     const [quoteAuthor, setQuoteAuthor] = useState('');
     const [impact, setImpact] = useState(null);
+    const [upcomingEvents, setUpcomingEvents] = useState([]);
+    const [heroImage, setHeroImage] = useState(require('./assets/image.png'));
+    const [currentEventIndex, setCurrentEventIndex] = useState(0);
+    const [isNextButtonHovered, setIsNextButtonHovered] = useState(false);
+    const [latestBooks, setLatestBooks] = useState([]);
+
+    // Fetch upcoming events for hero image
+    useEffect(() => {
+        const fetchUpcomingEvents = async () => {
+            try {
+                const res = await fetch(`${API_URL}/events/upcoming`);
+                const data = await res.json();
+                // Limit to max 3 events
+                const limitedEvents = data.slice(0, 3);
+                setUpcomingEvents(limitedEvents);
+                // Use the first upcoming event's banner image as hero image
+                if (limitedEvents.length > 0 && limitedEvents[0].bannerImage) {
+                    setHeroImage(limitedEvents[0].bannerImage);
+                }
+            } catch (err) {
+                console.log('No upcoming events found, using default hero image');
+            }
+        };
+        fetchUpcomingEvents();
+    }, []);
+
+    // Fetch latest books
+    useEffect(() => {
+        const fetchLatestBooks = async () => {
+            try {
+                const res = await fetch(`${API_URL}/books`);
+                const data = await res.json();
+                // Get the latest 4 books
+                const latest = data.slice(-4).reverse();
+                setLatestBooks(latest);
+            } catch (err) {
+                console.log('No books found');
+            }
+        };
+        fetchLatestBooks();
+    }, []);
+
+    const nextEvent = () => {
+        setCurrentEventIndex((prev) =>
+            prev === upcomingEvents.length - 1 ? 0 : prev + 1
+        );
+    };
+
+    const prevEvent = () => {
+        setCurrentEventIndex((prev) =>
+            prev === 0 ? upcomingEvents.length - 1 : prev - 1
+        );
+    };
+
+    const goToEvent = (index) => {
+        setCurrentEventIndex(index);
+    };
 
     // Only skip intro if skipIntro is set in location.state, then clear the state
     useEffect(() => {
@@ -284,14 +344,119 @@ function Home() {
             <Navbar resetHome={resetHome} />
             {/* Main scrollable content after navbars */}
             <div style={{ marginTop: 100 }}>
-                {/* Hero Section: Full image.png */}
-                <img
-                    src={require('./assets/image.png')}
-                    alt="Hero"
-                    style={{ width: '100vw', display: 'block', margin: 0, padding: 0, objectFit: 'cover' }}
-                />
+                {/* Hero Section: Events Carousel */}
+                {upcomingEvents.length > 0 ? (
+                    <div style={{
+                        width: '100vw',
+                        height: '65vh',
+                        position: 'relative',
+                        background: '#FFE4D6',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        {/* Event Banner Image */}
+                        <div style={{
+                            width: '100%',
+                            height: '100%',
+                            position: 'relative',
+                            overflow: 'hidden'
+                        }}>
+                            <img
+                                src={upcomingEvents[currentEventIndex].bannerImage}
+                                alt={upcomingEvents[currentEventIndex].title}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                        </div>
+
+                        {/* Pagination Dots */}
+                        <div style={{
+                            position: 'absolute',
+                            bottom: '20px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            display: 'flex',
+                            gap: '10px',
+                            zIndex: 10
+                        }}>
+                            {upcomingEvents.map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => goToEvent(index)}
+                                    style={{
+                                        width: '12px',
+                                        height: '12px',
+                                        borderRadius: '50%',
+                                        border: 'none',
+                                        background: index === currentEventIndex ? '#DD783C' : 'rgba(221, 120, 60, 0.4)',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Next Button */}
+                        {upcomingEvents.length > 1 && (
+                            <button
+                                onClick={nextEvent}
+                                onMouseEnter={() => setIsNextButtonHovered(true)}
+                                onMouseLeave={() => setIsNextButtonHovered(false)}
+                                style={{
+                                    position: 'absolute',
+                                    right: '30px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: isNextButtonHovered ? '#C6692E' : '#DD783C',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    width: '50px',
+                                    height: '50px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    fontSize: '20px',
+                                    color: 'white',
+                                    zIndex: 10,
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                                    transition: 'all 0.3s ease'
+                                }}
+                            >
+                                <svg width="16" height="27" viewBox="0 0 16 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M1.375 1.25L13.625 13.5L1.375 25.75"
+                                        stroke="white"
+                                        strokeWidth="3"
+                                    />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
+                ) : (
+                    // Fallback to original hero image if no events
+                    <img
+                        src={heroImage}
+                        alt="Hero"
+                        style={{ width: '100vw', display: 'block', margin: 0, padding: 0, objectFit: 'cover' }}
+                    />
+                )}
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '32px 0' }}>
-                    <button className="register-btn">Register</button>
+                    <button
+                        className="register-btn"
+                        onClick={() => {
+                            if (upcomingEvents.length > 0 && upcomingEvents[currentEventIndex].googleFormLink) {
+                                window.open(upcomingEvents[currentEventIndex].googleFormLink, '_blank');
+                            }
+                        }}
+                    >
+                        Register
+                    </button>
                 </div>
                 {/* Quote of the Day Section */}
                 <div style={{
@@ -433,6 +598,66 @@ function Home() {
                     </div>
                 </div>
             </div>
+
+            {/* Latest Books Section */}
+            <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '64px 0', textAlign: 'center' }}>
+                <div style={{ fontFamily: 'Tangerine, cursive', fontSize: 64, color: '#DD783C', fontWeight: 700, marginBottom: 48 }}>
+                    Latest Books
+                </div>
+                <div className="books-scroll-container" style={{
+                    display: 'flex',
+                    gap: '32px',
+                    overflowX: 'auto',
+                    padding: '0 20px'
+                }}>
+                    {latestBooks.map((book, index) => (
+                        <div key={book._id} style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            minWidth: '300px',
+                            maxWidth: '350px',
+                            flexShrink: 0,
+                            padding: '20px',
+                            backgroundColor: '#FFE7D7',
+                            borderRadius: '16px',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                            border: '1px solid #e0e0e0'
+                        }}>
+                            <div style={{
+                                width: '260px',
+                                height: '360px',
+                                borderRadius: '12px',
+                                overflow: 'hidden',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                                marginBottom: '16px',
+                                backgroundColor: '#f5f5f5'
+                            }}>
+                                <img
+                                    src={book.frontPageImage}
+                                    alt={book.title}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover'
+                                    }}
+                                />
+                            </div>
+                            <div style={{
+                                fontFamily: 'Arimo, sans-serif',
+                                fontSize: '18px',
+                                fontWeight: 'bold',
+                                color: '#333',
+                                textAlign: 'center',
+                                lineHeight: '1.2'
+                            }}>
+                                {book.title}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <HomeInitiatives />
             {/* Testimonials Section */}
             <section className="testimonials-section">

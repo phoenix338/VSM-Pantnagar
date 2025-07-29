@@ -332,3 +332,13 @@
     color: #CCCCCC;
     opacity: 1;
 }
+
+/* Hide scrollbars for books section */
+.books-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.books-scroll-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

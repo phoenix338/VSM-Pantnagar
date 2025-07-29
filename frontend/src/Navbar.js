@@ -72,11 +72,8 @@ const Navbar = (props) => {
               Events <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
             </span>
             <div className="dropdown-menu">
-              <div className="dropdown-item">Yuva</div>
-              <div className="dropdown-item">Upcoming Events</div>
-              <div className="dropdown-item">Previous Events</div>
-              <div className="dropdown-item">Other Events</div>
-              <div className="dropdown-item">Reviews</div>
+              <Link to="/events/upcoming" className="dropdown-item">Upcoming Events</Link>
+              <Link to="/events/previous" className="dropdown-item">Previous Events</Link>
             </div>
           </li><li style={{ cursor: 'pointer', position: 'relative' }} className="navbar-item dropdown">
             <span className="dropdown-label">
@@ -84,9 +81,9 @@ const Navbar = (props) => {
             </span>
             <div className="dropdown-menu">
               <Link to="/gallery/images" className="dropdown-item">Images</Link>
-              <div className="dropdown-item">Videos</div>
+              <Link to="/gallery/videos" className="dropdown-item">Videos</Link>
             </div>
-          </li><li style={{ cursor: 'pointer' }}>Books</li><li style={{ cursor: 'pointer' }}>Resources</li><li style={{ cursor: 'pointer' }}>VSM Motivation</li>
+          </li><li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Books</Link></li><li style={{ cursor: 'pointer' }}>Resources</li><li style={{ cursor: 'pointer' }}>VSM Motivation</li>
         </ul>
         {/* Right side: Login and Contribute buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>

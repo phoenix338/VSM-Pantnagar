@@ -148,38 +148,91 @@ const GalleryImages = () => {
         <>
             <Navbar />
             <div className="gallery-page">
-                <h1 className="gallery-heading">Gallery</h1>
+                {selectedImageIndex !== null ? (
+                    // Carousel View
+                    <div className="gallery-carousel-view">
+                        {/* Header with Back, Gallery, and Navigation */}
+                        <div className="gallery-carousel-header">
+                            <button className="gallery-back-btn" onClick={() => setSelectedImageIndex(null)}>
+                                <img src={require('./assets/lets-icons_back.png')} alt="Back" />
+                                Back
+                            </button>
 
-                <div className="gallery-grid">
-                    {galleryImages.map((item, index) => (
-                        <div className="gallery-img-container" key={item._id}>
-                            <div className="gallery-img-wrapper">
-                                <img
-                                    src={item.imageUrl}
-                                    alt={item.title}
-                                    className="gallery-img"
-                                    onClick={() => handleImageClick(index)}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                                {isAdmin && (
-                                    <button
-                                        className="gallery-delete-btn"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDelete(item._id);
-                                        }}
-                                    >
-                                        ×
-                                    </button>
-                                )}
-                            </div>
-                            <div className="gallery-img-overlay">
-                                {item.title && <div className="gallery-name">{item.title}</div>}
-                                {item.description && <div className="gallery-title">{item.description}</div>}
+                            <h1 className="gallery-heading">Gallery</h1>
+
+                            <div className="gallery-header-nav">
+                                <button
+                                    className="gallery-nav-btn"
+                                    onClick={prevImage}
+                                >
+                                    <img src={require('./assets/lucide_move-left.png')} alt="Previous" />
+                                </button>
+                                <button
+                                    className="gallery-nav-btn"
+                                    onClick={nextImage}
+                                >
+                                    <img src={require('./assets/lucide_move-left.png')} alt="Next" />
+                                </button>
                             </div>
                         </div>
-                    ))}
-                </div>
+
+                        <div className="gallery-carousel-container">
+                            {/* Previous Image - always show */}
+                            <div className="gallery-side-image prev" onClick={prevImage}>
+                                <img src={prevImageData ? prevImageData.imageUrl : galleryImages[galleryImages.length - 1].imageUrl} alt="Previous" />
+                            </div>
+
+                            {/* Center Image */}
+                            <div className="gallery-center-image">
+                                <img src={currentImage.imageUrl} alt={currentImage.title} />
+                                <div className="gallery-image-details">
+                                    <h3>{currentImage.title}</h3>
+                                    <p>{currentImage.description}</p>
+                                </div>
+                            </div>
+
+                            {/* Next Image - always show */}
+                            <div className="gallery-side-image next" onClick={nextImage}>
+                                <img src={nextImageData ? nextImageData.imageUrl : galleryImages[0].imageUrl} alt="Next" />
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    // Grid View
+                    <>
+                        <h1 className="gallery-heading">Gallery</h1>
+                        <div className="gallery-grid">
+                            {galleryImages.map((item, index) => (
+                                <div className="gallery-img-container" key={item._id}>
+                                    <div className="gallery-img-wrapper">
+                                        <img
+                                            src={item.imageUrl}
+                                            alt={item.title}
+                                            className="gallery-img"
+                                            onClick={() => handleImageClick(index)}
+                                            style={{ cursor: 'pointer' }}
+                                        />
+                                        {isAdmin && (
+                                            <button
+                                                className="gallery-delete-btn"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDelete(item._id);
+                                                }}
+                                            >
+                                                ×
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="gallery-img-overlay">
+                                        {item.title && <div className="gallery-name">{item.title}</div>}
+                                        {item.description && <div className="gallery-title">{item.description}</div>}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
 
                 {isAdmin && (
                     <div className="gallery-admin-form">
@@ -219,69 +272,6 @@ const GalleryImages = () => {
                                 </div>
                             )}
                         </form>
-                    </div>
-                )}
-
-                {/* Gallery Modal Carousel */}
-                {selectedImageIndex !== null && currentImage && (
-                    <div className="gallery-modal" onClick={closeModal}>
-                        <div className="gallery-modal-content">
-                            <button className="gallery-modal-back" onClick={closeModal}>
-                                <img src={require('./assets/lets-icons_back.png')} alt="Back" />
-                                Back
-                            </button>
-
-                            <div className="gallery-carousel">
-                                <div className="gallery-carousel-left">
-                                    {prevImageData && (
-                                        <div className="gallery-side-image" onClick={(e) => {
-                                            e.stopPropagation();
-                                            prevImage();
-                                        }}>
-                                            <img src={prevImageData.imageUrl} alt={prevImageData.title} />
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="gallery-carousel-center">
-                                    <img
-                                        src={currentImage.imageUrl}
-                                        alt={currentImage.title}
-                                        className="gallery-main-image"
-                                    />
-                                    <div className="gallery-image-info">
-                                        <h3>{currentImage.title}</h3>
-                                        <p>{currentImage.description}</p>
-                                    </div>
-                                </div>
-
-                                <div className="gallery-carousel-right">
-                                    {nextImageData && (
-                                        <div className="gallery-side-image" onClick={(e) => {
-                                            e.stopPropagation();
-                                            nextImage();
-                                        }}>
-                                            <img src={nextImageData.imageUrl} alt={nextImageData.title} />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="gallery-modal-nav">
-                                <button className="gallery-nav-btn" onClick={(e) => {
-                                    e.stopPropagation();
-                                    prevImage();
-                                }}>
-                                    <img src={require('./assets/lucide_move-left.png')} alt="Previous" />
-                                </button>
-                                <button className="gallery-nav-btn" onClick={(e) => {
-                                    e.stopPropagation();
-                                    nextImage();
-                                }}>
-                                    <img src={require('./assets/lucide_move-left-1.png')} alt="Next" />
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 )}
             </div>

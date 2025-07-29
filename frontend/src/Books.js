@@ -1,37 +1,330 @@
-import React, { useEffect, useState } from 'react';
-function Books() {
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { auth } from './firebase';
+import Navbar from './Navbar';
+import Footer from './Footer';
+import './Books.css';
+import booksGif from './assets/timeline.gif';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
+
+const Books = () => {
+    const [genres, setGenres] = useState([]);
     const [books, setBooks] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [selectedBooks, setSelectedBooks] = useState({}); // Changed state
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedBookForModal, setSelectedBookForModal] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
-        fetch(`${API_URL}/books`)
-            .then(res => res.json())
-            .then(data => {
-                setBooks(data);
-                setLoading(false);
-            })
-            .catch(() => setLoading(false));
+        fetchGenres();
+        fetchBooks();
+        const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
+        return () => unsubscribe();
     }, []);
 
-    if (loading) return <div>Loading books...</div>;
-    if (!books.length) return <div>No books found.</div>;
+    useEffect(() => {
+        if (genres.length > 0 && books.length > 0) {
+            const newSelectedBooks = {};
+            genres.forEach(genre => {
+                const genreBooks = books.filter(book => book.genre && book.genre._id === genre._id);
+                if (genreBooks.length > 0) {
+                    const mainBook = genreBooks.find(book => book.isMainBook) || genreBooks[0];
+                    newSelectedBooks[genre._id] = mainBook;
+                }
+            });
+            setSelectedBooks(newSelectedBooks);
+        }
+    }, [genres, books]);
+
+    const fetchGenres = async () => {
+        try {
+            const res = await fetch(`${API_URL}/genres`);
+            const data = await res.json();
+            setGenres(data);
+        } catch (err) {
+            console.error('Error fetching genres:', err);
+        }
+    };
+
+    const fetchBooks = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch(`${API_URL}/books`);
+            const data = await res.json();
+            setBooks(data);
+        } catch (err) {
+            console.error('Error fetching books:', err);
+        }
+        setLoading(false);
+    };
+
+    const isAdmin = user && user.email === ADMIN_EMAIL;
+
+    const handleBookClick = (genreId, book) => { // Modified signature
+        setSelectedBooks(prev => ({
+            ...prev,
+            [genreId]: book
+        }));
+    };
+
+    const handleMainBookClick = (book) => {
+        setSelectedBookForModal(book);
+        setShowModal(true);
+        setCurrentPage(1);
+        // Calculate total pages based on description length
+        const wordsPerPage = 100; // Adjust this number as needed
+        const words = book.previewDescription.split(' ').length;
+        setTotalPages(Math.ceil(words / wordsPerPage));
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedBookForModal(null);
+        setCurrentPage(1);
+    };
+
+    const nextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const deleteGenre = async (genreId) => {
+        if (!window.confirm('Are you sure you want to delete this genre? This will also delete all books in this genre.')) {
+            return;
+        }
+
+        try {
+            const adminPassword = prompt('Enter admin password:');
+            if (!adminPassword) throw new Error('Password is required');
+
+            const res = await fetch(`${API_URL}/genres/${genreId}`, {
+                method: 'DELETE',
+                headers: {
+                    'email': user.email,
+                    'password': adminPassword
+                }
+            });
+
+            if (res.ok) {
+                // Refresh genres and books
+                fetchGenres();
+                fetchBooks();
+            } else {
+                alert('Failed to delete genre');
+            }
+        } catch (err) {
+            console.error('Error deleting genre:', err);
+            alert('Failed to delete genre');
+        }
+    };
+
+    const deleteSelectedBook = async (bookId) => {
+        if (!window.confirm('Are you sure you want to delete this book?')) {
+            return;
+        }
+
+        try {
+            const adminPassword = prompt('Enter admin password:');
+            if (!adminPassword) throw new Error('Password is required');
+
+            const res = await fetch(`${API_URL}/books/${bookId}`, {
+                method: 'DELETE',
+                headers: {
+                    'email': user.email,
+                    'password': adminPassword
+                }
+            });
+
+            if (res.ok) {
+                // Refresh books
+                fetchBooks();
+            } else {
+                alert('Failed to delete book');
+            }
+        } catch (err) {
+            console.error('Error deleting book:', err);
+            alert('Failed to delete book');
+        }
+    };
+
+    const getGenreBooks = (genreId) => { // Modified signature
+        return books.filter(book => book.genre && book.genre._id === genreId);
+    };
+
+    if (loading) return (
+        <>
+            <Navbar />
+            <div className="books-loading">Loading books...</div>
+            <Footer />
+        </>
+    );
 
     return (
-        <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '32px 0' }}>
-            <h2 style={{ fontFamily: 'Arimo, sans-serif', color: '#DD783C', fontWeight: 700, fontSize: 32, marginBottom: 24 }}>All Books</h2>
-            <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'center' }}>
-                {books.map(book => (
-                    <div key={book._id} style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px #0001', padding: 20, width: 220, textAlign: 'center' }}>
-                        {book.coverImage && <img src={book.coverImage} alt={book.title} style={{ width: '100%', height: 180, objectFit: 'cover', borderRadius: 8, marginBottom: 12 }} />}
-                        <div style={{ fontWeight: 600, fontSize: 18, marginBottom: 6 }}>{book.title}</div>
-                        <div style={{ color: '#904B1C', fontSize: 15, marginBottom: 8 }}>{book.author}</div>
-                        <div style={{ fontSize: 14, color: '#444', minHeight: 40 }}>{book.description}</div>
+        <>
+            <Navbar />
+            <div className="books-page">
+                <div className="books-gif-wrapper">
+                    <img src={booksGif} alt="Books" className="books-gif" />
+                </div>
+                <h1 className="books-heading">Books</h1>
+                <div className="books-content">
+
+
+                    {/* Genre Sections */}
+                    <div className="genres-sections">
+                        {genres.map((genre, index) => {
+                            const genreBooks = getGenreBooks(genre._id);
+                            const selectedBook = selectedBooks[genre._id];
+                            const isEven = index % 2 === 1; // 0-based index, so odd numbers are even genres
+
+                            if (genreBooks.length === 0) return null;
+
+                            return (
+                                <div key={genre._id}>
+                                    <div className="genre-section">
+                                        {/* Genre Title */}
+                                        <div className="genre-section-title">
+                                            <h2>{genre.name}</h2>
+                                            {isAdmin && (
+                                                <button
+                                                    className="delete-genre-btn"
+                                                    onClick={() => deleteGenre(genre._id)}
+                                                    title="Delete Genre"
+                                                >
+                                                    ×
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        <div className={`genre-section-content ${isEven ? 'reversed' : ''}`}>
+                                            {/* Genre Image */}
+                                            <div className="genre-image-left">
+                                                <img src={genre.image} alt={genre.name} />
+                                            </div>
+
+                                            {/* Selected Book */}
+                                            <div className="selected-book-area">
+                                                {selectedBook && (
+                                                    <>
+                                                        <div className="book-cover" onClick={() => handleMainBookClick(selectedBook)}>
+                                                            <img src={selectedBook.frontPageImage} alt={selectedBook.title} />
+                                                            {isAdmin && (
+                                                                <button
+                                                                    className="delete-book-btn"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        deleteSelectedBook(selectedBook._id);
+                                                                    }}
+                                                                    title="Delete Book"
+                                                                >
+                                                                    ×
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                        <div className="book-description">
+                                                            <h3>{selectedBook.title}</h3>
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
+
+                                            {/* Scrollable Books List */}
+                                            <div className="books-scrollable-list">
+                                                <div className={`books-list-container ${isEven ? 'reverse' : ''}`}>
+                                                    {genreBooks.map(book => (
+                                                        <div
+                                                            key={book._id}
+                                                            className={`scrollable-book-item ${selectedBook?._id === book._id ? 'active' : ''}`}
+                                                            onClick={() => handleBookClick(genre._id, book)}
+                                                        >
+                                                            <div className="book-thumbnail">
+                                                                <img src={book.frontPageImage} alt={book.title} />
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Add horizontal line after each genre (except the last one) */}
+                                    {index < genres.length - 1 && (
+                                        <div className="genre-divider">
+                                            <hr />
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
-                ))}
+
+                    {/* Remove the old divider section */}
+                    <div className="books-header">
+                        {isAdmin && (
+                            <div className="admin-links">
+                                <Link to="/admin/add-genre" className="admin-link">Add Genre</Link>
+                                <Link to="/admin/add-book" className="admin-link">Add Book</Link>
+                            </div>
+                        )}
+                    </div>
+                    {genres.length === 0 && (
+                        <div className="no-genres">
+                            <p>No genres available. Please add some genres first.</p>
+                            {isAdmin && (
+                                <Link to="/admin/add-genre" className="admin-link">Add Your First Genre</Link>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                {/* Book Preview Modal */}
+                {showModal && selectedBookForModal && (
+                    <div className="book-modal-overlay" onClick={closeModal}>
+                        <div className="book-modal" onClick={(e) => e.stopPropagation()}>
+                            <button className="book-modal-close" onClick={closeModal}>×</button>
+                            <div className="book-modal-content">
+                                <div className="book-modal-info">
+                                    <p className="book-modal-description">{selectedBookForModal.previewDescription}</p>
+                                </div>
+                                {totalPages > 1 && (
+                                    <div className="book-modal-pagination">
+                                        <button
+                                            className="pagination-btn prev-btn"
+                                            onClick={prevPage}
+                                            disabled={currentPage === 1}
+                                        >
+                                            ‹
+                                        </button>
+                                        <span className="pagination-text">{currentPage}/{totalPages}</span>
+                                        <button
+                                            className="pagination-btn next-btn"
+                                            onClick={nextPage}
+                                            disabled={currentPage === totalPages}
+                                        >
+                                            ›
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+                <Footer />
             </div>
-        </div>
+        </>
     );
-}
+};
 
 export default Books; 
