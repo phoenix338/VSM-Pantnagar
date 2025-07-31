@@ -253,6 +253,10 @@
     display: block;
 }
 
+.navbar-item.dropdown.force-close .dropdown-menu {
+    display: none !important;
+}
+
 .dropdown-item,
 .dropdown-item:visited,
 .dropdown-item:hover,

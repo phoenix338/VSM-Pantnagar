@@ -79,6 +79,27 @@ const Navbar = (props) => {
             <div className="dropdown-menu">
               <Link to="/events/upcoming" className="dropdown-item">Upcoming Events</Link>
               <Link to="/events/previous" className="dropdown-item">Previous Events</Link>
+              <a
+                href="https://www.youthariseawake.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="dropdown-item"
+                onClick={(e) => {
+                  // Force the dropdown to close using CSS class
+                  const dropdown = e.target.closest('.dropdown');
+                  if (dropdown) {
+                    // Add class to force close
+                    dropdown.classList.add('force-close');
+
+                    // Remove the class after a short delay
+                    setTimeout(() => {
+                      dropdown.classList.remove('force-close');
+                    }, 200);
+                  }
+                }}
+              >
+                YUVA
+              </a>
             </div>
           </li><li style={{ cursor: 'pointer', position: 'relative' }} className="navbar-item dropdown">
             <span className="dropdown-label">
@@ -88,7 +109,16 @@ const Navbar = (props) => {
               <Link to="/gallery/images" className="dropdown-item">Images</Link>
               <Link to="/gallery/videos" className="dropdown-item">Videos</Link>
             </div>
-          </li><li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Books</Link></li><li style={{ cursor: 'pointer' }}>Resources</li><li style={{ cursor: 'pointer' }}>VSM Motivation</li>
+          </li><li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Books</Link></li><li style={{ cursor: 'pointer' }}>Resources</li><li style={{ cursor: 'pointer' }}>
+            <a
+              href="https://vsmmotivation.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              VSM Motivation
+            </a>
+          </li>
         </ul>
         {/* Right side: Login and Contribute buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
