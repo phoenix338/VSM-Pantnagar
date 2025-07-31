@@ -442,9 +442,9 @@ function Home() {
                     // Fallback to original hero image if no events
                     <img
                         src={heroImage}
-                        alt="Hero"
-                        style={{ width: '100vw', display: 'block', margin: 0, padding: 0, objectFit: 'cover' }}
-                    />
+                    alt="Hero"
+                    style={{ width: '100vw', display: 'block', margin: 0, padding: 0, objectFit: 'cover' }}
+                />
                 )}
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '32px 0' }}>
                     <button

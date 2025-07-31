@@ -8,6 +8,7 @@ import AddBook from './AddBook';
 import AddGenre from './AddGenre';
 import GalleryImages from './GalleryImages';
 import Videos from './Videos';
+import ContactUs from './ContactUs';
 import OurInitiative from './OurInitiative';
 import OurImpact from './OurImpact';
 import MeetOurTeam from './MeetOurTeam';
@@ -29,6 +30,7 @@ function App() {
         <Route path="/admin/add-genre" element={<AddGenre />} />
         <Route path="/gallery/images" element={<GalleryImages />} />
         <Route path="/gallery/videos" element={<Videos />} />
+        <Route path="/contact" element={<ContactUs />} />
         <Route path="/our-initiative" element={<OurInitiative />} />
         <Route path="/our-impact" element={<OurImpact />} />
         <Route path="/meet-our-team" element={<MeetOurTeam />} />

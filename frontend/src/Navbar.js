@@ -46,7 +46,12 @@ const Navbar = (props) => {
           <span style={{ fontFamily: 'Freehand, cursive', fontStyle: 'normal', color: '#FF0000', fontWeight: 500, fontSize: 22, marginRight: 10 }}>
             {userName ? userName : 'New'}
           </span>
-          <img src={headphones} alt="Customer Support" style={{ height: 22, width: 22, marginLeft: 4, objectFit: 'contain' }} />
+          <Link to="/contact" className="navbar-headphone-link">
+            <img
+              src={headphones}
+              alt="Customer Support"
+            />
+          </Link>
         </div>
       </div>
       {/* Main white navbar */}

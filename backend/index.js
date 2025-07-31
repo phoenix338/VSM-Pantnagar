@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const nodemailer = require('nodemailer');
 
 const app = express();
 app.use(cors({
@@ -16,7 +17,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3002;
 
 const Book = require('./Book');
 const Initiative = require('./Initiative');
@@ -75,6 +76,17 @@ app.get('/', (req, res) => {
   res.send('API is running');
 });
 
+// Test contact endpoint
+app.get('/contact-test', (req, res) => {
+  res.json({
+    message: 'Contact endpoint is working',
+    emailConfig: {
+      hasEmailUser: !!process.env.EMAIL_USER,
+      hasEmailPass: !!process.env.EMAIL_PASS,
+      hasContactEmail: !!process.env.CONTACT_EMAIL
+    }
+  });
+});
 
 
 // Get all initiatives
@@ -551,6 +563,67 @@ app.delete('/videos/:id', adminAuth, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete video' });
+  }
+});
+
+// Email transporter configuration
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+// Contact form endpoint
+app.post('/contact', async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+
+    console.log('Contact form submission:', { name, email, subject, message });
+
+    // Validate required fields
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // Check if email configuration is set
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.log('Email not configured. Logging contact form data to console:');
+      console.log('Name:', name);
+      console.log('Email:', email);
+      console.log('Subject:', subject);
+      console.log('Message:', message);
+      return res.json({ success: true, message: 'Message received! (Email service not configured - check server logs)' });
+    }
+
+    // Email content
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: process.env.CONTACT_EMAIL || process.env.EMAIL_USER, // Send to admin email
+      subject: `Contact Form: ${subject}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Subject:</strong> ${subject}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+        <hr>
+        <p><em>This message was sent from the VSM Pantnagar contact form.</em></p>
+      `
+    };
+
+    console.log('Sending email to:', mailOptions.to);
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    console.log('Email sent successfully');
+    res.json({ success: true, message: 'Message sent successfully!' });
+  } catch (error) {
+    console.error('Email sending error:', error);
+    res.status(500).json({ error: 'Failed to send message. Please try again.' });
   }
 });
 

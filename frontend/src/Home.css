@@ -330,7 +330,31 @@
 
 .search-input::placeholder {
     color: #CCCCCC;
-    opacity: 1;
+    font-size: 13px;
+}
+
+/* Headphone icon link styles */
+.navbar-headphone-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    text-decoration: none;
+}
+
+.navbar-headphone-link:hover {
+    /* background-color: rgba(255, 255, 255, 0.2); */
+}
+
+.navbar-headphone-link img {
+    height: 28px;
+    width: 28px;
+    object-fit: contain;
+    cursor: pointer;
+    z-index: 1002;
+    position: relative;
 }
 
 /* Hide scrollbars for books section */

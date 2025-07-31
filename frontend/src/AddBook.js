@@ -185,9 +185,9 @@ const AddBook = () => {
                                 {formMsg}
                             </div>
                         )}
-                    </form>
+            </form>
                 </div>
-            </div>
+        </div>
             <Footer />
         </>
     );
