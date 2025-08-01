@@ -32,6 +32,8 @@ function App() {
         <Route path="/gallery/videos" element={<Videos />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/our-initiative" element={<OurInitiative />} />
+        <Route path="/our-events" element={<OurInitiative />} />
+        <Route path="/our-events/:eventId" element={<OurInitiative />} />
         <Route path="/our-impact" element={<OurImpact />} />
         <Route path="/meet-our-team" element={<MeetOurTeam />} />
         <Route path="/timeline" element={<Timeline />} />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import './OurInitiative.css';
 import initiativeGif from './assets/gif/initiative.gif';
@@ -7,6 +8,8 @@ import Footer from './Footer';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 const OurInitiative = () => {
+    const { eventId } = useParams();
+    const location = useLocation();
     const [initiatives, setInitiatives] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -23,12 +26,21 @@ const OurInitiative = () => {
             .then(data => {
                 setInitiatives(data);
                 setLoading(false);
+                // Scroll to specific event if eventId is provided
+                if (eventId) {
+                    setTimeout(() => {
+                        const eventElement = document.getElementById(`event-${eventId}`);
+                        if (eventElement) {
+                            eventElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }, 500);
+                }
             })
             .catch(err => {
-                setError('Failed to load initiatives');
+                setError('Failed to load events');
                 setLoading(false);
             });
-    }, []);
+    }, [eventId]);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(setUser);
@@ -83,7 +95,7 @@ const OurInitiative = () => {
             if (!res.ok) throw new Error('Failed to add initiative');
             setForm({ title: '', text: '', imageUrl: '' });
             setImageFile(null);
-            setFormMsg('Initiative added!');
+            setFormMsg('Event added!');
             // Refresh list
             const data = await res.json();
             setInitiatives(prev => [...prev, data]);
@@ -94,7 +106,7 @@ const OurInitiative = () => {
     };
 
     const handleDelete = async (id) => {
-        const password = prompt('Enter admin password to delete initiative:');
+        const password = prompt('Enter admin password to delete event:');
         if (!password) return;
         try {
             const res = await fetch(`${API_URL}/initiatives/${id}`, {
@@ -104,7 +116,7 @@ const OurInitiative = () => {
                     password
                 }
             });
-            if (!res.ok) throw new Error('Failed to delete initiative');
+            if (!res.ok) throw new Error('Failed to delete event');
             setInitiatives(prev => prev.filter(i => i._id !== id));
         } catch (err) {
             alert('Error: ' + err.message);
@@ -118,14 +130,15 @@ const OurInitiative = () => {
                 <div className="initiative-gif-wrapper">
                     <img src={initiativeGif} alt="Our Initiative" className="initiative-gif" />
                 </div>
-                <h1 className="our-initiative-heading">Our Initiative</h1>
+                <h1 className="our-initiative-heading">Our Events</h1>
                 <div className="initiatives-list">
-                    {loading && <div>Loading initiatives...</div>}
+                    {loading && <div>Loading events...</div>}
                     {error && <div style={{ color: 'red' }}>{error}</div>}
                     {initiatives.map((item, idx) => (
                         <div
                             className={`initiative-row${idx % 2 === 1 ? ' even' : ''}`}
                             key={item._id || idx}
+                            id={`event-${item._id}`}
                         >
                             <div className="initiative-text-col">
                                 <h2 className="initiative-heading">{item.title || `Initiative ${idx + 1}`}</h2>
@@ -147,13 +160,13 @@ const OurInitiative = () => {
                 </div>
                 {isAdmin && (
                     <div className="admin-initiative-form">
-                        <h3>Add Initiative</h3>
+                        <h3>Add Event</h3>
                         <form onSubmit={handleAddInitiative} style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 400 }}>
-                            <input name="title" placeholder="Initiative title" value={form.title} onChange={handleChange} required />
-                            <textarea name="text" placeholder="Initiative text" value={form.text} onChange={handleChange} required style={{ minHeight: 60 }} />
+                            <input name="title" placeholder="Event title" value={form.title} onChange={handleChange} required />
+                            <textarea name="text" placeholder="Event text" value={form.text} onChange={handleChange} required style={{ minHeight: 60 }} />
                             <input type="file" accept="image/*" onChange={handleFileChange} />
                             {uploading && <div>Uploading image...</div>}
-                            <button type="submit" disabled={submitting || uploading}>{submitting ? 'Adding...' : 'Add Initiative'}</button>
+                            <button type="submit" disabled={submitting || uploading}>{submitting ? 'Adding...' : 'Add Event'}</button>
                             {formMsg && <div style={{ color: formMsg.startsWith('Error') ? 'red' : 'green' }}>{formMsg}</div>}
                         </form>
                     </div>

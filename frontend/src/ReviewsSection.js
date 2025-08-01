@@ -101,7 +101,6 @@ const ReviewsSection = () => {
                 <div className="reviews-main-left">
                     {reviews[selected] ? (
                         <div className="reviews-main-card">
-                            <img src={reviews[selected].imageUrl} alt={reviews[selected].name} className="reviews-main-img-rect" />
                             <div className="reviews-main-name">{reviews[selected].name}</div>
                             <div className="reviews-main-divider" />
                             <div className="reviews-main-designation">

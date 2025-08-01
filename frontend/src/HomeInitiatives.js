@@ -19,7 +19,7 @@ const HomeInitiatives = () => {
 
     return (
         <section className="home-initiatives-section">
-            <h2 className="home-initiatives-title">Our Initiatives</h2>
+            <h2 className="home-initiatives-title">Our Events</h2>
             <div className="home-initiatives-list">
                 {initiatives.map((item, idx) => (
                     <div
@@ -27,7 +27,7 @@ const HomeInitiatives = () => {
                         key={item._id || idx}
                         onClick={() => handleToggle(idx)}
                     >
-                        <div className="home-initiative-heading">{`Initiative ${idx + 1}`}</div>
+                        <div className="home-initiative-heading">{item.title || `Initiative ${idx + 1}`}</div>
                         {expanded === idx && (
                             <div className={`home-initiative-details${idx % 2 === 1 ? ' reverse' : ''}`}>
                                 {item.imageUrl && (
@@ -36,18 +36,17 @@ const HomeInitiatives = () => {
                                     </div>
                                 )}
                                 <div className="home-initiative-summary">
-                                    <div className="home-initiative-title" style={{ fontWeight: 600, fontSize: '1.3em', marginBottom: 8 }}>{item.title}</div>
-                                    <ul style={{ margin: 0, paddingLeft: 20 }}>
-                                        {item.text &&
-                                            item.text
-                                                .match(/[^.?!]+[.?!]+[\])'"`’”]*|.+/g)
+                                    {item.text && (
+                                        <p style={{ marginBottom: 8, fontSize: '1.05em', lineHeight: 1.4, textAlign: 'left' }}>
+                                            {item.text
+                                                .match(/[^.?!]+[.?!]+[\])'"`'"`]*|.+/g)
                                                 .filter(s => s.trim())
                                                 .slice(0, 3)
-                                                .map((sentence, i) => (
-                                                    <li key={i} style={{ marginBottom: 4, fontSize: '1.05em', lineHeight: 1.4, textAlign: 'left' }}>{sentence.trim()}</li>
-                                                ))}
-                                    </ul>
-                                    <Link to="/our-initiative" className="home-initiative-readmore">
+                                                .map((sentence, i) => sentence.trim())
+                                                .join(' ')}
+                                        </p>
+                                    )}
+                                    <Link to={`/our-events/${item._id}`} className="home-initiative-readmore">
                                         Read More &rarr;
                                     </Link>
                                 </div>

@@ -24,6 +24,11 @@ const Navbar = (props) => {
     navigate('/', { state: { skipIntro: true } });
   };
 
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    navigate('/', { state: { skipIntro: false } });
+  };
+
   return (
     <>
       {/* Top grey navbar */}
@@ -57,7 +62,12 @@ const Navbar = (props) => {
       {/* Main white navbar */}
       <div style={{ background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2vw', position: 'fixed', top: 44, left: 0, width: '100vw', height: 64, zIndex: 1001, boxSizing: 'border-box', boxShadow: '0 2px 6px #0001' }}>
         {/* Logo (overlapping both navbars) */}
-        <img src={logo} alt="Logo" style={{ height: 110, width: 110, borderRadius: '50%', objectFit: 'cover', position: 'absolute', top: -30, left: 18, zIndex: 1101, background: '#fff', boxShadow: '0 1px 4px #0001', border: '2px solid #fff' }} />
+        <img
+          src={logo}
+          alt="Logo"
+          style={{ height: 110, width: 110, borderRadius: '50%', objectFit: 'cover', position: 'absolute', top: -30, left: 18, zIndex: 1101, background: '#fff', boxShadow: '0 1px 4px #0001', border: '2px solid #fff', cursor: 'pointer' }}
+          onClick={handleLogoClick}
+        />
         {/* Nav Links */}
         <ul style={{ display: 'flex', listStyle: 'none', margin: 0, padding: 0, fontFamily: 'Arimo, sans-serif', fontStyle: 'normal', fontWeight: 400, color: '#DD783C', fontSize: 15, gap: 15 }}>
           <li style={{ cursor: 'pointer', marginLeft: 130 }}>
@@ -67,7 +77,6 @@ const Navbar = (props) => {
               About us <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
             </span>
             <div className="dropdown-menu">
-              <Link to="/our-initiative" className="dropdown-item">Our Initiative</Link>
               <Link to="/our-impact" className="dropdown-item">Our Impact</Link>
               <Link to="/meet-our-team" className="dropdown-item">Meet our Team</Link>
               <Link to="/timeline" className="dropdown-item">Timeline</Link>
@@ -77,6 +86,8 @@ const Navbar = (props) => {
               Events <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
             </span>
             <div className="dropdown-menu">
+              <Link to="/our-events" className="dropdown-item">Our Events</Link>
+
               <Link to="/events/upcoming" className="dropdown-item">Upcoming Events</Link>
               <Link to="/events/previous" className="dropdown-item">Previous Events</Link>
               <a

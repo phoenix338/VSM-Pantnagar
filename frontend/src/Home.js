@@ -41,6 +41,9 @@ function Home() {
     const [currentEventIndex, setCurrentEventIndex] = useState(0);
     const [isNextButtonHovered, setIsNextButtonHovered] = useState(false);
     const [latestBooks, setLatestBooks] = useState([]);
+    const [visionMissionVisible, setVisionMissionVisible] = useState(false);
+    const [visionMissionRef, setVisionMissionRef] = useState(null);
+    const [currentStep, setCurrentStep] = useState(0); // 0: initial, 1: vision, 2: mission, 3: values
 
     // Fetch upcoming events for hero image
     useEffect(() => {
@@ -78,6 +81,32 @@ function Home() {
         fetchLatestBooks();
     }, []);
 
+    // Scroll observer for Vision, Mission, Values animation
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setVisionMissionVisible(true);
+                    // Start sequence: Vision -> Mission -> Values
+                    setTimeout(() => setCurrentStep(1), 1000);  // Vision (1s)
+                    setTimeout(() => setCurrentStep(2), 3000);  // Mission (3s)
+                    setTimeout(() => setCurrentStep(3), 5000);  // Values (5s)
+                }
+            },
+            { threshold: 0.3 }
+        );
+
+        if (visionMissionRef) {
+            observer.observe(visionMissionRef);
+        }
+
+        return () => {
+            if (visionMissionRef) {
+                observer.unobserve(visionMissionRef);
+            }
+        };
+    }, [visionMissionRef]);
+
     const nextEvent = () => {
         setCurrentEventIndex((prev) =>
             prev === upcomingEvents.length - 1 ? 0 : prev + 1
@@ -108,6 +137,19 @@ function Home() {
             navigate(location.pathname, { replace: true, state: {} });
         }
     }, [location.state, location.pathname, navigate]);
+
+    // Handle location state for intro video
+    useEffect(() => {
+        if (location.state && location.state.skipIntro === false) {
+            setShowLandingVideo(true);
+            setShowHindi(false);
+            setShowIntroScreen(false);
+            setShowIntro1(false);
+            setShowIntro2(false);
+            setShowIntro3(false);
+            setShowIntro4(false);
+        }
+    }, [location.state]);
 
     // Reset function for Navbar
     const resetHome = () => {
@@ -190,11 +232,12 @@ function Home() {
                             width: 757,
                             height: 360,
                             left: 61,
-                            top: 157,
+                            top: '50%',
+                            transform: 'translateY(-40%)',
                             fontFamily: 'Tiro Devanagari Hindi, serif',
                             fontStyle: 'normal',
                             fontWeight: 400,
-                            fontSize: 62,
+                            fontSize: 49,
                             lineHeight: '35px',
                             color: '#DEDEB9',
                             zIndex: 2,
@@ -204,7 +247,7 @@ function Home() {
                     >
                         {showHindi && (
                             <>
-                                अंधकार को क्यों धिक्कारे,<br /><br />अच्छा है एक दीप जलाये।
+                                Why curse the darkness,<br /><br />Better to light a lamp.
                             </>
                         )}
                     </div>
@@ -212,7 +255,8 @@ function Home() {
                         style={{
                             position: 'absolute',
                             left: 61,
-                            top: 340,
+                            top: '50%',
+                            transform: 'translateY(-5%)',
                             background: '#fff',
                             color: '#a2592a',
                             fontSize: 24,
@@ -232,24 +276,6 @@ function Home() {
                     >
                         Enter
                     </button>
-                    <div
-                        style={{
-                            position: 'absolute',
-                            width: 300,
-                            height: 70,
-                            left: 61,
-                            top: 431,
-                            fontFamily: 'Tiro Devanagari Hindi, serif',
-                            fontStyle: 'normal',
-                            fontWeight: 400,
-                            fontSize: 26,
-                            lineHeight: '35px',
-                            color: '#DEDEB9',
-                            zIndex: 2,
-                        }}
-                    >
-                        Why curse the darkness,<br />it is better to light a lamp.
-                    </div>
                     <div style={{ position: 'absolute', right: 10, bottom: 40, zIndex: 3, display: 'flex', alignItems: 'center', width: 320, justifyContent: 'center' }}>
                         <div style={{ height: 2, background: '#dedeb9', flex: 1, marginRight: 16 }} />
                         <button
@@ -442,9 +468,9 @@ function Home() {
                     // Fallback to original hero image if no events
                     <img
                         src={heroImage}
-                    alt="Hero"
-                    style={{ width: '100vw', display: 'block', margin: 0, padding: 0, objectFit: 'cover' }}
-                />
+                        alt="Hero"
+                        style={{ width: '100vw', display: 'block', margin: 0, padding: 0, objectFit: 'cover' }}
+                    />
                 )}
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '32px 0' }}>
                     <button
@@ -508,24 +534,166 @@ function Home() {
                     </div>
                 </div>
                 {/* Vision, Mission and Values Section */}
-                <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '48px 0 64px 0', textAlign: 'center' }}>
-                    <div style={{ fontFamily: 'Tangerine, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 32 }}>
+                <div
+                    ref={setVisionMissionRef}
+                    style={{
+                        width: '100%',
+                        maxWidth: 1200,
+                        margin: '0 auto',
+                        padding: '48px 0 64px 0',
+                        textAlign: 'center',
+                        opacity: visionMissionVisible ? 1 : 0,
+                        transform: visionMissionVisible ? 'translateY(0)' : 'translateY(50px)',
+                        transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
+                    }}
+                >
+                    <div
+                        style={{
+                            fontFamily: 'Tangerine, cursive',
+                            fontSize: 64,
+                            color: '#DD783C',
+                            fontWeight: 500,
+                            marginBottom: 32,
+                            opacity: visionMissionVisible ? 1 : 0,
+                            transform: visionMissionVisible ? 'translateY(0)' : 'translateY(30px)',
+                            transition: 'opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s'
+                        }}
+                    >
                         Vision, Mission and Values
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-start', marginBottom: 64 }}>
-                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <img src={require('./assets/Sun2.png')} alt="Vision" style={{ width: 110, height: 110, objectFit: 'contain', marginBottom: 18 }} />
+                        {/* Vision Section with Text Box */}
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+                            {/* Text Box to the left of Vision */}
+                            <div style={{
+                                position: 'absolute',
+                                left: '-20px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                background: '#FFFDCE',
+                                padding: '16px',
+                                borderRadius: '12px',
+                                maxWidth: '200px',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                fontSize: '18px',
+                                lineHeight: '1.4',
+                                color: '#333',
+                                textAlign: 'left',
+                                opacity: currentStep >= 1 ? 1 : 0,
+                                transition: 'opacity 0.6s ease-out 0.6s'
+                            }}>
+                                To inspire and support personal excellence through value-based development, uplifting individuals from mediocrity to higher human potential.
+                            </div>
+
+                            <img
+                                src={currentStep >= 1 ? require('./assets/sunafter.png') : require('./assets/sunvsm.png')}
+                                alt="Vision"
+                                style={{
+                                    width: 110,
+                                    height: 110,
+                                    objectFit: 'contain',
+                                    marginBottom: 18,
+                                    transition: 'all 0.8s ease-out'
+                                }}
+                            />
                             <div style={{ color: '#DD783C', fontWeight: 700, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VISION</div>
                         </div>
-                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <img src={require('./assets/Irrigation.png')} alt="Mission" style={{ width: 110, height: 110, objectFit: 'contain', marginBottom: 18 }} />
+
+                        {/* Connecting Sunrays */}
+                        <div style={{
+                            position: 'absolute',
+                            top: '30%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            zIndex: 1,
+                            width: '200px',
+                            height: '100px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            pointerEvents: 'none'
+                        }}>
+                            <img
+                                src={require('./assets/sunrays.png')}
+                                alt="Connecting Sunrays"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'contain',
+                                    opacity: 0.7
+                                }}
+                            />
+                        </div>
+
+                        {/* Mission Section with Text Box */}
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+                            {/* Text Box to the right of Mission */}
+                            <div style={{
+                                position: 'absolute',
+                                right: '-20px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                background: '#FFFDCE',
+                                padding: '16px',
+                                borderRadius: '12px',
+                                maxWidth: '200px',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                fontSize: '18px',
+                                lineHeight: '1.4',
+                                color: '#333',
+                                textAlign: 'left',
+                                opacity: currentStep >= 2 ? 1 : 0,
+                                transition: 'opacity 0.6s ease-out 0.6s'
+                            }}>
+                                To nurture holistic human development, balancing inner growth with social responsibility and national consciousness.
+                            </div>
+
+                            <img
+                                src={currentStep >= 2 ? require('./assets/plantafter.png') : require('./assets/plant.png')}
+                                alt="Mission"
+                                style={{
+                                    width: 110,
+                                    height: 110,
+                                    objectFit: 'contain',
+                                    marginBottom: 18,
+                                    transition: 'all 0.8s ease-out'
+                                }}
+                            />
                             <div style={{ color: '#DD783C', fontWeight: 700, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>MISSION</div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <img src={require('./assets/Acacia.png')} alt="Values" style={{ width: 120, height: 120, objectFit: 'contain', marginBottom: 18 }} />
+                            <img
+                                src={currentStep >= 3 ? require('./assets/treeafter.png') : require('./assets/tree.png')}
+                                alt="Values"
+                                style={{
+                                    width: 120,
+                                    height: 120,
+                                    objectFit: 'contain',
+                                    marginBottom: 18,
+                                    transition: 'all 0.8s ease-out'
+                                }}
+                            />
                             <div style={{ color: '#DD783C', fontWeight: 700, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VALUES</div>
+
+                            {/* Text Box below Values */}
+                            <div style={{
+                                background: '#FFFDCE',
+                                padding: '20px',
+                                borderRadius: '12px',
+                                maxWidth: '400px',
+                                marginTop: '24px',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                fontSize: '18px',
+                                lineHeight: '1.5',
+                                color: '#333',
+                                textAlign: 'center',
+                                opacity: currentStep >= 3 ? 1 : 0,
+                                transition: 'opacity 0.6s ease-out 0.6s'
+                            }}>
+                                To uphold compassion, integrity, self-awareness, and service as the foundation for meaningful personal and collective growth.
+                            </div>
                         </div>
                     </div>
                 </div>

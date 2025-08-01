@@ -45,12 +45,12 @@
 }
 
 .reviews-main-card {
-    width: 370px;
-    min-height: 340px;
+    width: 280px;
+    min-height: 260px;
     background: #fff;
     border: 2px solid #dd783c;
     border-radius: 18px;
-    padding: 38px 32px 32px 32px;
+    padding: 28px 24px 24px 24px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -126,7 +126,7 @@
 }
 
 .reviews-main-right {
-    width: 260px;
+    width: 220px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
