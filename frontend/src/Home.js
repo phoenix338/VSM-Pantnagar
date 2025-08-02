@@ -71,9 +71,8 @@ function Home() {
             try {
                 const res = await fetch(`${API_URL}/books`);
                 const data = await res.json();
-                // Get the latest 4 books
-                const latest = data.slice(-4).reverse();
-                setLatestBooks(latest);
+                // Get all books instead of just latest 4
+                setLatestBooks(data);
             } catch (err) {
                 console.log('No books found');
             }
@@ -776,7 +775,10 @@ function Home() {
                     display: 'flex',
                     gap: '32px',
                     overflowX: 'auto',
-                    padding: '0 20px'
+                    overflowY: 'hidden',
+                    padding: '0 20px 20px 20px',
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: '#DD783C #f0f0f0'
                 }}>
                     {latestBooks.map((book, index) => (
                         <div key={book._id} style={{
@@ -790,7 +792,8 @@ function Home() {
                             backgroundColor: '#FFE7D7',
                             borderRadius: '16px',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                            border: '1px solid #e0e0e0'
+                            border: '1px solid #e0e0e0',
+                            transition: 'transform 0.2s, box-shadow 0.2s'
                         }}>
                             <div style={{
                                 width: '260px',

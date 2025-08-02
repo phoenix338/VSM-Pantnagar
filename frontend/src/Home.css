@@ -361,12 +361,27 @@
     position: relative;
 }
 
-/* Hide scrollbars for books section */
+/* Custom scrollbar for books section */
 .books-scroll-container::-webkit-scrollbar {
-    display: none;
+    height: 8px;
+    display: block;
+}
+
+.books-scroll-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.books-scroll-container::-webkit-scrollbar-thumb {
+    background: #DD783C;
+    border-radius: 4px;
+}
+
+.books-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #a2592a;
 }
 
 .books-scroll-container {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: #DD783C #f0f0f0;
 }

@@ -332,13 +332,16 @@ app.get('/reviews', async (req, res) => {
   }
 });
 
-// Add review (admin only, with image upload)
+// Add review (admin only, with optional image upload)
 app.post('/reviews', adminAuth, upload.single('image'), async (req, res) => {
   try {
-    const { name, designation, title, text } = req.body;
-    if (!name || !designation || !title || !text || !req.file || !req.file.path) return res.status(400).json({ error: 'All fields and image are required' });
-    const imageUrl = req.file.path;
-    const review = new Review({ name, designation, title, text, imageUrl });
+    const { name, designation, text } = req.body;
+    if (!name || !designation || !text) return res.status(400).json({ error: 'Name, designation and text are required' });
+
+    // Use a default image if no image is uploaded
+    const imageUrl = req.file ? req.file.path : '/uploads/default-testimonial.jpg';
+
+    const review = new Review({ name, designation, text, imageUrl });
     await review.save();
     res.status(201).json(review);
   } catch (err) {

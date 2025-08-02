@@ -54,9 +54,20 @@ const HomeInitiatives = () => {
                     <div
                         className={`home-initiative-card${expanded === idx ? ' expanded' : ''}`}
                         key={item._id || idx}
-                        onClick={() => handleToggle(idx)}
                     >
-                        <div className="home-initiative-heading">{item.title || `Initiative ${idx + 1}`}</div>
+                        <div className="home-initiative-header" onClick={() => handleToggle(idx)}>
+                            <div className="home-initiative-heading">{item.title || `Initiative ${idx + 1}`}</div>
+                            <svg
+                                className={`home-initiative-icon ${expanded === idx ? 'expanded' : ''}`}
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path d="M12 4V20M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </div>
                         {expanded === idx && (
                             <div className={`home-initiative-details${idx % 2 === 1 ? ' reverse' : ''}`}>
                                 {(item.imageUrls && item.imageUrls.length > 0) || item.imageUrl ? (

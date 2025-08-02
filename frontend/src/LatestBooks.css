@@ -1,0 +1,79 @@
+.latest-books-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 0;
+}
+
+.latest-books-title {
+    font-family: 'Arimo, sans-serif';
+    color: #DD783C;
+    font-weight: 700;
+    font-size: 32px;
+    margin-bottom: 24px;
+}
+
+.latest-books-scroll {
+    display: flex;
+    gap: 32px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: #DD783C #f0f0f0;
+}
+
+.latest-books-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.latest-books-scroll::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.latest-books-scroll::-webkit-scrollbar-thumb {
+    background: #DD783C;
+    border-radius: 4px;
+}
+
+.latest-books-scroll::-webkit-scrollbar-thumb:hover {
+    background: #a2592a;
+}
+
+.book-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px #0001;
+    padding: 20px;
+    width: 220px;
+    min-width: 220px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.book-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px #0002;
+}
+
+.book-cover {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.book-title {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 6px;
+    color: #222;
+}
+
+.book-author {
+    color: #904B1C;
+    font-size: 15px;
+}

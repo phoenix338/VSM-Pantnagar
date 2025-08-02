@@ -7,6 +7,42 @@ import { auth } from './firebase';
 import Footer from './Footer';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
+
+// Function to convert URLs in text to clickable links
+const convertTextToLinks = (text) => {
+    if (!text) return '';
+
+    // Regular expression to match URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    // Split the text by URLs and create React elements
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+        if (part.match(urlRegex)) {
+            // This is a URL, make it a clickable link
+            return (
+                <a
+                    key={index}
+                    href={part}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                        color: '#007bff',
+                        textDecoration: 'underline',
+                        wordBreak: 'break-all'
+                    }}
+                >
+                    {part}
+                </a>
+            );
+        } else {
+            // This is regular text
+            return part;
+        }
+    });
+};
+
 const OurInitiative = () => {
     const { eventId } = useParams();
     const location = useLocation();
@@ -185,7 +221,9 @@ const OurInitiative = () => {
                         >
                             <div className="initiative-text-col">
                                 <h2 className="initiative-heading">{item.title || `Event ${idx + 1}`}</h2>
-                                <div className="initiative-text">{item.text}</div>
+                                <div className="initiative-text">
+                                    {convertTextToLinks(item.text)}
+                                </div>
                                 {isAdmin && (
                                     <button
                                         className="initiative-delete-btn"
