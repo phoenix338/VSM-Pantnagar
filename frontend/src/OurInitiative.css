@@ -2,7 +2,8 @@
   width: 100vw;
   min-height: 100vh;
   background: #fdf6f1;
-  margin-top: 100px;
+  margin-top: 120px;
+  /* Increased from 100px to prevent logo overlap */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,7 +88,8 @@
   align-items: flex-start;
   /* Align text to left */
   padding: 0 48px;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  /* Reduced from 2rem */
   font-family: 'Nunito', sans-serif;
 }
 
@@ -104,25 +106,126 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Center image vertically */
+  padding: 48px;
+  position: relative;
 }
 
 .initiative-img {
-  max-width: 320px;
-  max-height: 320px;
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+
+
+/* Image Slideshow Styles */
+.image-slideshow {
+  position: relative;
   width: 100%;
-  height: auto;
-  background: transparent;
-  transition: filter 0.3s;
+  height: 400px;
+  /* Fixed height for consistency */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding-bottom: 50px; */
+  /* Add space for dots below */
 }
 
-/* Optional: Invert image for dark background if you don't have a white version */
-.initiative-row.reverse .initiative-img {
-  filter: invert(1) grayscale(1) brightness(1.5);
+.image-slideshow img {
+  width: 400px;
+  /* Fixed width */
+  height: 400px;
+  /* Fixed height */
+  object-fit: cover;
+  /* Maintains aspect ratio while filling the container */
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.5s ease;
 }
 
-.initiative-row.even .initiative-img {
-  filter: none;
+.slideshow-btn {
+  position: absolute;
+  bottom: 20px;
+  /* Move to bottom instead of center */
+  transform: none;
+  /* Remove vertical centering */
+  background: rgba(0, 0, 0, 0.3);
+  /* More transparent background */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(5px);
+  /* Add blur effect for better visibility */
+}
+
+.slideshow-btn:hover {
+  background: rgba(0, 0, 0, 0.6);
+  /* Slightly more opaque on hover */
+  transform: scale(1.1);
+  /* Remove translateY since we're not centering */
+}
+
+.prev-btn {
+  left: 20px;
+  /* Back on the image */
+}
+
+.next-btn {
+  right: 20px;
+  /* Back on the image */
+}
+
+.image-indicators {
+  position: absolute;
+  bottom: -30px;
+  /* Move below the image */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.no-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 200px;
+  background: #f0f0f0;
+  border-radius: 16px;
+  color: #666;
+  font-size: 1.2rem;
 }
 
 .initiative-delete-btn {

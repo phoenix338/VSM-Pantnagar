@@ -65,7 +65,7 @@ const Navbar = (props) => {
         <img
           src={logo}
           alt="Logo"
-          style={{ height: 110, width: 110, borderRadius: '50%', objectFit: 'cover', position: 'absolute', top: -30, left: 18, zIndex: 1101, background: '#fff', boxShadow: '0 1px 4px #0001', border: '2px solid #fff', cursor: 'pointer' }}
+          style={{ height: 110, width: 110, borderRadius: '50%', objectFit: 'cover', position: 'absolute', top: -25, left: 18, zIndex: 1101, background: '#fff', boxShadow: '0 1px 4px #0001', border: '2px solid #fff', cursor: 'pointer' }}
           onClick={handleLogoClick}
         />
         {/* Nav Links */}

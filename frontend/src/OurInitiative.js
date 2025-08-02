@@ -14,11 +14,12 @@ const OurInitiative = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
-    const [form, setForm] = useState({ title: '', text: '', imageUrl: '' });
-    const [imageFile, setImageFile] = useState(null);
+    const [form, setForm] = useState({ title: '', text: '', imageUrls: [] });
+    const [imageFiles, setImageFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [formMsg, setFormMsg] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState({}); // Track current image for each event
 
     useEffect(() => {
         fetch(`${API_URL}/initiatives`)
@@ -26,6 +27,12 @@ const OurInitiative = () => {
             .then(data => {
                 setInitiatives(data);
                 setLoading(false);
+                // Initialize current image index for each event
+                const initialIndexes = {};
+                data.forEach(item => {
+                    initialIndexes[item._id] = 0;
+                });
+                setCurrentImageIndex(initialIndexes);
                 // Scroll to specific event if eventId is provided
                 if (eventId) {
                     setTimeout(() => {
@@ -42,6 +49,23 @@ const OurInitiative = () => {
             });
     }, [eventId]);
 
+    // Auto-advance slideshow every 5 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex(prev => {
+                const newIndexes = { ...prev };
+                initiatives.forEach(item => {
+                    if (item.imageUrls && item.imageUrls.length > 1) {
+                        newIndexes[item._id] = (newIndexes[item._id] + 1) % item.imageUrls.length;
+                    }
+                });
+                return newIndexes;
+            });
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [initiatives]);
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(setUser);
         return () => unsubscribe();
@@ -54,33 +78,32 @@ const OurInitiative = () => {
     };
 
     const handleFileChange = e => {
-        setImageFile(e.target.files[0]);
+        setImageFiles(Array.from(e.target.files));
     };
 
     const handleAddInitiative = async e => {
         e.preventDefault();
         setSubmitting(true);
         setFormMsg('');
-        let imageUrl = form.imageUrl;
+        let imageUrls = [];
         try {
-            // Prompt for password once
-            const adminPassword = prompt('Enter admin password:');
-            if (!adminPassword) throw new Error('Password is required');
-            if (imageFile) {
+            if (imageFiles.length > 0) {
                 setUploading(true);
                 const formData = new FormData();
-                formData.append('image', imageFile);
-                const res = await fetch(`${API_URL}/upload-image`, {
+                imageFiles.forEach(file => {
+                    formData.append('images', file);
+                });
+                const res = await fetch(`${API_URL}/upload-multiple-images`, {
                     method: 'POST',
                     headers: {
                         email: user.email,
-                        password: adminPassword
+                        password: prompt('Enter admin password:')
                     },
                     body: formData
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Image upload failed');
-                imageUrl = data.imageUrl;
+                imageUrls = data.imageUrls;
                 setUploading(false);
             }
             const res = await fetch(`${API_URL}/initiatives`, {
@@ -88,13 +111,13 @@ const OurInitiative = () => {
                 headers: {
                     'Content-Type': 'application/json',
                     email: user.email,
-                    password: adminPassword
+                    password: prompt('Enter admin password:')
                 },
-                body: JSON.stringify({ ...form, imageUrl })
+                body: JSON.stringify({ ...form, imageUrls })
             });
-            if (!res.ok) throw new Error('Failed to add initiative');
-            setForm({ title: '', text: '', imageUrl: '' });
-            setImageFile(null);
+            if (!res.ok) throw new Error('Failed to add event');
+            setForm({ title: '', text: '', imageUrls: [] });
+            setImageFiles([]);
             setFormMsg('Event added!');
             // Refresh list
             const data = await res.json();
@@ -123,6 +146,26 @@ const OurInitiative = () => {
         }
     };
 
+    const nextImage = (eventId) => {
+        const event = initiatives.find(item => item._id === eventId);
+        if (event && event.imageUrls && event.imageUrls.length > 1) {
+            setCurrentImageIndex(prev => ({
+                ...prev,
+                [eventId]: (prev[eventId] + 1) % event.imageUrls.length
+            }));
+        }
+    };
+
+    const prevImage = (eventId) => {
+        const event = initiatives.find(item => item._id === eventId);
+        if (event && event.imageUrls && event.imageUrls.length > 1) {
+            setCurrentImageIndex(prev => ({
+                ...prev,
+                [eventId]: prev[eventId] === 0 ? event.imageUrls.length - 1 : prev[eventId] - 1
+            }));
+        }
+    };
+
     return (
         <>
             <Navbar />
@@ -141,7 +184,7 @@ const OurInitiative = () => {
                             id={`event-${item._id}`}
                         >
                             <div className="initiative-text-col">
-                                <h2 className="initiative-heading">{item.title || `Initiative ${idx + 1}`}</h2>
+                                <h2 className="initiative-heading">{item.title || `Event ${idx + 1}`}</h2>
                                 <div className="initiative-text">{item.text}</div>
                                 {isAdmin && (
                                     <button
@@ -153,7 +196,44 @@ const OurInitiative = () => {
                                 )}
                             </div>
                             <div className="initiative-img-col">
-                                <img src={item.imageUrl} alt="Initiative" className="initiative-img" />
+                                {(item.imageUrls && item.imageUrls.length > 0) || item.imageUrl ? (
+                                    <div className="image-slideshow">
+                                        <img
+                                            src={item.imageUrls && item.imageUrls.length > 0
+                                                ? item.imageUrls[currentImageIndex[item._id] || 0]
+                                                : item.imageUrl}
+                                            alt="Event"
+                                            className="initiative-img"
+                                        />
+                                        {item.imageUrls && item.imageUrls.length > 1 && (
+                                            <>
+                                                <button
+                                                    className="slideshow-btn prev-btn"
+                                                    onClick={() => prevImage(item._id)}
+                                                >
+                                                    ‹
+                                                </button>
+                                                <button
+                                                    className="slideshow-btn next-btn"
+                                                    onClick={() => nextImage(item._id)}
+                                                >
+                                                    ›
+                                                </button>
+                                                <div className="image-indicators">
+                                                    {item.imageUrls.map((_, index) => (
+                                                        <span
+                                                            key={index}
+                                                            className={`indicator ${(currentImageIndex[item._id] || 0) === index ? 'active' : ''}`}
+                                                            onClick={() => setCurrentImageIndex(prev => ({ ...prev, [item._id]: index }))}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="no-image">No images available</div>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -164,15 +244,14 @@ const OurInitiative = () => {
                         <form onSubmit={handleAddInitiative} style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 400 }}>
                             <input name="title" placeholder="Event title" value={form.title} onChange={handleChange} required />
                             <textarea name="text" placeholder="Event text" value={form.text} onChange={handleChange} required style={{ minHeight: 60 }} />
-                            <input type="file" accept="image/*" onChange={handleFileChange} />
-                            {uploading && <div>Uploading image...</div>}
+                            <input type="file" accept="image/*" multiple onChange={handleFileChange} />
+                            {uploading && <div>Uploading images...</div>}
                             <button type="submit" disabled={submitting || uploading}>{submitting ? 'Adding...' : 'Add Event'}</button>
                             {formMsg && <div style={{ color: formMsg.startsWith('Error') ? 'red' : 'green' }}>{formMsg}</div>}
                         </form>
                     </div>
                 )}
                 <Footer />
-
             </div>
         </>
     );

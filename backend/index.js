@@ -93,7 +93,26 @@ app.get('/contact-test', (req, res) => {
 app.get('/initiatives', async (req, res) => {
   try {
     const initiatives = await Initiative.find().sort({ createdAt: 1 });
-    res.json(initiatives);
+
+    // Handle backward compatibility for old imageUrl format
+    const processedInitiatives = initiatives.map(initiative => {
+      const initiativeObj = initiative.toObject();
+
+      // If imageUrls doesn't exist but imageUrl does, convert to new format
+      if (!initiativeObj.imageUrls && initiativeObj.imageUrl) {
+        initiativeObj.imageUrls = [initiativeObj.imageUrl];
+        delete initiativeObj.imageUrl;
+      }
+
+      // If neither exists, provide empty array
+      if (!initiativeObj.imageUrls) {
+        initiativeObj.imageUrls = [];
+      }
+
+      return initiativeObj;
+    });
+
+    res.json(processedInitiatives);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -103,8 +122,8 @@ app.get('/initiatives', async (req, res) => {
 app.post('/initiatives', adminAuth, async (req, res) => {
   try {
     console.log('Received body:', req.body);
-    const { title, text, imageUrl } = req.body;
-    const initiative = new Initiative({ title, text, imageUrl });
+    const { title, text, imageUrls } = req.body;
+    const initiative = new Initiative({ title, text, imageUrls });
     await initiative.save();
     res.status(201).json(initiative);
   } catch (err) {
@@ -171,6 +190,15 @@ app.post('/upload-image', adminAuth, upload.single('image'), (req, res) => {
     return res.status(400).json({ error: 'Image upload failed' });
   }
   res.json({ imageUrl: req.file.path });
+});
+
+// Multiple images upload endpoint
+app.post('/upload-multiple-images', adminAuth, upload.array('images', 10), (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: 'No images uploaded' });
+  }
+  const imageUrls = req.files.map(file => file.path);
+  res.json({ imageUrls });
 });
 
 // Get all team members
