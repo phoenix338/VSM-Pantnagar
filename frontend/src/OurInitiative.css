@@ -37,6 +37,7 @@
   margin-bottom: 24px;
   margin-top: 64px;
   letter-spacing: 1px;
+  text-align: center;
 }
 
 .our-initiative-heading {
@@ -83,22 +84,25 @@
   flex: 2;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  /* Align text to top */
-  align-items: flex-start;
-  /* Align text to left */
+  justify-content: center;
+  /* Center text vertically */
+  align-items: center;
+  /* Center text horizontally */
   padding: 0 48px;
   font-size: 1.8rem;
   /* Reduced from 2rem */
   font-family: 'Nunito', sans-serif;
+  /* text-align: center; */
 }
 
 .initiative-row.reverse .initiative-text-col {
   color: #fff;
+  /* text-align: center; */
 }
 
 .initiative-row.even .initiative-text-col {
   color: #fff;
+  /* text-align: center; */
 }
 
 .initiative-img-col {
