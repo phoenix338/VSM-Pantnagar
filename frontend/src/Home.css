@@ -11,12 +11,12 @@
 }
 
 .testimonials-heading {
-    font-family: 'Tangerine', cursive;
+    font-family: 'Apple Chancery', cursive;
     font-size: 64px;
     color: #DD783C;
     margin-bottom: 0;
     margin-top: 32px;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 1px;
 }
 
@@ -46,7 +46,7 @@
 
 .testimonials-quote-text {
     position: relative;
-    font-family: 'Oranienbaum', serif;
+    font-family: 'Georgia', serif;
     font-size: 32px;
     color: #181818;
     text-align: center;
@@ -82,7 +82,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Arimo', sans-serif;
+    font-family: 'Helvetica', sans-serif;
     font-size: 28px;
     color: #181818;
     transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
@@ -98,179 +98,173 @@
 }
 
 .testimonial-card.side {
-    background: #fdf6f1;
+    transform: scale(0.9) translateY(-8px);
+    opacity: 0.8;
     z-index: 2;
-    opacity: 0.95;
 }
 
 .testimonial-card.faded {
-    background: #e6e6e6;
+    transform: scale(0.8);
+    opacity: 0.6;
     z-index: 1;
-    opacity: 0.7;
 }
 
 .testimonial-card-name {
+    font-family: 'Helvetica', sans-serif;
     font-weight: bold;
-    margin-bottom: 8px;
 }
 
 .testimonial-card-title {
+    font-family: 'Arial', sans-serif;
     font-size: 18px;
-    color: #181818;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 400;
-    text-align: center;
+    margin-top: 8px;
+    color: #666;
 }
 
 .testimonials-bar {
-    width: 120px;
-    height: 8px;
-    background: #888;
-    border-radius: 4px;
-    margin: 18px auto 0 auto;
-    opacity: 0.6;
+    width: 200px;
+    height: 4px;
+    background: #DD783C;
+    border-radius: 2px;
+    margin-top: 16px;
 }
 
 .testimonials-cards-row .testimonial-card:first-child,
 .testimonials-cards-row .testimonial-card:last-child {
-    transform: translateY(24px);
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .testimonials-cards-row .testimonial-card.faded:first-child,
 .testimonials-cards-row .testimonial-card.faded:last-child {
-    transform: scale(1) translateY(24px);
+    opacity: 0.4;
 }
 
 @media (max-width: 900px) {
     .testimonials-quote-bg-img {
-        width: 95vw;
-        min-height: 80px;
+        width: 90vw;
+        margin: 32px auto;
     }
 
     .testimonials-bg-img {
-        width: 90vw;
-        max-width: 90vw;
-        height: 80px;
+        width: 80vw;
     }
 
     .testimonials-cards-row {
-        margin: 24px 0 12px 0;
+        flex-direction: column;
+        gap: 16px;
+        margin: 16px 0;
     }
 
     .testimonial-card {
-        width: 220px;
+        width: 280px;
         height: 120px;
-        font-size: 18px;
-        margin: 0 -24px;
+        margin: 0;
+        font-size: 24px;
     }
 
     .testimonial-card.active {
-        font-size: 22px;
+        font-size: 28px;
+    }
+
+    .testimonial-card-title {
+        font-size: 16px;
+    }
+
+    .testimonials-bar {
+        width: 150px;
     }
 }
 
 @media (max-width: 600px) {
     .testimonials-section {
         margin-bottom: 32px;
-        padding-bottom: 16px;
     }
 
     .testimonials-heading {
-        font-size: 38px;
+        font-size: 48px;
+        margin-top: 16px;
     }
 
     .testimonials-quote-bg-img {
-        width: 100vw;
-        min-height: 60px;
+        width: 95vw;
+        margin: 16px auto;
     }
 
     .testimonials-bg-img {
         width: 90vw;
-        height: 60px;
     }
 
     .testimonials-cards-row {
-        margin: 12px 0 8px 0;
+        gap: 12px;
     }
 
     .testimonial-card {
-        width: 120px;
-        height: 70px;
-        font-size: 12px;
-        margin: 0 -10px;
-        border-radius: 10px;
+        width: 240px;
+        height: 100px;
+        font-size: 20px;
     }
 
     .testimonial-card.active {
-        font-size: 14px;
+        font-size: 24px;
     }
 
     .testimonial-card-title {
-        font-size: 10px;
+        font-size: 14px;
     }
 
     .testimonials-bar {
-        width: 60px;
-        height: 4px;
-        margin-top: 8px;
+        width: 120px;
     }
 }
 
 .navbar-item.dropdown {
     position: relative;
-    display: inline-block;
 }
 
 .dropdown-label {
-    color: #DD783C;
-    cursor: pointer;
-    padding: 0 12px;
     display: flex;
     align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-family: 'Helvetica', sans-serif;
 }
 
 .dropdown-arrow {
-    font-size: 13px;
-    margin-left: 4px;
+    transition: transform 0.2s;
 }
 
 .dropdown-menu {
-    display: none;
     position: absolute;
     top: 100%;
     left: 0;
-    min-width: 210px;
-    background: #fff;
-    border: 2px solid #eceae7;
-    border-radius: 16px;
-    box-shadow: none;
-    z-index: 100;
-    padding: 8px 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s;
 }
 
 .navbar-item.dropdown:hover .dropdown-menu,
-.navbar-item.dropdown:focus-within .dropdown-menu {
-    display: block;
-}
-
 .navbar-item.dropdown.force-close .dropdown-menu {
-    display: none !important;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 .dropdown-item,
-.dropdown-item:visited,
-.dropdown-item:hover,
-.dropdown-item:focus {
-    color: #181818;
-    padding: 12px 24px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s, color 0.15s;
-    text-align: left;
-    border-radius: 0;
-    background: none;
-    text-decoration: none !important;
+.navbar-item.dropdown .dropdown-menu a {
     display: block;
+    padding: 12px 16px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.2s;
+    font-family: 'Arial', sans-serif;
 }
 
 .dropdown-item:hover,
@@ -286,6 +280,7 @@
     word-break: break-word;
     overflow-wrap: break-word;
     text-align: center;
+    font-family: 'Georgia', serif;
 }
 
 .contribute-btn,
@@ -299,7 +294,7 @@
     font-size: 20px;
     box-shadow: 0 2px 6px #DD783C22;
     cursor: pointer;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Helvetica', sans-serif;
     font-style: normal;
     transition: background 0.2s, color 0.2s;
 }
@@ -321,7 +316,7 @@
     margin-right: 8px;
     box-shadow: 0 2px 8px #f3c7a1aa;
     cursor: pointer;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Helvetica', sans-serif;
     font-style: normal;
     transition: background 0.2s, color 0.2s;
 }
@@ -330,11 +325,10 @@
     background: #F8D4BC;
 }
 
-
-
 .search-input::placeholder {
     color: #CCCCCC;
     font-size: 13px;
+    font-family: 'Georgia', serif;
 }
 
 /* Headphone icon link styles */
@@ -384,4 +378,22 @@
 .books-scroll-container {
     scrollbar-width: thin;
     scrollbar-color: #DD783C #f0f0f0;
+}
+
+/* Sparkle animation for Introducing VSM text */
+@keyframes sparkle {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(180deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.5) rotate(360deg);
+    }
 }

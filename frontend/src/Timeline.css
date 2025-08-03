@@ -30,11 +30,11 @@
 }
 
 .timeline-heading {
-    font-family: 'Tangerine', cursive;
-    font-size: 4rem;
-    color: #888;
+    font-family: 'Apple Chancery', cursive;
+    font-size: 64px;
+    color: #DD783C;
     text-align: center;
-    font-weight: 400;
+    font-weight: 500;
     margin: 0;
     letter-spacing: 2px;
 }

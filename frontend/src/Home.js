@@ -218,7 +218,7 @@ function Home() {
                 <Navbar resetHome={resetHome} />
                 <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', zIndex: 2000, overflow: 'hidden' }}>
                     <video
-                        src={require('./assets/diya.mp4')}
+                        src={require('./assets/diyaa.mp4')}
                         autoPlay
                         loop
                         muted
@@ -301,7 +301,7 @@ function Home() {
                 <div style={{ width: '100vw', height: '100vh', background: '#f9f3ec', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'fixed', inset: 0, zIndex: 1500 }}>
                     <div style={{ textAlign: 'center', marginBottom: 32 }}>
                         <div style={{
-                            fontFamily: 'Italiana, serif',
+                            fontFamily: 'Arial, sans-serif',
                             fontStyle: 'normal',
                             fontWeight: 400,
                             fontSize: 50,
@@ -313,28 +313,75 @@ function Home() {
                             Come, let's witness the heart warming saga of<br />growth and transformation
                         </div>
                         <div style={{
-                            fontFamily: 'Joan, serif',
+                            fontFamily: 'Helvetica',
                             fontStyle: 'normal',
                             fontWeight: 400,
                             fontSize: 48,
-                            color: '#904B1C',
+                            color: '#FFD700',
                             marginBottom: 40,
                             opacity: showIntro2 ? 1 : 0,
                             transition: 'opacity 0.8s',
+                            position: 'relative',
+                            display: 'inline-block',
                         }}>
+                            <span style={{
+                                position: 'absolute',
+                                top: '-15px',
+                                left: '-20px',
+                                fontSize: '24px',
+                                color: '#FFD700',
+                                animation: 'sparkle 2s infinite',
+                                opacity: 0.9,
+                            }}>✨</span>
+                            <span style={{
+                                position: 'absolute',
+                                top: '10px',
+                                right: '-25px',
+                                fontSize: '20px',
+                                color: '#FFD700',
+                                animation: 'sparkle 2.5s infinite 0.5s',
+                                opacity: 0.8,
+                            }}>✨</span>
+                            <span style={{
+                                position: 'absolute',
+                                bottom: '5px',
+                                left: '30px',
+                                fontSize: '18px',
+                                color: '#FFD700',
+                                animation: 'sparkle 1.8s infinite 1s',
+                                opacity: 0.7,
+                            }}>✨</span>
                             Introducing VSM
+                            <span style={{
+                                position: 'absolute',
+                                top: '5px',
+                                right: '40px',
+                                fontSize: '22px',
+                                color: '#FFD700',
+                                animation: 'sparkle 2.2s infinite 0.8s',
+                                opacity: 0.8,
+                            }}>✨</span>
+                            <span style={{
+                                position: 'absolute',
+                                bottom: '-10px',
+                                right: '15px',
+                                fontSize: '16px',
+                                color: '#FFD700',
+                                animation: 'sparkle 1.5s infinite 1.2s',
+                                opacity: 0.6,
+                            }}>✨</span>
                         </div>
                         <div style={{
-                            fontFamily: 'Joan',
+                            fontFamily: 'Georgia, serif',
                             fontStyle: 'normal',
                             fontWeight: 400,
                             fontSize: 45,
                             color: '#000',
-                            textAlign: 'right',
+                            textAlign: 'center',
                             opacity: showIntro3 ? 1 : 0,
                             transition: 'opacity 0.8s',
                         }}>
-                            - Built with inspiration, sustained<br />by love
+                            - Built with inspiration, sustained by love
                         </div>
                         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: 40 }}>
                             <button
@@ -519,7 +566,8 @@ function Home() {
                         marginTop: 110,
                     }}>
                         {/* Quote of the Day */}
-                        <div style={{ fontFamily: 'Tangerine, cursive', fontSize: 80, color: '#DD783C', fontStyle: 'normal', margin: '24px 0 12px 0', fontWeight: 500 }}>
+
+                        <div style={{ fontFamily: 'Apple Chancery, cursive', fontSize: 64, color: '#DD783C', fontStyle: 'normal', margin: '24px 0 12px 0', fontWeight: 500 }}>
                             Quote of The Day:
                         </div>
                         <div style={{ fontFamily: 'Oranienbaum, serif', fontSize: 48, fontWeight: 400, color: '#8B8080', margin: '0 0 0 0', fontStyle: 'normal', textDecoration: 'none', lineHeight: 1.1 }}>
@@ -548,7 +596,7 @@ function Home() {
                 >
                     <div
                         style={{
-                            fontFamily: 'Tangerine, cursive',
+                            fontFamily: 'Apple Chancery, cursive',
                             fontSize: 64,
                             color: '#DD783C',
                             fontWeight: 500,
@@ -698,7 +746,7 @@ function Home() {
                 </div>
                 {/* Our Impact Section */}
                 <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '0 0 64px 0', textAlign: 'center' }}>
-                    <div style={{ fontFamily: 'Tangerine, cursive', fontSize: 64, color: '#DD783C', fontWeight: 700, marginBottom: 32 }}>
+                    <div style={{ fontFamily: 'Apple Chancery, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 32 }}>
                         Our Impact
                     </div>
                     <div style={{ background: '#FFE5D0', borderRadius: 48, padding: '48px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 16px #0001', flexWrap: 'wrap', gap: 0 }}>
@@ -768,7 +816,7 @@ function Home() {
 
             {/* Latest Books Section */}
             <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '64px 0', textAlign: 'center' }}>
-                <div style={{ fontFamily: 'Tangerine, cursive', fontSize: 64, color: '#DD783C', fontWeight: 700, marginBottom: 48 }}>
+                <div style={{ fontFamily: 'Apple Chancery, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 48 }}>
                     Latest Books
                 </div>
                 <div className="books-scroll-container" style={{

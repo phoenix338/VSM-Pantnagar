@@ -38,8 +38,9 @@ body,
 }
 
 .login-form-section h1 {
-    font-size: 2.1rem;
-    font-weight: 700;
+    font-size: 48px;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-weight: 500;
 }
 
 .login-form {

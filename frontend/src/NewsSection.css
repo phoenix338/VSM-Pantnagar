@@ -12,9 +12,10 @@
 }
 
 .news-section-title {
+    font-family: 'Helvetica', 'Arial', sans-serif;;
     color: #dd783c;
-    font-size: 3.5rem;
-    font-weight: 400;
+    font-size: 52px;
+    font-weight: 500;
     letter-spacing: 1px;
     margin-bottom: 0;
 }

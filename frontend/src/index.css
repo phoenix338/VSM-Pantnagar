@@ -3,11 +3,26 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Georgia', 'Merriweather', serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global font classes */
+.main-heading {
+  font-family: 'Apple Chancery', 'Playfair Display', cursive;
+}
+
+.heading {
+  font-family: 'Helvetica', 'Open Sans', sans-serif;
+}
+
+.sub-heading {
+  font-family: 'Arial', 'Roboto', sans-serif;
+}
+
+.body-text {
+  font-family: 'Georgia', 'Merriweather', serif;
 }
 
 code {

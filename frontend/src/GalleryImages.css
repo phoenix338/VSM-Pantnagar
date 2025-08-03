@@ -8,12 +8,11 @@
 
 .gallery-heading {
     text-align: center;
-    font-family: 'Tangerine', cursive;
-    font-style: normal;
-    font-size: 56px;
-    color: #8B8080;
+    font-family: 'Apple Chancery', cursive;
+    font-size: 64px;
+    color:#dd783c;
     margin-bottom: 32px;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .gallery-grid {

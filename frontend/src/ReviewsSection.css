@@ -13,10 +13,12 @@
 
 .reviews-section-title {
     color: #dd783c;
-    font-size: 3.5rem;
-    font-weight: 400;
+    font-size: 52px;
+    font-weight: 500;
     letter-spacing: 1px;
     margin-bottom: 0;
+    
+    font-family:'Helvetica', 'Arial', sans-serif;
 }
 
 .reviews-section-horizontal-line {
@@ -69,7 +71,7 @@
 }
 
 .reviews-main-name {
-    font-family: 'Tangerine', cursive;
+    font-family: 'Helvetica', 'Open Sans', sans-serif;
     font-size: 2rem;
     color: #dd783c;
     margin-bottom: 12px;
@@ -84,7 +86,7 @@
 .reviews-main-designation {
     font-size: 1.1rem;
     color: #111;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Arial', 'Roboto', sans-serif;
     margin-top: 8px;
     font-weight: 700;
 }
@@ -99,7 +101,7 @@
 }
 
 .reviews-main-title {
-    font-family: 'Tangerine', cursive;
+    font-family: 'Helvetica', 'Open Sans', sans-serif;
     font-size: 2.2rem;
     color: #dd783c;
     margin-bottom: 18px;
@@ -110,7 +112,7 @@
 .reviews-main-text {
     font-size: 1.2rem;
     color: #222;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Georgia', 'Merriweather', serif;
     line-height: 1.6;
     margin-bottom: 0;
     width: 100%;
@@ -181,7 +183,7 @@
 }
 
 .reviews-scroll-name {
-    font-family: 'Tangerine', cursive;
+    font-family: 'Helvetica', 'Open Sans', sans-serif;
     font-size: 1.2rem;
     color: #dd783c;
     margin-bottom: 6px;
@@ -191,7 +193,7 @@
 .reviews-scroll-designation {
     font-size: 1rem;
     color: #111;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Arial', 'Roboto', sans-serif;
     text-align: center;
     font-weight: 700;
 }
@@ -218,6 +220,7 @@
     color: #222;
     margin-top: 8px;
     text-align: center;
+    font-family: 'Georgia', 'Merriweather', serif;
 }
 
 /* Enhanced form styling for testimonials */
@@ -228,7 +231,7 @@
     border: 2px solid #ddd;
     border-radius: 8px;
     font-size: 14px;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Georgia', 'Merriweather', serif;
     line-height: 1.5;
     resize: vertical;
     min-height: 80px;
@@ -254,7 +257,7 @@
     border: 2px solid #ddd;
     border-radius: 8px;
     font-size: 14px;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Georgia', 'Merriweather', serif;
     box-sizing: border-box;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
