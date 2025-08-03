@@ -858,7 +858,7 @@ function Home() {
                                     style={{
                                         width: '100%',
                                         height: '100%',
-                                        objectFit: 'cover'
+                                        objectFit: 'fill'
                                     }}
                                 />
                             </div>
@@ -868,7 +868,15 @@ function Home() {
                                 fontWeight: 'bold',
                                 color: '#333',
                                 textAlign: 'center',
-                                lineHeight: '1.2'
+                                lineHeight: '1.3',
+                                wordWrap: 'break-word',
+                                overflowWrap: 'break-word',
+                                maxHeight: '60px',
+                                overflow: 'hidden',
+                                display: '-webkit-box',
+                                WebkitLineClamp: '3',
+                                WebkitBoxOrient: 'vertical',
+                                padding: '0 8px'
                             }}>
                                 {book.title}
                             </div>

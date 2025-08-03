@@ -97,26 +97,23 @@ const ReviewsSection = () => {
                 <div className="reviews-section-horizontal-line" />
             </div>
             <div className="reviews-section-main">
-                <div className="reviews-main-left">
-                    {reviews[selected] ? (
-                        <div className="reviews-main-card">
-                            <div className="reviews-main-name">{reviews[selected].name}</div>
-                            <div className="reviews-main-divider" />
-                            <div className="reviews-main-designation">
-                                {reviews[selected].designation.split('\n').map((line, idx) => (
-                                    <div key={idx}>{line}</div>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="reviews-main-card-placeholder" />
-                    )}
-                </div>
                 <div className="reviews-main-center">
                     {reviews[selected] ? (
                         <>
                             <div className="reviews-main-title">{reviews[selected].title}</div>
-                            <div className="reviews-main-text">{reviews[selected].text}</div>
+                            <div className="reviews-main-text">
+                                "{reviews[selected].text}"
+                                <div style={{
+                                    textAlign: 'right',
+                                    fontStyle: 'normal',
+                                    fontWeight: 'bold',
+                                    color: '#dd783c',
+                                    fontSize: '1rem',
+                                    marginTop: '1rem'
+                                }}>
+                                    — {reviews[selected].name}
+                                </div>
+                            </div>
                         </>
                     ) : (
                         <>

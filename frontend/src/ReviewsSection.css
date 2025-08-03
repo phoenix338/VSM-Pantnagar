@@ -17,8 +17,8 @@
     font-weight: 500;
     letter-spacing: 1px;
     margin-bottom: 0;
-    
-    font-family:'Helvetica', 'Arial', sans-serif;
+
+    font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .reviews-section-horizontal-line {
@@ -112,7 +112,8 @@
 .reviews-main-text {
     font-size: 1.2rem;
     color: #222;
-    font-family: 'Georgia', 'Merriweather', serif;
+    font-family: 'Times New Roman', 'Georgia', serif;
+    font-style: italic;
     line-height: 1.6;
     margin-bottom: 0;
     width: 100%;
