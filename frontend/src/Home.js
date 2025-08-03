@@ -225,6 +225,12 @@ function Home() {
                         playsInline
                         style={{ position: 'absolute', inset: 0, width: '100vw', height: '100vh', objectFit: 'cover', zIndex: 1 }}
                     />
+                    <audio
+                        src={require('./assets/audio.mp3')}
+                        autoPlay
+                        loop
+                        style={{ display: 'none' }}
+                    />
                     <div
                         style={{
                             position: 'absolute',
@@ -288,6 +294,41 @@ function Home() {
                         </button>
                         <div style={{ height: 2, background: '#dedeb9', flex: 1, marginLeft: 16 }} />
                     </div>
+
+                    {/* Audio Control */}
+                    {/* <div style={{ position: 'absolute', top: 20, right: 20, zIndex: 4 }}>
+                        <button
+                            id="audio-toggle"
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.9)',
+                                color: '#a2592a',
+                                fontSize: 16,
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '50px',
+                                height: '50px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                            }}
+                            onClick={() => {
+                                const audio = document.querySelector('audio');
+                                if (audio) {
+                                    if (audio.paused) {
+                                        audio.play();
+                                        document.getElementById('audio-toggle').innerHTML = '🔊';
+                                    } else {
+                                        audio.pause();
+                                        document.getElementById('audio-toggle').innerHTML = '🔇';
+                                    }
+                                }
+                            }}
+                        >
+                            🔊
+                        </button>
+                    </div> */}
                 </div>
             </>
         );
