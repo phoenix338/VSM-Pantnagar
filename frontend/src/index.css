@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Freehand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
 
 body {
   margin: 0;
@@ -10,19 +14,19 @@ body {
 
 /* Global font classes */
 .main-heading {
-  font-family: 'Apple Chancery', 'Playfair Display', cursive;
+  font-family: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
 }
 
 .heading {
-  font-family: 'Helvetica', 'Open Sans', sans-serif;
+  font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
 }
 
 .sub-heading {
-  font-family: 'Arial', 'Roboto', sans-serif;
+  font-family: 'Roboto', 'Arial', 'Helvetica', sans-serif;
 }
 
 .body-text {
-  font-family: 'Georgia', 'Merriweather', serif;
+  font-family: 'Merriweather', 'Georgia', 'Times New Roman', serif;
 }
 
 code {
