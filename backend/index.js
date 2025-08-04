@@ -214,12 +214,12 @@ app.get('/team', async (req, res) => {
 // Add a new team member (admin only, with image upload)
 app.post('/team', adminAuth, upload.single('image'), async (req, res) => {
   try {
-    const { name, designation } = req.body;
+    const { name, designation, email, contactNumber } = req.body;
     const imageUrl = req.file && req.file.path;
     if (!name || !designation || !imageUrl) {
-      return res.status(400).json({ error: 'All fields are required' });
+      return res.status(400).json({ error: 'Name, designation and image are required' });
     }
-    const member = new TeamMember({ name, designation, imageUrl });
+    const member = new TeamMember({ name, designation, email, contactNumber, imageUrl });
     await member.save();
     res.status(201).json(member);
   } catch (err) {
@@ -230,10 +230,10 @@ app.post('/team', adminAuth, upload.single('image'), async (req, res) => {
 // Update a team member (admin only)
 app.put('/team/:id', adminAuth, async (req, res) => {
   try {
-    const { name, designation, imageUrl } = req.body;
+    const { name, designation, email, contactNumber, imageUrl } = req.body;
     const member = await TeamMember.findByIdAndUpdate(
       req.params.id,
-      { name, designation, imageUrl },
+      { name, designation, email, contactNumber, imageUrl },
       { new: true }
     );
     if (!member) return res.status(404).json({ error: 'Not found' });

@@ -1,6 +1,13 @@
 .meet-our-team-root {
     min-height: 100vh;
     background: #fff;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.meet-our-team-content {
+    flex: 1;
     padding-bottom: 32px;
 }
 
@@ -53,15 +60,14 @@
 
 .meet-our-team-grid {
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 64px 48px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
     justify-content: center;
-    align-items: flex-start;
-    gap: 10rem;
-
+    align-items: start;
+    padding: 0 20px;
 }
 
 .team-member-card {
@@ -70,15 +76,21 @@
     box-shadow: 0 2px 12px #0001;
     border: 1.5px solid #eceae7;
     width: 260px;
-    min-height: 320px;
+    height: 350px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 24px 12px 18px 12px;
+    justify-content: flex-start;
+    padding: 24px 12px 40px 12px;
     position: relative;
     transition: box-shadow 0.2s, border 0.2s;
+    justify-self: center;
 }
+
+/* .team-member-card:hover {
+    box-shadow: 0 4px 20px #0002;
+    border-color: #DD783C;
+} */
 
 .team-member-img {
     width: 160px;
@@ -87,6 +99,7 @@
     border-radius: 18px;
     margin-bottom: 14px;
     background: #f7f7f7;
+    flex-shrink: 0;
 }
 
 .team-member-name {
@@ -95,6 +108,7 @@
     font-weight: 600;
     margin-bottom: 2px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .team-member-designation {
@@ -102,12 +116,58 @@
     font-size: 1rem;
     color: #444;
     text-align: center;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.team-member-email {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    color: #000;
+    text-align: center;
+    margin-bottom: 4px;
+    flex-shrink: 0;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.team-member-email a {
+    color: #000;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.team-member-email a:hover {
+    color: #DD783C;
+    text-decoration: underline;
+}
+
+.team-member-contact {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    color: #000;
+    text-align: center;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.team-member-contact a {
+    color: #000;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.team-member-contact a:hover {
+    color: #DD783C;
+    text-decoration: underline;
 }
 
 .team-member-delete-btn {
     position: absolute;
-    bottom: 12px;
-    right: 12px;
+    bottom: 8px;
+    right: 8px;
     background: #e68346;
     color: #fff;
     border: none;
@@ -203,13 +263,32 @@
 
 @media (max-width: 900px) {
     .meet-our-team-grid {
-        gap: 32px 12px;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+        padding: 0 16px;
     }
 
     .team-member-card {
-        width: 90vw;
-        min-width: 0;
-        min-height: 220px;
-        padding: 18px 4vw 10px 4vw;
+        width: 260px;
+        height: 380px;
+        padding: 18px 12px 12px 12px;
+    }
+
+    .team-member-img {
+        width: 160px;
+        height: 160px;
+    }
+}
+
+@media (max-width: 600px) {
+    .meet-our-team-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 12px;
+    }
+
+    .team-member-card {
+        width: 260px;
+        height: 380px;
     }
 }
