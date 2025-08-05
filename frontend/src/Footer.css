@@ -47,6 +47,17 @@
     font-weight: 400;
 }
 
+.footer-link {
+    text-decoration: none;
+    color: #181818;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.footer-link:hover {
+    color: #DD783C;
+}
+
 .right-col div {
     font-weight: bold;
 }

@@ -78,11 +78,11 @@ const Navbar = (props) => {
             <span onClick={handleHomeClick} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>Home</span>
           </li><li style={{ cursor: 'pointer', position: 'relative' }} className="navbar-item dropdown">
             <span className="dropdown-label">
-              About us <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
+              About Us <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
             </span>
             <div className="dropdown-menu">
               <Link to="/our-impact" className="dropdown-item">Our Impact</Link>
-              <Link to="/meet-our-team" className="dropdown-item">Meet our Team</Link>
+              <Link to="/meet-our-team" className="dropdown-item">Meet Our Team</Link>
               <Link to="/timeline" className="dropdown-item">Timeline</Link>
             </div>
           </li><li style={{ cursor: 'pointer', position: 'relative' }} className="navbar-item dropdown">
@@ -93,7 +93,7 @@ const Navbar = (props) => {
               <Link to="/our-events" className="dropdown-item">Our Events</Link>
 
               <Link to="/events/upcoming" className="dropdown-item">Upcoming Events</Link>
-              <Link to="/events/previous" className="dropdown-item">Previous Events</Link>
+              <Link to="/events/upcoming" state={{ scrollTo: 'previous' }} className="dropdown-item">Previous Events</Link>
               <a
                 href="https://www.youthariseawake.org/"
                 target="_blank"

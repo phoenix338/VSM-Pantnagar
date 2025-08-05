@@ -11,7 +11,7 @@
 }
 
 .testimonials-heading {
-    font-family: 'Apple Chancery', cursive;
+    font-family: 'Alex Brush', cursive;
     font-size: 64px;
     color: #DD783C;
     margin-bottom: 0;
@@ -395,5 +395,38 @@
     100% {
         opacity: 0;
         transform: scale(0.5) rotate(360deg);
+    }
+}
+
+/* Glowing Circle Animations */
+@keyframes glowPulse {
+    0% {
+        box-shadow:
+            0 0 20px #FFD700,
+            0 0 40px #FFA500,
+            0 0 60px #FF8C00,
+            inset 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    100% {
+        box-shadow:
+            0 0 30px #FFD700,
+            0 0 60px #FFA500,
+            0 0 90px #FF8C00,
+            inset 0 0 30px rgba(255, 215, 0, 0.5);
+    }
+}
+
+@keyframes rippleEffect {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+
+    100% {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
     }
 }

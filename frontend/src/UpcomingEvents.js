@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { auth } from './firebase';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -15,12 +16,15 @@ const UpcomingEvents = () => {
         title: '',
         date: '',
         venue: '',
-        googleFormLink: ''
+        googleFormLink: '',
+        category: 'upcoming'
     });
     const [selectedFile, setSelectedFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [formMsg, setFormMsg] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const location = useLocation();
+    const previousEventsRef = useRef(null);
 
     useEffect(() => {
         fetchEvents();
@@ -28,12 +32,30 @@ const UpcomingEvents = () => {
         return () => unsubscribe();
     }, []);
 
+    useEffect(() => {
+        // Scroll to previous events section if specified
+        if (location.state?.scrollTo === 'previous' && previousEventsRef.current) {
+            setTimeout(() => {
+                previousEventsRef.current.scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        }
+    }, [location.state, events]);
+
     const fetchEvents = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${API_URL}/events/upcoming`);
-            const data = await res.json();
-            setEvents(data);
+            // Fetch both upcoming and previous events
+            const [upcomingRes, previousRes] = await Promise.all([
+                fetch(`${API_URL}/events/upcoming`),
+                fetch(`${API_URL}/events/previous`)
+            ]);
+
+            const upcomingData = await upcomingRes.json();
+            const previousData = await previousRes.json();
+
+            // Combine both arrays into one
+            const allEvents = [...upcomingData, ...previousData];
+            setEvents(allEvents);
         } catch (err) {
             setEvents([]);
         }
@@ -138,13 +160,13 @@ const UpcomingEvents = () => {
                         <h2>Upcoming Events</h2>
                     </div>
 
-                    {events.length === 0 ? (
+                    {events.filter(event => new Date(event.date) >= new Date()).length === 0 ? (
                         <div className="no-events">
                             <p>No upcoming events at the moment. Check back soon!</p>
                         </div>
                     ) : (
                         <div className="events-grid">
-                            {events.map(event => {
+                            {events.filter(event => new Date(event.date) >= new Date()).map(event => {
                                 const eventDate = new Date(event.date);
                                 const month = eventDate.toLocaleDateString('en-US', { month: 'short' });
                                 const year = eventDate.getFullYear();
@@ -171,6 +193,40 @@ const UpcomingEvents = () => {
                                                     Register
                                                 </a>
                                             )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    <div className="events-header" ref={previousEventsRef}>
+                        <h2>Previous Events</h2>
+                    </div>
+
+                    {events.filter(event => new Date(event.date) < new Date()).length === 0 ? (
+                        <div className="no-events">
+                            <p>No previous events at the moment. Check back soon!</p>
+                        </div>
+                    ) : (
+                        <div className="events-grid">
+                            {events.filter(event => new Date(event.date) < new Date()).map(event => {
+                                const eventDate = new Date(event.date);
+                                const month = eventDate.toLocaleDateString('en-US', { month: 'short' });
+                                const year = eventDate.getFullYear();
+                                const day = eventDate.getDate();
+
+                                return (
+                                    <div key={event._id} className="event-item">
+                                        <div className="event-date-marker">
+                                            <div className="event-date-month">{month}</div>
+                                            <div className="event-date-year">{year}</div>
+                                            <div className="event-date-day">{day}</div>
+                                        </div>
+                                        <div className="event-content-wrapper">
+                                            <div className="event-card">
+                                                <img src={event.bannerImage} alt={event.title} />
+                                            </div>
                                         </div>
                                     </div>
                                 );

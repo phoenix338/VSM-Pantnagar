@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FaInstagram, FaFacebook, FaXTwitter, FaYoutube } from 'react-icons/fa6';
 import './Footer.css';
 import backToTopImg from './assets/backtotop.png';
@@ -8,19 +9,23 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleFooterLinkClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <footer className="footer-container">
       <div className="footer-links-row">
         <div className="footer-col">
-          <div>Our Impact</div>
+          <Link to="/our-impact" className="footer-link" onClick={handleFooterLinkClick}>Our Impact</Link>
           <div>Our Projects</div>
           <div>Stories</div>
-          <div>Contact Us</div>
+          <Link to="/contact" className="footer-link" onClick={handleFooterLinkClick}>Contact Us</Link>
         </div>
         <div className="footer-col">
           <div>Get Involved</div>
-          <div>Books</div>
-          <div>Events</div>
+          <Link to="/books" className="footer-link" onClick={handleFooterLinkClick}>Books</Link>
+          <Link to="/events/upcoming" className="footer-link" onClick={handleFooterLinkClick}>Events</Link>
         </div>
         <div className="footer-col right-col">
           <div><b>Samadhan<span className="footer-asterisk">*</span></b></div>
@@ -37,7 +42,7 @@ const Footer = () => {
             <span>Back To Top</span>
           </div>
           <div className="footer-social">
-            <b>Don’t miss the chance to be a part of</b>
+            <b>Don't miss the chance to be a part of</b>
             <FaInstagram className="footer-icon" />
             <FaFacebook className="footer-icon" />
             <FaXTwitter className="footer-icon" />

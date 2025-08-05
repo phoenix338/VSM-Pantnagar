@@ -46,8 +46,17 @@
   color: black;
   text-align: center;
   margin: 32px 0 80px 0;
-  letter-spacing: 2px;
   color: #DD783C;
+}
+
+.our-initiative-title {
+  font-family: 'Alex Brush', cursive;
+  font-size: 64px;
+  color: #DD783C;
+  text-align: center;
+  margin: 148px 0 32px 0;
+  font-weight: 500;
+
 }
 
 .initiatives-list {
@@ -82,6 +91,8 @@
 
 .initiative-text-col {
   flex: 2;
+  word-spacing: 2px;
+  line-height: 1.5;
   display: flex;
   flex-direction: column;
   justify-content: center;

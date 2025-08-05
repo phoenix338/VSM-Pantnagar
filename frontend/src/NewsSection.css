@@ -12,7 +12,8 @@
 }
 
 .news-section-title {
-    font-family: 'Helvetica', 'Arial', sans-serif;;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    ;
     color: #dd783c;
     font-size: 52px;
     font-weight: 500;
@@ -21,9 +22,9 @@
 }
 
 .news-section-horizontal-line {
-    height: 6px;
+    height: 8px;
     background: #dd783c;
-    border-radius: 3px;
+    border-radius: 4px;
     margin-left: 24px;
     flex: 1;
     margin-bottom: 0.2em;
@@ -44,33 +45,36 @@
     background: none;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     max-width: none;
 }
 
 .news-main-image-placeholder {
-    width: 100%;
-    min-height: 400px;
-    height: 400px;
-    background: #f5f5f5;
-    border-radius: 32px;
+    width: auto;
+    height: auto;
+    background: transparent;
+    border-radius: 0;
     margin-bottom: 18px;
     margin-top: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    border: 2px solid #bbb;
+    overflow: visible;
+    border: 1px solid #bbb;
+    padding: 8px;
 }
 
 .news-main-left img.news-main-image-placeholder {
     object-fit: contain;
-    width: 100%;
-    height: 400px;
-    border-radius: 32px;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 600px;
+    border-radius: 0;
     display: block;
-    border: 2px solid #bbb;
-    background: #f5f5f5;
+    border: none;
+    background: transparent;
 }
 
 .news-main-title-placeholder {
@@ -94,8 +98,10 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
-    max-height: 570px;
+    max-height: 700px;
     overflow-y: auto;
+    justify-content: center;
+    align-items: center;
 }
 
 .news-scroll-item {
@@ -151,12 +157,14 @@
 }
 
 .news-main-image {
-    object-fit: fill;
-    width: 100%;
-    height: 100%;
-    background: #f5f5f5;
-    border-radius: 32px;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 600px;
+    object-fit: contain;
+    border-radius: 0;
     display: block;
+    border: none;
 }
 
 .news-section-form-wrapper {

@@ -93,7 +93,7 @@ const ReviewsSection = () => {
     return (
         <div className="reviews-section-root">
             <div className="reviews-section-header-row">
-                <h2 className="reviews-section-title">Testimonials from VSM Alumni</h2>
+                <h2 className="reviews-section-title">Testimonials From VSM Alumni</h2>
                 <div className="reviews-section-horizontal-line" />
             </div>
             <div className="reviews-section-main">
@@ -130,8 +130,9 @@ const ReviewsSection = () => {
                                 key={item._id}
                                 onClick={() => setSelected(i)}
                                 style={{
-                                    border: i === selected ? '2px solid #dd783c' : '2px solid #e3b48a',
-                                    position: 'relative'
+                                    border: i === selected ? '2px solid #dd783c' : '2px solid #bbb',
+                                    position: 'relative',
+                                    // backgroundColor: i === selected ? 'rgb(245, 191, 160)' : 'transparent'
                                 }}
                             >
                                 <div className="reviews-scroll-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>

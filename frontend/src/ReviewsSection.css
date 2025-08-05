@@ -154,15 +154,19 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    padding: 18px 0 14px 0;
-    border: 2px solid #e3b48a;
+    padding: 24px 16px 20px 16px;
+    border: 2px solid #bbb;
     position: relative;
-    min-width: 220px;
+    min-width: 280px;
     height: 155px;
     box-sizing: border-box;
 }
 
 .reviews-scroll-item:hover {
+    border-color: #dd783c;
+}
+
+.reviews-scroll-item.active {
     border-color: #dd783c;
 }
 
@@ -185,18 +189,19 @@
 
 .reviews-scroll-name {
     font-family: 'Helvetica', 'Open Sans', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #dd783c;
     margin-bottom: 6px;
     text-align: center;
+    font-weight: 400;
 }
 
 .reviews-scroll-designation {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #111;
     font-family: 'Arial', 'Roboto', sans-serif;
     text-align: center;
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .reviews-section-form-wrapper {

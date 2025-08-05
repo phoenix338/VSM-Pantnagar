@@ -340,40 +340,83 @@ function Home() {
                         <div style={{ height: 2, background: '#dedeb9', flex: 1, marginLeft: 16 }} />
                     </div>
 
-                    {/* Audio Control */}
-                    {/* <div style={{ position: 'absolute', top: 20, right: 20, zIndex: 4 }}>
-                        <button
-                            id="audio-toggle"
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.9)',
-                                color: '#a2592a',
-                                fontSize: 16,
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '50px',
-                                height: '50px',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                    {/* Glowing Circle Element */}
+                    <div style={{
+                        position: 'absolute',
+                        top: 20,
+                        right: 20,
+                        zIndex: 4,
+                        cursor: 'pointer'
+                    }}>
+                        <div style={{
+                            width: '60px',
+                            height: '60px',
+                            borderRadius: '50%',
+                            background: 'radial-gradient(circle, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
+                            boxShadow: `
+                                0 0 20px #FFD700,
+                                0 0 40px #FFA500,
+                                0 0 60px #FF8C00,
+                                inset 0 0 20px rgba(255, 215, 0, 0.3)
+                            `,
+                            animation: 'glowPulse 2s ease-in-out infinite alternate',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '24px',
+                            color: '#fff',
+                            textShadow: '0 0 10px rgba(255, 255, 255, 0.8)',
+                            transition: 'all 0.3s ease',
+                            transform: 'scale(1)',
+                        }}
+                            onMouseEnter={(e) => {
+                                e.target.style.transform = 'scale(1.1)';
+                                e.target.style.boxShadow = `
+                                0 0 30px #FFD700,
+                                0 0 60px #FFA500,
+                                0 0 90px #FF8C00,
+                                inset 0 0 30px rgba(255, 215, 0, 0.5)
+                            `;
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.transform = 'scale(1)';
+                                e.target.style.boxShadow = `
+                                0 0 20px #FFD700,
+                                0 0 40px #FFA500,
+                                0 0 60px #FF8C00,
+                                inset 0 0 20px rgba(255, 215, 0, 0.3)
+                            `;
                             }}
                             onClick={() => {
+                                // Create a ripple effect
+                                const ripple = document.createElement('div');
+                                ripple.style.cssText = `
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                width: 0;
+                                height: 0;
+                                border-radius: 50%;
+                                background: rgba(255, 215, 0, 0.6);
+                                transform: translate(-50%, -50%);
+                                animation: rippleEffect 0.6s ease-out;
+                                pointer-events: none;
+                            `;
+                                document.body.appendChild(ripple);
+
+                                setTimeout(() => {
+                                    document.body.removeChild(ripple);
+                                }, 600);
+
+                                // Play audio if available
                                 const audio = document.querySelector('audio');
-                                if (audio) {
-                                    if (audio.paused) {
-                                        audio.play();
-                                        document.getElementById('audio-toggle').innerHTML = '🔊';
-                                    } else {
-                                        audio.pause();
-                                        document.getElementById('audio-toggle').innerHTML = '🔇';
-                                    }
+                                if (audio && audio.paused) {
+                                    audio.play();
                                 }
                             }}
                         >
-                            🔊
-                        </button>
-                    </div> */}
+                        </div>
+                    </div>
                 </div>
             </>
         );
@@ -654,7 +697,7 @@ function Home() {
                         {/* Quote of the Day */}
 
                         <div style={{ fontFamily: 'Apple Chancery, cursive', fontSize: 64, color: '#DD783C', fontStyle: 'normal', margin: '24px 0 12px 0', fontWeight: 500 }}>
-                            Quote of The Day:
+                            Quote Of The Day:
                         </div>
                         <div style={{ fontFamily: 'Oranienbaum, serif', fontSize: 48, fontWeight: 400, color: '#8B8080', margin: '0 0 0 0', fontStyle: 'normal', textDecoration: 'none', lineHeight: 1.1 }}>
                             {quoteOfTheDay}
@@ -682,7 +725,7 @@ function Home() {
                 >
                     <div
                         style={{
-                            fontFamily: 'Apple Chancery, cursive',
+                            fontFamily: 'Alex Brush, cursive',
                             fontSize: 64,
                             color: '#DD783C',
                             fontWeight: 500,
@@ -692,7 +735,7 @@ function Home() {
                             transition: 'opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s'
                         }}
                     >
-                        Vision, Mission and Values
+                        Vision, Mission And Values
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-start', marginBottom: 64 }}>
                         {/* Vision Section with Text Box */}
@@ -832,7 +875,7 @@ function Home() {
                 </div>
                 {/* Our Impact Section */}
                 <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '0 0 64px 0', textAlign: 'center' }}>
-                    <div style={{ fontFamily: 'Apple Chancery, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 32 }}>
+                    <div style={{ fontFamily: 'Alex Brush, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 32 }}>
                         Our Impact
                     </div>
                     <div style={{ background: '#FFE5D0', borderRadius: 48, padding: '48px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 16px #0001', flexWrap: 'wrap', gap: 0 }}>
@@ -902,7 +945,7 @@ function Home() {
 
             {/* Latest Books Section */}
             <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '64px 0', textAlign: 'center' }}>
-                <div style={{ fontFamily: 'Apple Chancery, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 48 }}>
+                <div style={{ fontFamily: 'Alex Brush, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 48 }}>
                     Latest Books
                 </div>
                 <div className="books-scroll-container" style={{

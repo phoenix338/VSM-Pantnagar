@@ -15,7 +15,7 @@ const OurImpact = () => (
         </section>
         <section className="our-impact-heading-section">
             <h1 className="our-impact-heading">
-                <span className="our-impact-heading-main">Impacts:</span> Flickers of Change
+                <span className="our-impact-heading-main">Impacts:</span> Flickers Of Change
             </h1>
         </section>
         <section className="our-impact-explore-section">
