@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import logo from './assets/VSM-icon.png';
@@ -26,6 +26,18 @@ const testimonials = [
 function Home() {
     const location = useLocation();
     const navigate = useNavigate();
+
+    // Function to play audio after user interaction
+    const playAudio = () => {
+        if (audioRef.current && !audioPlayed) {
+            audioRef.current.play().then(() => {
+                setAudioPlayed(true);
+            }).catch(err => {
+                console.log('Audio play failed:', err);
+            });
+        }
+    };
+
     const [showLandingVideo, setShowLandingVideo] = useState(true);
     const [showHindi, setShowHindi] = useState(false);
     const [showIntroScreen, setShowIntroScreen] = useState(false);
@@ -44,6 +56,47 @@ function Home() {
     const [visionMissionVisible, setVisionMissionVisible] = useState(false);
     const [visionMissionRef, setVisionMissionRef] = useState(null);
     const [currentStep, setCurrentStep] = useState(0); // 0: initial, 1: vision, 2: mission, 3: values
+    const [audioPlayed, setAudioPlayed] = useState(false);
+    const audioRef = useRef(null);
+
+    // Handle location state for intro video
+    useEffect(() => {
+        if (location.state && location.state.skipIntro === false) {
+            setShowLandingVideo(true);
+            setShowHindi(false);
+            setShowIntroScreen(false);
+            setShowIntro1(false);
+            setShowIntro2(false);
+            setShowIntro3(false);
+            setShowIntro4(false);
+            // Reset audio played state when logo is clicked
+            setAudioPlayed(false);
+            // Play audio immediately when logo is clicked
+            setTimeout(() => {
+                playAudio();
+            }, 500);
+        }
+    }, [location.state, location.pathname, navigate]);
+
+    // Handle user interaction to enable audio
+    useEffect(() => {
+        const handleUserInteraction = () => {
+            if (!audioPlayed && showLandingVideo) {
+                playAudio();
+            }
+        };
+
+        // Add event listeners for user interaction
+        document.addEventListener('click', handleUserInteraction);
+        document.addEventListener('touchstart', handleUserInteraction);
+        document.addEventListener('keydown', handleUserInteraction);
+
+        return () => {
+            document.removeEventListener('click', handleUserInteraction);
+            document.removeEventListener('touchstart', handleUserInteraction);
+            document.removeEventListener('keydown', handleUserInteraction);
+        };
+    }, [audioPlayed, showLandingVideo]);
 
     // Fetch upcoming events for hero image
     useEffect(() => {
@@ -137,19 +190,6 @@ function Home() {
         }
     }, [location.state, location.pathname, navigate]);
 
-    // Handle location state for intro video
-    useEffect(() => {
-        if (location.state && location.state.skipIntro === false) {
-            setShowLandingVideo(true);
-            setShowHindi(false);
-            setShowIntroScreen(false);
-            setShowIntro1(false);
-            setShowIntro2(false);
-            setShowIntro3(false);
-            setShowIntro4(false);
-        }
-    }, [location.state]);
-
     // Reset function for Navbar
     const resetHome = () => {
         setShowLandingVideo(true);
@@ -159,6 +199,11 @@ function Home() {
         setShowIntro2(false);
         setShowIntro3(false);
         setShowIntro4(false);
+        // Reset audio state and play audio
+        setAudioPlayed(false);
+        setTimeout(() => {
+            playAudio();
+        }, 500);
     };
 
     useEffect(() => {
@@ -226,8 +271,8 @@ function Home() {
                         style={{ position: 'absolute', inset: 0, width: '100vw', height: '100vh', objectFit: 'cover', zIndex: 1 }}
                     />
                     <audio
+                        ref={audioRef}
                         src={require('./assets/audio.mp3')}
-                        autoPlay
                         loop
                         style={{ display: 'none' }}
                     />

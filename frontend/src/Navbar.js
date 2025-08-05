@@ -26,6 +26,10 @@ const Navbar = (props) => {
 
   const handleLogoClick = (e) => {
     e.preventDefault();
+    // Call resetHome if it exists (for audio playback)
+    if (props.resetHome) {
+      props.resetHome();
+    }
     navigate('/', { state: { skipIntro: false } });
   };
 
