@@ -12,8 +12,10 @@ import HomeInitiatives from './HomeInitiatives';
 import './HomeInitiatives.css';
 import ImpactStats from './ImpactStats';
 import HinduCalendar from './HinduCalendar';
-
+import './QuoteOfTheDay.css';
+import { auth } from './firebase';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
 const testimonials = [
     { name: 'Dr. J Kumar', title: 'Dean College of Agriculture, GBPUAT, Pantnagar', text: 'Initiatives like VSM help students realize their inner potential, ad value.' },
@@ -24,6 +26,39 @@ const testimonials = [
 ];
 
 function Home() {
+    // Admin user state
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(setUser);
+        return () => unsubscribe();
+    }, []);
+    // Guest testimonial form state
+    const [guestForm, setGuestForm] = useState({ name: '', designation: '', text: '' });
+    const [guestSubmitting, setGuestSubmitting] = useState(false);
+    const [guestFormMsg, setGuestFormMsg] = useState('');
+
+    // Handle guest testimonial form submit
+    const handleGuestTestimonialSubmit = async (e) => {
+        e.preventDefault();
+        setGuestFormMsg('');
+        setGuestSubmitting(true);
+        try {
+            const res = await fetch(`${API_URL}/guest-testimonials`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(guestForm)
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.error || 'Submission failed');
+            }
+            setGuestForm({ name: '', designation: '', text: '' });
+            setGuestFormMsg('Thank you for sharing your testimonial!');
+        } catch (err) {
+            setGuestFormMsg('Error: ' + err.message);
+        }
+        setGuestSubmitting(false);
+    }
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -659,56 +694,30 @@ function Home() {
                         Register
                     </button>
                 </div>
-                {/* Quote of the Day Section */}
+                {/* Quote of the Day Section - New Design */}
                 <div style={{
                     width: '100vw',
                     minHeight: 700,
                     position: 'relative',
-                    background: '#fff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     overflow: 'hidden',
-                    marginBottom: 40
+                    marginBottom: 40,
+                    background: '#e7f2fa'
                 }}>
-                    {/* Left Cloud */}
-                    <img src={require('./assets/cloud-left.png')} alt="Cloud Left" style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: 500, zIndex: 1, minHeight: '100%', objectFit: 'cover' }} />
-                    {/* Right Cloud */}
-                    <img src={require('./assets/cloud-right.png')} alt="Cloud Right" style={{ position: 'absolute', right: 0, top: 0, height: '100%', width: 500, zIndex: 1, minHeight: '100%', objectFit: 'cover' }} />
-                    {/* Sun at top center */}
-                    <img src={require('./assets/sun.png')} alt="Sun" style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 270, zIndex: 2, marginTop: 0 }} />
-                    {/* Center Content */}
-                    <div style={{
-                        position: 'relative',
-                        zIndex: 2,
-                        width: '100%',
-                        maxWidth: 700,
-                        margin: '0 auto',
-                        textAlign: 'center',
-                        padding: '0 16px',
-                        background: 'transparent',
-                        borderRadius: 0,
-                        boxShadow: 'none',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        marginTop: 110,
-                    }}>
-                        {/* Quote of the Day */}
-
-                        <div style={{ fontFamily: 'Apple Chancery, cursive', fontSize: 64, color: '#DD783C', fontStyle: 'normal', margin: '24px 0 12px 0', fontWeight: 500 }}>
-                            Quote Of The Day:
-                        </div>
-                        <div style={{ fontFamily: 'Oranienbaum, serif', fontSize: 48, fontWeight: 400, color: '#8B8080', margin: '0 0 0 0', fontStyle: 'normal', textDecoration: 'none', lineHeight: 1.1 }}>
-                            {quoteOfTheDay}
-                        </div>
-                        {quoteAuthor && <div style={{ fontFamily: 'Nunito, sans-serif', fontSize: 22, color: '#181818', marginTop: 8 }}>{quoteAuthor}</div>}
-                        <HinduCalendar />
-                        <div style={{ fontFamily: 'Nunito, sans-serif', fontSize: 32, color: '#DD783C', fontWeight: 700, margin: '32px 0 10px 0', background: '#fff', borderRadius: 32, display: 'inline-block', padding: '10px 40px', boxShadow: '0 4px 16px #0002', letterSpacing: 2, border: '1.5px solid #eee', color: '#e53935' }}>
-                            {new Date().toLocaleDateString('en-GB').replace(/\//g, ' / ')}
-                        </div>
+                    {/* Background GIF */}
+                    <img src={require('./assets/qouteoftheday.jpg')} alt="Quote Background" className="quote-bg" />
+                    {/* Frosted Glass Card */}
+                    <div className="quote-frosted">
+                        <div className="quote-title">Quote Of The Day:</div>
+                        <div className="quote-main">{quoteOfTheDay}</div>
+                        {quoteAuthor && <div className="quote-author">{quoteAuthor}</div>}
+                        <div className="quote-date">{new Date().toLocaleDateString('en-GB').replace(/\//g, ' / ')}</div>
+                        <div className="quote-hindu"><HinduCalendar /></div>
                     </div>
                 </div>
+
                 {/* Vision, Mission and Values Section */}
                 <div
                     ref={setVisionMissionRef}
@@ -762,7 +771,7 @@ function Home() {
                             </div>
 
                             <img
-                                src={currentStep >= 1 ? require('./assets/sunafter.png') : require('./assets/sunvsm.png')}
+                                src={require('./assets/sunvsm.png')}
                                 alt="Vision"
                                 style={{
                                     width: 110,
@@ -825,7 +834,7 @@ function Home() {
                             </div>
 
                             <img
-                                src={currentStep >= 2 ? require('./assets/plantafter.png') : require('./assets/plant.png')}
+                                src={require('./assets/plant.png')}
                                 alt="Mission"
                                 style={{
                                     width: 110,
@@ -841,7 +850,7 @@ function Home() {
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <img
-                                src={currentStep >= 3 ? require('./assets/treeafter.png') : require('./assets/tree.png')}
+                                src={require('./assets/tree.png')}
                                 alt="Values"
                                 style={{
                                     width: 120,
@@ -1015,7 +1024,7 @@ function Home() {
             </div>
 
             <HomeInitiatives />
-            {/* Testimonials Section */}
+            {/* Testimonials Section
             <section className="testimonials-section">
                 <h2 className="testimonials-heading">Testimonials</h2>
                 <div className="testimonials-quote-bg-img">
@@ -1036,7 +1045,55 @@ function Home() {
                     ))}
                 </div>
                 <div className="testimonials-bar"></div>
-            </section>
+            </section> */}
+
+            {/* Guest Testimonial Submission Form (admin only) */}
+            {user && user.email === ADMIN_EMAIL && (
+                <section className="guest-testimonial-section" style={{ maxWidth: 600, margin: '48px auto', background: '#fff8f2', borderRadius: 18, boxShadow: '0 2px 12px #0001', padding: 32 }}>
+                    <h3 style={{ color: '#DD783C', fontFamily: 'Alex Brush, cursive', fontSize: 36, marginBottom: 18, textAlign: 'center' }}>Share Your Experience</h3>
+                    <form onSubmit={handleGuestTestimonialSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Your Name"
+                            value={guestForm.name}
+                            onChange={e => setGuestForm({ ...guestForm, name: e.target.value })}
+                            required
+                            style={{ padding: 12, borderRadius: 8, border: '1.5px solid #eceae7', fontSize: 18 }}
+                        />
+                        <input
+                            type="text"
+                            name="designation"
+                            placeholder="Your Designation (e.g. Student, Professor)"
+                            value={guestForm.designation}
+                            onChange={e => setGuestForm({ ...guestForm, designation: e.target.value })}
+                            required
+                            style={{ padding: 12, borderRadius: 8, border: '1.5px solid #eceae7', fontSize: 18 }}
+                        />
+                        <textarea
+                            name="text"
+                            placeholder="Your Testimonial"
+                            value={guestForm.text}
+                            onChange={e => setGuestForm({ ...guestForm, text: e.target.value })}
+                            required
+                            rows={4}
+                            style={{ padding: 12, borderRadius: 8, border: '1.5px solid #eceae7', fontSize: 18, resize: 'vertical' }}
+                        />
+                        <button
+                            type="submit"
+                            disabled={guestSubmitting}
+                            style={{ background: '#DD783C', color: '#fff', fontSize: 20, fontWeight: 600, border: 'none', borderRadius: 8, padding: '14px 0', cursor: 'pointer', marginTop: 6, boxShadow: '0 2px 8px #DD783C22', transition: 'background 0.2s, color 0.2s' }}
+                        >
+                            {guestSubmitting ? 'Submitting...' : 'Submit Testimonial'}
+                        </button>
+                        {guestFormMsg && (
+                            <div style={{ marginTop: 8, padding: 10, borderRadius: 6, background: guestFormMsg.startsWith('Thank') ? '#d4edda' : '#f8d7da', color: guestFormMsg.startsWith('Thank') ? '#155724' : '#721c24', border: guestFormMsg.startsWith('Thank') ? '1px solid #c3e6cb' : '1px solid #f5c6cb', textAlign: 'center', fontWeight: 500 }}>
+                                {guestFormMsg}
+                            </div>
+                        )}
+                    </form>
+                </section>
+            )}
 
             <Footer />
         </div>

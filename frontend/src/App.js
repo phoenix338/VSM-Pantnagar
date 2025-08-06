@@ -16,6 +16,7 @@ import Timeline from './Timeline';
 import Events from './Events';
 import UpcomingEvents from './UpcomingEvents';
 import PreviousEvents from './PreviousEvents';
+import Resources from './Resources';
 import './App.css';
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/events/upcoming" element={<UpcomingEvents />} />
         <Route path="/events/previous" element={<PreviousEvents />} />
+        <Route path="/resources" element={<Resources />} />
       </Routes>
     </Router>
   );

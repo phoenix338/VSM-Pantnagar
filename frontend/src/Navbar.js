@@ -124,7 +124,7 @@ const Navbar = (props) => {
               <Link to="/gallery/images" className="dropdown-item">Images</Link>
               <Link to="/gallery/videos" className="dropdown-item">Videos</Link>
             </div>
-          </li><li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Books</Link></li><li style={{ cursor: 'pointer' }}>Resources</li><li style={{ cursor: 'pointer' }}>
+          </li><li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Books</Link></li><li style={{ cursor: 'pointer' }}><Link to="/resources" style={{ textDecoration: 'none', color: 'inherit' }}>Resources</Link></li><li style={{ cursor: 'pointer' }}>
             <a
               href="https://vsmmotivation.in/"
               target="_blank"

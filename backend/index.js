@@ -30,6 +30,8 @@ const Review = require('./Review');
 const GalleryImage = require('./GalleryImage');
 const Genre = require('./Genre');
 const Video = require('./Video');
+const Resource = require('./Resource');
+const TestimonialFromGuest = require('./TestimonialFromGuest');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -597,6 +599,32 @@ app.delete('/videos/:id', adminAuth, async (req, res) => {
   }
 });
 
+// Get all resources
+app.get('/resources', async (req, res) => {
+  try {
+    const resources = await Resource.find().sort({ createdAt: -1 });
+    res.json(resources);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch resources' });
+  }
+});
+
+// Add resource (admin only)
+app.post('/resources', adminAuth, async (req, res) => {
+  try {
+    const { title, url } = req.body;
+    if (!title || !url) {
+      return res.status(400).json({ error: 'Title and URL are required' });
+    }
+    const resource = new Resource({ title, url });
+    await resource.save();
+    res.status(201).json(resource);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add resource' });
+  }
+});
+
+
 // Email transporter configuration
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -607,6 +635,21 @@ const transporter = nodemailer.createTransport({
 });
 
 // Contact form endpoint
+// Guest testimonial submission endpoint
+app.post('/guest-testimonials', async (req, res) => {
+  try {
+    const { name, designation, text } = req.body;
+    if (!name || !designation || !text) {
+      return res.status(400).json({ error: 'Name, designation, and testimonial text are required.' });
+    }
+    const testimonial = new TestimonialFromGuest({ name, designation, text });
+    await testimonial.save();
+    res.status(201).json(testimonial);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to submit testimonial.' });
+  }
+});
+
 app.post('/contact', async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
