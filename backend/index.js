@@ -636,6 +636,16 @@ const transporter = nodemailer.createTransport({
 
 // Contact form endpoint
 // Guest testimonial submission endpoint
+// Get all guest testimonials
+app.get('/guest-testimonials', async (req, res) => {
+  try {
+    const testimonials = await TestimonialFromGuest.find().sort({ createdAt: -1 });
+    res.json(testimonials);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch guest testimonials' });
+  }
+});
+
 app.post('/guest-testimonials', async (req, res) => {
   try {
     const { name, designation, text } = req.body;

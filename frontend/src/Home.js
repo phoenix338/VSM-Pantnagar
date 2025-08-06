@@ -32,10 +32,20 @@ function Home() {
         const unsubscribe = auth.onAuthStateChanged(setUser);
         return () => unsubscribe();
     }, []);
-    // Guest testimonial form state
+    // Guest testimonial state
+    const [guestTestimonials, setGuestTestimonials] = useState([]);
+    const [selectedGuestIndex, setSelectedGuestIndex] = useState(0);
     const [guestForm, setGuestForm] = useState({ name: '', designation: '', text: '' });
     const [guestSubmitting, setGuestSubmitting] = useState(false);
     const [guestFormMsg, setGuestFormMsg] = useState('');
+
+    // Fetch guest testimonials
+    useEffect(() => {
+        fetch(`${API_URL}/guest-testimonials`)
+            .then(res => res.json())
+            .then(data => setGuestTestimonials(data || []))
+            .catch(() => setGuestTestimonials([]));
+    }, []);
 
     // Handle guest testimonial form submit
     const handleGuestTestimonialSubmit = async (e) => {
@@ -54,6 +64,10 @@ function Home() {
             }
             setGuestForm({ name: '', designation: '', text: '' });
             setGuestFormMsg('Thank you for sharing your testimonial!');
+            // Refetch testimonials after submission
+            fetch(`${API_URL}/guest-testimonials`)
+                .then(res => res.json())
+                .then(data => setGuestTestimonials(data || []));
         } catch (err) {
             setGuestFormMsg('Error: ' + err.message);
         }
@@ -1024,28 +1038,68 @@ function Home() {
             </div>
 
             <HomeInitiatives />
-            {/* Testimonials Section
-            <section className="testimonials-section">
-                <h2 className="testimonials-heading">Testimonials</h2>
-                <div className="testimonials-quote-bg-img">
-                    <img src={testimonialBg} alt="Testimonials background" className="testimonials-bg-img" />
-
+            {/* Guest Testimonials Section (VSM Guest Testimonials) */}
+            <section className="reviews-section-root" style={{ marginTop: 64 }}>
+                <div className="reviews-section-header-row">
+                    <h2 className="reviews-section-title" style={{ fontFamily: 'Alex Brush, cursive', fontSize: 64, fontWeight: 400 }}>Testimonials From Our Guests</h2>
+                    <div className="reviews-section-horizontal-line" />
                 </div>
-                <div className="testimonials-cards-row">
-                    {testimonials.map((t, i) => (
-                        <div
-                            key={t.name}
-                            className={`testimonial-card ${i === 2 ? 'active' : i === 1 || i === 3 ? 'side' : 'faded'}`}
-                        >
-                            <div className="testimonial-card-name"><b>{i === 2 ? t.name : `Dr. J ...`}</b></div>
-                            {i === 2 && (
-                                <div className="testimonial-card-title">{t.title}</div>
-                            )}
+                {guestTestimonials.length === 0 ? (
+                    <div style={{textAlign: 'center', color: '#888', fontStyle: 'italic', margin: '32px 0', fontSize: 20}}>
+                        No guest testimonials yet.
+                    </div>
+                ) : (
+                <div className="reviews-section-main">
+                    <div className="reviews-main-center">
+                        {guestTestimonials[selectedGuestIndex] ? (
+                            <>
+                                <div className="reviews-main-title"></div>
+                                <div className="reviews-main-text">
+                                    "{guestTestimonials[selectedGuestIndex].text}"
+                                    <div style={{
+                                        textAlign: 'right',
+                                        fontStyle: 'normal',
+                                        fontWeight: 'bold',
+                                        color: '#dd783c',
+                                        fontSize: '1rem',
+                                        marginTop: '1rem'
+                                    }}>
+                                        — {guestTestimonials[selectedGuestIndex].name}
+                                    </div>
+                                </div>
+                            </>
+                        ) : null}
+                    </div>
+                    <div className="reviews-section-divider" />
+                    <div className="reviews-main-right">
+                        <div className="reviews-scroll-list">
+                            {guestTestimonials.map((item, i) => (
+                                <div
+                                    className={`reviews-scroll-item${i === selectedGuestIndex ? ' active' : ''}`}
+                                    key={item._id || i}
+                                    onClick={() => setSelectedGuestIndex(i)}
+                                    style={{
+                                        border: i === selectedGuestIndex ? '2px solid #dd783c' : '2px solid #bbb',
+                                        position: 'relative',
+                                    }}
+                                >
+                                    <div className="reviews-scroll-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                        <div>
+                                            <div className="reviews-scroll-name">{item.name}</div>
+                                            <div className="reviews-scroll-designation">
+                                                {item.designation.split('\n').map((line, idx) => (
+                                                    <div key={idx}>{line}</div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
                 </div>
-                <div className="testimonials-bar"></div>
-            </section> */}
+                )}
+            </section>
 
             {/* Guest Testimonial Submission Form (admin only) */}
             {user && user.email === ADMIN_EMAIL && (
