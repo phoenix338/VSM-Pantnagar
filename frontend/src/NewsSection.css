@@ -2,7 +2,7 @@
     margin: 48px auto 0 auto;
     max-width: 1200px;
     padding: 0 24px;
-    font-family: 'Georgia', serif;
+    font-family: 'open sans';
 }
 
 .news-section-header-row {
@@ -12,8 +12,7 @@
 }
 
 .news-section-title {
-    font-family: 'Helvetica', 'Arial', sans-serif;
-    ;
+    font-family: 'open sans';
     color: #dd783c;
     font-size: 52px;
     font-weight: 500;

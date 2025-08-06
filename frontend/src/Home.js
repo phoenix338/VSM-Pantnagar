@@ -720,10 +720,23 @@ function Home() {
                     marginBottom: 40,
                     background: '#e7f2fa'
                 }}>
-                    {/* Background GIF */}
+                    {/* Background Image */}
                     <img src={require('./assets/qouteoftheday.jpg')} alt="Quote Background" className="quote-bg" />
+                    {/* Quote GIF - above bg, below card */}
+                    <img src={require('./assets/birds2-unscreen.gif')} alt="Quote GIF" style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -40%)',
+                        zIndex: 2,
+                        width: 1500,
+                        height: 1000,
+                        objectFit: 'contain',
+                        pointerEvents: 'none',
+                        opacity: 0.92
+                    }} />
                     {/* Frosted Glass Card */}
-                    <div className="quote-frosted">
+                    <div className="quote-frosted" style={{ zIndex: 3 }}>
                         <div className="quote-title">Quote Of The Day:</div>
                         <div className="quote-main">{quoteOfTheDay}</div>
                         {quoteAuthor && <div className="quote-author">{quoteAuthor}</div>}
@@ -795,7 +808,7 @@ function Home() {
                                     transition: 'all 0.8s ease-out'
                                 }}
                             />
-                            <div style={{ color: '#DD783C', fontWeight: 700, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VISION</div>
+                            <div style={{ fontFamily: 'open sans',color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VISION</div>
                         </div>
 
                         {/* Connecting Sunrays */}
@@ -858,7 +871,7 @@ function Home() {
                                     transition: 'all 0.8s ease-out'
                                 }}
                             />
-                            <div style={{ color: '#DD783C', fontWeight: 700, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>MISSION</div>
+                            <div style={{ fontFamily: 'open sans',color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>MISSION</div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -874,7 +887,7 @@ function Home() {
                                     transition: 'all 0.8s ease-out'
                                 }}
                             />
-                            <div style={{ color: '#DD783C', fontWeight: 700, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VALUES</div>
+                            <div style={{fontFamily: 'open sans', color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VALUES</div>
 
                             {/* Text Box below Values */}
                             <div style={{
@@ -1015,9 +1028,8 @@ function Home() {
                                 />
                             </div>
                             <div style={{
-                                fontFamily: 'Arimo, sans-serif',
+                                fontFamily: 'open sans',
                                 fontSize: '18px',
-                                fontWeight: 'bold',
                                 color: '#333',
                                 textAlign: 'center',
                                 lineHeight: '1.3',

@@ -36,7 +36,7 @@
 }
 
 .quote-main {
-  font-family: 'Oranienbaum', serif;
+  font-family: 'open sans';
   font-size: 38px;
   color: #181818;
   font-weight: 400;
@@ -48,8 +48,8 @@
   display: block;
   color: #8B8080;
   font-size: 54px;
-  font-family: 'Oranienbaum', serif;
-  font-weight: 400;
+  font-family: 'open sans';
+  font-weight: 300;
   margin: 0 0 8px 0;
   letter-spacing: 1px;
 }
@@ -62,10 +62,10 @@
 }
 
 .quote-date {
-  font-family: 'Oranienbaum', serif;
+  font-family: 'open sans';
   font-size: 24px;
   color: #181818;
-  background: #FFD2B3;
+  /* background: #FFD2B3; */
   border-radius: 16px;
   display: inline-block;
   padding: 8px 36px;

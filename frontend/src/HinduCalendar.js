@@ -417,12 +417,12 @@ const HinduCalendar = () => {
 
     return (
         <>
-            <div style={{ fontFamily: 'Tiro Devanagari Hindi, serif', fontSize: 28, color: '#111', margin: '18px 0 0 0', lineHeight: 1.5, textAlign: 'left', display: 'inline-block', fontWeight: 400 }}>
-                <span style={{ fontWeight: 400 }}>तिथि:</span> <span style={{ color: '#DD783C', fontWeight: 400 }}>{calendarData?.tithi}</span><br />
-                <span style={{ fontWeight: 400 }}>नक्षत्र:</span> <span style={{ color: '#DD783C', fontWeight: 400 }}>{calendarData?.nakshatra}</span><br />
-                <span style={{ fontWeight: 400 }}>वार:</span> <span style={{ color: '#DD783C', fontWeight: 400 }}>{calendarData?.vara}</span>
+            <div style={{ fontFamily: 'Tiro Devanagari Hindi, serif', fontSize: 28, color: '#111', margin: '18px 0 0 0', lineHeight: 1.5, textAlign: 'left', display: 'inline-block', fontWeight: 300 }}>
+                <span style={{ fontWeight: 300 }}>तिथि:</span> <span style={{ color: '#DD783C', fontWeight: 300 }}>{calendarData?.tithi}</span><br />
+                <span style={{ fontWeight: 300 }}>नक्षत्र:</span> <span style={{ color: '#DD783C', fontWeight: 300 }}>{calendarData?.nakshatra}</span><br />
+                <span style={{ fontWeight: 300 }}>वार:</span> <span style={{ color: '#DD783C', fontWeight: 300 }}>{calendarData?.vara}</span>
                 {calendarData?.special && (
-                  <><br /><span style={{ fontWeight: 400, color: '#111' }}>उत्सवः</span> <span style={{ color: '#DD783C', fontWeight: 400 }}>{calendarData.special}</span></>
+                  <><br /><span style={{ fontWeight: 300, color: '#111' }}>उत्सवः</span> <span style={{ color: '#DD783C', fontWeight: 300 }}>{calendarData.special}</span></>
                 )}
             </div>
         </>
