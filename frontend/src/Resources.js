@@ -113,13 +113,12 @@ const Resources = () => {
         </>
     );
 
-    // Helper to convert YouTube URLs to embed format (copied from Videos.js)
     const getYouTubeEmbedUrl = (url) => {
         const videoId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
         return videoId ? `https://www.youtube.com/embed/${videoId[1]}` : url;
     };
 
-    // Carousel View for selected resource
+    // Carousel View for selected resource (match Videos gallery exactly)
     if (selectedResourceIndex !== null) {
         const resource = resources[selectedResourceIndex];
         const prevResourceData = resources[(selectedResourceIndex - 1 + resources.length) % resources.length];
@@ -127,48 +126,64 @@ const Resources = () => {
         return (
             <>
                 <Navbar />
-                <div className="videos-carousel-view">
-                    <div className="videos-carousel-header">
-                        <button className="videos-back-btn" onClick={() => setSelectedResourceIndex(null)}>
-                            <img src={require('./assets/lets-icons_back.png')} alt="Back" />
-                            Back
-                        </button>
-                        <h1 className="videos-heading">Resources</h1>
-                    </div>
-                    <div className="videos-carousel-container">
-                        <div className="videos-side-video" onClick={prevResource}>
-                            <iframe
-                                src={getYouTubeEmbedUrl(prevResourceData.url)}
-                                title={prevResourceData.title}
-                                allowFullScreen
-                            />
-                        </div>
-                        <div className="videos-center-video">
-                            <iframe
-                                src={getYouTubeEmbedUrl(resource.url)}
-                                title={resource.title}
-                                allowFullScreen
-                            />
-                            <div className="videos-video-details">
-                                <h3>{resource.title}</h3>
-                                <p>{resource.description}</p>
+                <div className="videos-page">
+                    <div className="videos-carousel-view">
+                        <div className="videos-carousel-header">
+                            <button className="videos-back-btn" onClick={() => setSelectedResourceIndex(null)}>
+                                <img src={require('./assets/lets-icons_back.png')} alt="Back" />
+                                Back
+                            </button>
+                            <h1 className="videos-heading">Resources</h1>
+                            <div className="videos-header-nav">
+                                <button
+                                    className="videos-nav-btn"
+                                    onClick={prevResource}
+                                >
+                                    <img src={require('./assets/lucide_move-left.png')} alt="Previous" />
+                                </button>
+                                <button
+                                    className="videos-nav-btn"
+                                    onClick={nextResource}
+                                >
+                                    <img src={require('./assets/lucide_move-left.png')} alt="Next" />
+                                </button>
                             </div>
                         </div>
-                        <div className="videos-side-video" onClick={nextResource}>
-                            <iframe
-                                src={getYouTubeEmbedUrl(nextResourceData.url)}
-                                title={nextResourceData.title}
-                                allowFullScreen
-                            />
+                        <div className="videos-carousel-container">
+                            {/* Previous Resource */}
+                            <div className="videos-side-video prev" onClick={prevResource}>
+                                <iframe
+                                    src={getYouTubeEmbedUrl(prevResourceData.url)}
+                                    title="Previous"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                            {/* Center Resource */}
+                            <div className="videos-center-video">
+                                <iframe
+                                    src={getYouTubeEmbedUrl(resource.url)}
+                                    title={resource.title}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                                <div className="videos-video-details">
+                                    <h3>{resource.title}</h3>
+                                </div>
+                            </div>
+                            {/* Next Resource */}
+                            <div className="videos-side-video next" onClick={nextResource}>
+                                <iframe
+                                    src={getYouTubeEmbedUrl(nextResourceData.url)}
+                                    title="Next"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
                         </div>
-                    </div>
-                    <div className="videos-header-nav">
-                        <button className="videos-nav-btn" onClick={prevResource}>
-                            <img src={require('./assets/lets-icons_back.png')} alt="Prev" />
-                        </button>
-                        <button className="videos-nav-btn" onClick={nextResource}>
-                            <img src={require('./assets/lets-icons_back.png')} alt="Next" style={{ transform: 'rotate(180deg)' }} />
-                        </button>
                     </div>
                 </div>
             </>
