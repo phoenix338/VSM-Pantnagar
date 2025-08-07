@@ -1,3 +1,116 @@
+@media (max-width: 600px) {
+  .timeline-events {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: 8px !important;
+    height: 48px !important;
+    width: 100vw !important;
+    align-items: center !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 8px !important;
+    scrollbar-width: thin;
+    scrollbar-color: #DD783C #f8f8f8;
+  }
+
+  .timeline-event-dot {
+    min-width: 28px !important;
+    min-height: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    margin: 0 4px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .timeline-event-date {
+    top: 36px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    font-size: 11px !important;
+    padding: 2px 6px !important;
+    background: #fff !important;
+    box-shadow: 0 1px 2px #0001 !important;
+    border-radius: 4px !important;
+    white-space: nowrap !important;
+  }
+
+  .timeline-line {
+    display: none !important;
+  }
+
+  .timeline-event-details {
+    margin-top: 12px !important;
+    padding: 8px !important;
+    font-size: 13px !important;
+    width: 98vw !important;
+    box-sizing: border-box !important;
+  }
+
+  .event-description {
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .horizontal-timeline-container {
+    padding: 16px 2px !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+
+  .timeline-wrapper {
+    margin-bottom: 24px !important;
+  }
+
+  .timeline-nav-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 18px !important;
+    left: 2px !important;
+    right: 2px !important;
+  }
+
+  .timeline-events {
+    gap: 12px !important;
+  }
+
+  .timeline-event-dot {
+    width: 28px !important;
+    height: 28px !important;
+    margin: 6px 0 !important;
+  }
+
+  .timeline-event-date {
+    font-size: 11px !important;
+    top: -28px !important;
+    padding: 2px 6px !important;
+  }
+
+  .timeline-event-details {
+    margin-top: 18px !important;
+    padding: 10px !important;
+    font-size: 13px !important;
+  }
+
+  .event-description {
+    font-size: 13px !important;
+  }
+
+  .timeline-admin-form {
+    padding: 10px !important;
+    max-width: 98vw !important;
+  }
+
+  .timeline-admin-form input {
+    font-size: 13px !important;
+    padding: 8px !important;
+  }
+
+  .timeline-admin-form button {
+    font-size: 14px !important;
+    padding: 8px !important;
+  }
+}
+
 /* Horizontal Timeline Styles */
 .horizontal-timeline-container {
   padding: 40px 20px;

@@ -593,36 +593,70 @@ function Home() {
         <div style={{ position: 'relative' }}>
             <Navbar resetHome={resetHome} />
             {/* Main scrollable content after navbars */}
-            <div style={{ marginTop: 100 }}>
+            <div className="main-content-gap" style={{ marginTop: 100 }}>
                 {/* Hero Section: Events Carousel */}
                 {upcomingEvents.length > 0 ? (
-                    <div style={{
-                        width: '100vw',
-                        height: '65vh',
-                        position: 'relative',
-                        background: '#FFE4D6',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        {/* Event Banner Image */}
-                        <div style={{
-                            width: '100%',
-                            height: '100%',
+                    <div
+                        style={{
+                            width: '100vw',
+                            minHeight: '220px',
+                            height: '65vh',
                             position: 'relative',
-                            overflow: 'hidden'
-                        }}>
+                            background: '#FFE4D6',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            overflow: 'hidden',
+                        }}
+                    >
+                        {/* Event Banner Image */}
+                        <div
+                            style={{
+                                width: '100vw',
+                                height: '100%',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                maxWidth: '100vw',
+                                minHeight: '220px',
+                            }}
+                        >
                             <img
                                 src={upcomingEvents[currentEventIndex].bannerImage}
                                 alt={upcomingEvents[currentEventIndex].title}
                                 style={{
-                                    width: '100%',
+                                    width: '100vw',
+                                    maxWidth: '100vw',
                                     height: '100%',
-                                    objectFit: 'cover'
+                                    minHeight: '220px',
+                                    objectFit: 'cover',
+                                    display: 'block',
+                                    margin: '0 auto',
                                 }}
                             />
                         </div>
+                        {/* Mobile specific styles */}
+                        <style>{`
+                            @media (max-width: 600px) {
+                                .event-hero-img,
+                                .event-hero-img img {
+                                    width: 100vw !important;
+                                    height: 220px !important;
+                                    object-fit: cover !important;
+                                    min-height: 220px !important;
+                                    max-width: 100vw !important;
+                                    display: block !important;
+                                    margin: 0 auto !important;
+                                }
+                                .event-hero-img {
+                                    justify-content: center !important;
+                                    align-items: center !important;
+                                }
+                            }
+                        `}</style>
 
                         {/* Pagination Dots */}
                         <div style={{
@@ -788,7 +822,7 @@ function Home() {
                                 maxWidth: '200px',
                                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                                 fontSize: '18px',
-                                fontFamily:'open sans',
+                                fontFamily: 'open sans',
                                 lineHeight: '1.4',
                                 color: '#333',
                                 textAlign: 'left',
@@ -810,7 +844,7 @@ function Home() {
                                     transition: 'all 0.8s ease-out'
                                 }}
                             />
-                            <div style={{ fontFamily: 'open sans',color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VISION</div>
+                            <div style={{ fontFamily: 'open sans', color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VISION</div>
                         </div>
 
                         {/* Connecting Sunrays */}
@@ -857,7 +891,7 @@ function Home() {
                                 color: '#333',
                                 textAlign: 'left',
                                 opacity: currentStep >= 2 ? 1 : 0,
-                                fontFamily:'open sans',
+                                fontFamily: 'open sans',
                                 fontWeight: 300,
                                 transition: 'opacity 0.6s ease-out 0.6s'
                             }}>
@@ -875,7 +909,7 @@ function Home() {
                                     transition: 'all 0.8s ease-out'
                                 }}
                             />
-                            <div style={{ fontFamily: 'open sans',color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>MISSION</div>
+                            <div style={{ fontFamily: 'open sans', color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>MISSION</div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -891,7 +925,7 @@ function Home() {
                                     transition: 'all 0.8s ease-out'
                                 }}
                             />
-                            <div style={{fontFamily: 'open sans', color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VALUES</div>
+                            <div style={{ fontFamily: 'open sans', color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VALUES</div>
 
                             {/* Text Box below Values */}
                             <div style={{
@@ -905,7 +939,7 @@ function Home() {
                                 lineHeight: '1.5',
                                 color: '#333',
                                 textAlign: 'center',
-                                fontFamily:'open sans',
+                                fontFamily: 'open sans',
                                 fontWeight: 300,
                                 opacity: currentStep >= 3 ? 1 : 0,
                                 transition: 'opacity 0.6s ease-out 0.6s'
@@ -1063,59 +1097,59 @@ function Home() {
                     <div className="reviews-section-horizontal-line" />
                 </div>
                 {guestTestimonials.length === 0 ? (
-                    <div style={{textAlign: 'center', color: '#888', fontStyle: 'italic', margin: '32px 0', fontSize: 20}}>
+                    <div style={{ textAlign: 'center', color: '#888', fontStyle: 'italic', margin: '32px 0', fontSize: 20 }}>
                         No guest testimonials yet.
                     </div>
                 ) : (
-                <div className="reviews-section-main">
-                    <div className="reviews-main-center">
-                        {guestTestimonials[selectedGuestIndex] ? (
-                            <>
-                                <div className="reviews-main-title"></div>
-                                <div className="reviews-main-text">
-                                    "{guestTestimonials[selectedGuestIndex].text}"
-                                    <div style={{
-                                        textAlign: 'right',
-                                        fontStyle: 'normal',
-                                        fontWeight: 'bold',
-                                        color: '#dd783c',
-                                        fontSize: '1rem',
-                                        marginTop: '1rem'
-                                    }}>
-                                        — {guestTestimonials[selectedGuestIndex].name}
+                    <div className="reviews-section-main">
+                        <div className="reviews-main-center">
+                            {guestTestimonials[selectedGuestIndex] ? (
+                                <>
+                                    <div className="reviews-main-title"></div>
+                                    <div className="reviews-main-text">
+                                        "{guestTestimonials[selectedGuestIndex].text}"
+                                        <div style={{
+                                            textAlign: 'right',
+                                            fontStyle: 'normal',
+                                            fontWeight: 'bold',
+                                            color: '#dd783c',
+                                            fontSize: '1rem',
+                                            marginTop: '1rem'
+                                        }}>
+                                            — {guestTestimonials[selectedGuestIndex].name}
+                                        </div>
                                     </div>
-                                </div>
-                            </>
-                        ) : null}
-                    </div>
-                    <div className="reviews-section-divider" />
-                    <div className="reviews-main-right">
-                        <div className="reviews-scroll-list">
-                            {guestTestimonials.map((item, i) => (
-                                <div
-                                    className={`reviews-scroll-item${i === selectedGuestIndex ? ' active' : ''}`}
-                                    key={item._id || i}
-                                    onClick={() => setSelectedGuestIndex(i)}
-                                    style={{
-                                        border: i === selectedGuestIndex ? '2px solid #dd783c' : '2px solid #bbb',
-                                        position: 'relative',
-                                    }}
-                                >
-                                    <div className="reviews-scroll-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                        <div>
-                                            <div className="reviews-scroll-name">{item.name}</div>
-                                            <div className="reviews-scroll-designation">
-                                                {item.designation.split('\n').map((line, idx) => (
-                                                    <div key={idx}>{line}</div>
-                                                ))}
+                                </>
+                            ) : null}
+                        </div>
+                        <div className="reviews-section-divider" />
+                        <div className="reviews-main-right">
+                            <div className="reviews-scroll-list">
+                                {guestTestimonials.map((item, i) => (
+                                    <div
+                                        className={`reviews-scroll-item${i === selectedGuestIndex ? ' active' : ''}`}
+                                        key={item._id || i}
+                                        onClick={() => setSelectedGuestIndex(i)}
+                                        style={{
+                                            border: i === selectedGuestIndex ? '2px solid #dd783c' : '2px solid #bbb',
+                                            position: 'relative',
+                                        }}
+                                    >
+                                        <div className="reviews-scroll-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                            <div>
+                                                <div className="reviews-scroll-name">{item.name}</div>
+                                                <div className="reviews-scroll-designation">
+                                                    {item.designation.split('\n').map((line, idx) => (
+                                                        <div key={idx}>{line}</div>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
                 )}
             </section>
 
@@ -1167,7 +1201,156 @@ function Home() {
                 </section>
             )}
 
-            <Footer />
+            <>
+                {/* Enhanced mobile and desktop styles for spacing and layout */}
+                <style>{`
+                @media (max-width: 600px) {
+                  html, body {
+                    width: 100vw !important;
+                    min-width: 100vw !important;
+                    max-width: 100vw !important;
+                    overflow-x: hidden !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                  }
+                  #root, .App, .main-content, .main-scrollable-content, .books-scroll-container, .quote-bg, .quote-frosted, .event-hero-img, .event-hero-img img, footer {
+                    width: 100vw !important;
+                    min-width: 100vw !important;
+                    max-width: 100vw !important;
+                    box-sizing: border-box !important;
+                    margin: 0 !important;
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                  }
+                  .main-content-gap {
+                    margin-top: 100px !important;
+                  }
+                  /* Remove broad section, div selector to avoid breaking button/icon layouts */
+                  footer {
+                    display: block !important;
+                    position: relative !important;
+                    left: 0 !important;
+                    bottom: 0 !important;
+                    z-index: 100 !important;
+                    padding: 10px 0 8px 0 !important;
+                    background: #fff8f2 !important;
+                    box-shadow: 0 -4px 16px #DD783C22 !important;
+                    text-align: center !important;
+                    border-top-left-radius: 12px !important;
+                    border-top-right-radius: 12px !important;
+                    font-size: 13px !important;
+                  }
+                  .event-hero-img,
+                  .event-hero-img img {
+                    height: 90px !important;
+                    max-width: 95vw !important;
+                    border-radius: 10px !important;
+                    box-shadow: 0 2px 8px #DD783C22 !important;
+                    margin: 0 auto !important;
+                  }
+                  .event-hero-img {
+                    justify-content: center !important;
+                    align-items: center !important;
+                  }
+                  .quote-bg,
+                  .quote-frosted {
+                    border-radius: 10px !important;
+                    box-shadow: 0 2px 8px #DD783C22 !important;
+                    max-width: 95vw !important;
+                    height: 90px !important;
+                    object-fit: cover !important;
+                    margin: 0 auto !important;
+                  }
+                  .quote-frosted {
+                    box-sizing: border-box !important;
+                    padding: 10px 4px !important;
+                    font-size: 15px !important;
+                  }
+                  .books-scroll-container {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    gap: 12px !important;
+                  }
+                  .books-scroll-container > div {
+                    min-width: 180px !important;
+                    max-width: 200px !important;
+                    padding: 10px !important;
+                    font-size: 14px !important;
+                  }
+                  .books-scroll-container img {
+                    width: 120px !important;
+                    height: 180px !important;
+                  }
+                  .reviews-section-title {
+                    font-size: 28px !important;
+                  }
+                  .reviews-section-root {
+                    margin-top: 24px !important;
+                  }
+                  .reviews-main-text {
+                    font-size: 15px !important;
+                  }
+                  .reviews-scroll-name {
+                    font-size: 13px !important;
+                  }
+                  .reviews-scroll-designation {
+                    font-size: 12px !important;
+                  }
+                  .guest-testimonial-section {
+                    max-width: 98vw !important;
+                    padding: 12px !important;
+                    font-size: 14px !important;
+                  }
+                  .guest-testimonial-section input,
+                  .guest-testimonial-section textarea {
+                    font-size: 13px !important;
+                    padding: 8px !important;
+                  }
+                  .guest-testimonial-section button {
+                    font-size: 15px !important;
+                    padding: 10px 0 !important;
+                  }
+                  body {
+                    padding-bottom: 70px !important;
+                  }
+                  /* Explicit mobile styles for navbar buttons and icons */
+                  .navbar-buttons, .navbar .login-btn, .navbar .contribute-btn {
+                    display: flex !important;
+                    flex-direction: row !important;
+                    align-items: center !important;
+                    gap: 8px !important;
+                    width: auto !important;
+                    margin: 0 8px !important;
+                  }
+                  .navbar .login-btn, .navbar .contribute-btn {
+                    font-size: 15px !important;
+                    padding: 8px 16px !important;
+                    border-radius: 8px !important;
+                    min-width: 80px !important;
+                    max-width: 120px !important;
+                    display: inline-block !important;
+                  }
+                  .navbar .headphone-icon {
+                    display: inline-block !important;
+                    width: 28px !important;
+                    height: 28px !important;
+                    margin-left: 8px !important;
+                  }
+                  .navbar .new-text {
+                    display: inline-block !important;
+                    font-size: 13px !important;
+                    color: #DD783C !important;
+                    margin-left: 6px !important;
+                  }
+                }
+                @media (min-width: 601px) {
+                  .main-content-gap {
+                    margin-top: 60px !important;
+                  }
+                }
+              `}</style>
+                <Footer />
+            </>
         </div>
 
     );

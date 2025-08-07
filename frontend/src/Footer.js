@@ -53,6 +53,68 @@ const Footer = () => {
           <span style={{ marginRight: 8 }}>&copy;</span> All Rights Reserved | Developed By ....
         </div>
       </div>
+      {/* Responsive styles for mobile */}
+      <style>{`
+        @media (max-width: 700px) {
+          .footer-container {
+            padding: 12px 0 !important;
+          }
+          .footer-links-row {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 18px !important;
+          }
+          .footer-col {
+            width: 100vw !important;
+            max-width: 350px !important;
+            text-align: center !important;
+            margin: 0 auto 12px auto !important;
+            font-size: 1rem !important;
+          }
+          .footer-col.right-col {
+            margin-bottom: 0 !important;
+          }
+          .footer-link {
+            font-size: 1rem !important;
+            padding: 6px 0 !important;
+            display: block !important;
+          }
+          .footer-bottom-wrapper {
+            padding: 0 !important;
+          }
+          .footer-bottom-row {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 12px !important;
+          }
+          .footer-backtotop {
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 1rem !important;
+          }
+          .footer-arrow-circle img {
+            width: 40px !important;
+            height: 40px !important;
+          }
+          .footer-social {
+            font-size: 1rem !important;
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+          }
+          .footer-icon {
+            font-size: 22px !important;
+          }
+          .footer-copyright {
+            font-size: 0.95rem !important;
+            text-align: center !important;
+            margin-top: 10px !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 };

@@ -25,6 +25,31 @@
     padding: 0 16px;
 }
 
+/* Responsive grid for Videos */
+@media (max-width: 900px) {
+    .videos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        padding: 0 8px;
+    }
+
+    .video-container {
+        height: 220px;
+    }
+}
+
+@media (max-width: 600px) {
+    .videos-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 0 4px;
+    }
+
+    .video-container {
+        height: 150px;
+    }
+}
+
 .video-container {
     display: flex;
     flex-direction: column;

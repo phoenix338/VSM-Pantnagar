@@ -205,7 +205,7 @@ const OurInitiative = () => {
     return (
         <>
             <Navbar />
-            <div className="initiative-page">
+            <div className="initiative-page main-content-gap">
                 <div className="initiative-gif-wrapper">
                     <img src={initiativeGif} alt="Our Initiative" className="initiative-gif" />
                 </div>
@@ -220,59 +220,59 @@ const OurInitiative = () => {
                             id={`event-${item._id}`}
                         >
                             <div className="initiative-text-col">
-  <h2 className="initiative-heading">{item.title || `Event ${idx + 1}`}</h2>
-  <div className="initiative-content-row">
-    <div className="initiative-text">
-      {convertTextToLinks(item.text)}
-    </div>
-    {(item.imageUrls && item.imageUrls.length > 0) || item.imageUrl ? (
-      <div className="image-slideshow">
-        <img
-          src={item.imageUrls && item.imageUrls.length > 0
-            ? item.imageUrls[currentImageIndex[item._id] || 0]
-            : item.imageUrl}
-          alt="Event"
-          className="initiative-img"
-        />
-        {item.imageUrls && item.imageUrls.length > 1 && (
-          <>
-            <button
-              className="slideshow-btn prev-btn"
-              onClick={() => prevImage(item._id)}
-            >
-              ‹
-            </button>
-            <button
-              className="slideshow-btn next-btn"
-              onClick={() => nextImage(item._id)}
-            >
-              ›
-            </button>
-            <div className="image-indicators">
-              {item.imageUrls.map((_, index) => (
-                <span
-                  key={index}
-                  className={`indicator ${(currentImageIndex[item._id] || 0) === index ? 'active' : ''}`}
-                  onClick={() => setCurrentImageIndex(prev => ({ ...prev, [item._id]: index }))}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    ) : (
-      <div className="no-image">No images available</div>
-    )}
-  </div>
-  {isAdmin && (
-    <button
-      className="initiative-delete-btn"
-      onClick={() => handleDelete(item._id)}
-    >
-      Delete
-    </button>
-  )}
-</div>
+                                <h2 className="initiative-heading">{item.title || `Event ${idx + 1}`}</h2>
+                                <div className="initiative-content-row">
+                                    <div className="initiative-text">
+                                        {convertTextToLinks(item.text)}
+                                    </div>
+                                    {(item.imageUrls && item.imageUrls.length > 0) || item.imageUrl ? (
+                                        <div className="image-slideshow">
+                                            <img
+                                                src={item.imageUrls && item.imageUrls.length > 0
+                                                    ? item.imageUrls[currentImageIndex[item._id] || 0]
+                                                    : item.imageUrl}
+                                                alt="Event"
+                                                className="initiative-img"
+                                            />
+                                            {item.imageUrls && item.imageUrls.length > 1 && (
+                                                <>
+                                                    <button
+                                                        className="slideshow-btn prev-btn"
+                                                        onClick={() => prevImage(item._id)}
+                                                    >
+                                                        ‹
+                                                    </button>
+                                                    <button
+                                                        className="slideshow-btn next-btn"
+                                                        onClick={() => nextImage(item._id)}
+                                                    >
+                                                        ›
+                                                    </button>
+                                                    <div className="image-indicators">
+                                                        {item.imageUrls.map((_, index) => (
+                                                            <span
+                                                                key={index}
+                                                                className={`indicator ${(currentImageIndex[item._id] || 0) === index ? 'active' : ''}`}
+                                                                onClick={() => setCurrentImageIndex(prev => ({ ...prev, [item._id]: index }))}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="no-image">No images available</div>
+                                    )}
+                                </div>
+                                {isAdmin && (
+                                    <button
+                                        className="initiative-delete-btn"
+                                        onClick={() => handleDelete(item._id)}
+                                    >
+                                        Delete
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -290,6 +290,19 @@ const OurInitiative = () => {
                     </div>
                 )}
                 <Footer />
+                {/* Responsive spacing for main content */}
+                <style>{`
+                  @media (max-width: 600px) {
+                    .main-content-gap {
+                      margin-top: 100px !important;
+                    }
+                  }
+                  @media (min-width: 601px) {
+                    .main-content-gap {
+                      margin-top: 60px !important;
+                    }
+                  }
+                `}</style>
             </div>
         </>
     );

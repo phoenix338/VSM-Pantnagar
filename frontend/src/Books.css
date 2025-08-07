@@ -8,13 +8,15 @@
     align-items: center;
     justify-content: center;
 }
-.books-page h1{
+
+.books-page h1 {
     font-size: 64px;
     font-family: 'Alex Brush', cursive;
     color: #DD783C;
     margin-bottom: 100px;
     font-weight: 500;
 }
+
 .books-gif-wrapper {
     width: 100vw;
     display: flex;
@@ -444,33 +446,98 @@
 
 @media (max-width: 768px) {
     .books-container {
-        padding: 100px 1vw 30px;
-    }
-
-    .books-header h1 {
-        font-size: 2rem;
+        padding: 80px 2vw 20px;
     }
 
     .genre-section {
-        padding: 30px 20px;
+        padding: 18px 8px;
+    }
+
+    .genre-section-title {
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 18px;
     }
 
     .genre-section-title h2 {
-        font-size: 2rem;
+        font-size: 1.3rem;
+        margin-bottom: 0;
+    }
+
+    .genre-section-content,
+    .genre-section-content.reversed {
+        flex-direction: column !important;
+        gap: 18px;
+        align-items: center;
+        min-height: unset;
+    }
+
+    .genre-image-left {
+        min-height: unset;
+        margin-bottom: 8px;
     }
 
     .genre-image-left img {
-        width: 150px;
-        height: 150px;
+        width: 110px;
+        height: 110px;
+    }
+
+    .selected-book-area {
+        max-width: 100%;
+        width: 100%;
+        align-items: center;
+        margin-bottom: 8px;
     }
 
     .book-cover {
-        width: 150px;
-        height: 210px;
+        width: 110px;
+        height: 160px;
+        margin: 0 auto;
+    }
+
+    .book-description {
+        max-width: 100%;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+
+    .books-scrollable-list {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 8px;
+    }
+
+    .books-list-container,
+    .books-list-container.reverse {
+        flex-direction: row;
+        gap: 8px;
+        width: 100%;
+        min-height: unset;
+        max-height: 120px;
+        height: 120px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0 4px;
+    }
+
+    .scrollable-book-item {
+        flex: 0 0 80px;
+        margin-right: 6px;
+        height: 110px;
+        padding: 4px;
+    }
+
+    .book-thumbnail {
+        height: 70px;
+    }
+
+    .book-thumbnail img {
+        height: 70px;
     }
 
     .book-description p {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 }
 

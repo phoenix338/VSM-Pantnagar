@@ -1,3 +1,36 @@
+@media (max-width: 600px) {
+  .initiative-text-col {
+    padding: 16px !important;
+    font-size: 1rem !important;
+  }
+
+  .initiative-content-row {
+    flex-direction: column !important;
+    gap: 16px !important;
+    align-items: stretch !important;
+  }
+
+  .initiative-text {
+    max-width: 100% !important;
+    font-size: 1rem !important;
+  }
+
+  .image-slideshow {
+    max-width: 100% !important;
+    width: 100% !important;
+    align-items: center !important;
+    margin-top: 8px !important;
+  }
+
+  .initiative-img {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+}
+
 .initiative-page {
   width: 100vw;
   min-height: 100vh;
@@ -149,7 +182,7 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items:flex-start;
+  align-items: flex-start;
   padding: 48px;
   position: relative;
 }

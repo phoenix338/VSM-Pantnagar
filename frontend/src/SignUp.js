@@ -133,6 +133,107 @@ const SignUp = () => {
             <div className="login-image-section">
                 <img src={require('./assets/भारतीय-नववर्ष-उत्सव (1).png')} alt="Sign Up Visual" />
             </div>
+            {/* Responsive styles for mobile */}
+            <style>{`
+                @media (max-width: 700px) {
+                    .login-container {
+                        flex-direction: column !important;
+                        align-items: center !important;
+                        padding: 8px !important;
+                    }
+                    .login-form-section {
+                        width: 100vw !important;
+                        max-width: 100vw !important;
+                        padding: 8px 12px 0 12px !important;
+                        box-sizing: border-box !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        align-items: center !important;
+                    }
+                    .login-form {
+                        width: 100%;
+                        max-width: 350px;
+                        margin: 0 auto;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    .login-form h1 {
+                        font-size: 1.15rem !important;
+                        margin-bottom: 14px !important;
+                        margin-top: 8px !important;
+                        text-align: center !important;
+                        word-break: break-word !important;
+                        overflow-wrap: break-word !important;
+                        white-space: normal !important;
+                        line-height: 1.2 !important;
+                        font-weight: 600 !important;
+                        max-width: 90vw !important;
+                    }
+                    .login-form label {
+                        font-size: 0.95rem !important;
+                        margin-bottom: 4px !important;
+                        width: 100%;
+                        max-width: 350px;
+                        text-align: left;
+                    }
+                    .login-form input {
+                        font-size: 0.95rem !important;
+                        padding: 8px !important;
+                        margin-bottom: 10px !important;
+                        width: 100%;
+                        max-width: 350px;
+                        box-sizing: border-box;
+                    }
+                    .signin-btn, .continue-btn, .signup-btn {
+                        font-size: 0.95rem !important;
+                        padding: 8px 0 !important;
+                        margin-bottom: 10px !important;
+                        width: 100%;
+                        max-width: 350px;
+                    }
+                    .google-btn, .facebook-btn {
+                        font-size: 0.95rem !important;
+                        padding: 8px 0 !important;
+                        margin-bottom: 10px !important;
+                        width: 100%;
+                        max-width: 350px;
+                    }
+                    .or-divider {
+                        margin: 16px 0 !important;
+                        font-size: 0.95rem !important;
+                        width: 100%;
+                        max-width: 350px;
+                        text-align: center;
+                    }
+                    .signup-success-message {
+                        width: 100%;
+                        max-width: 350px;
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                    .login-image-section {
+                        width: 100vw !important;
+                        max-width: 100vw !important;
+                        margin-top: 16px !important;
+                        display: flex !important;
+                        justify-content: center !important;
+                    }
+                    .login-image-section img {
+                        width: 85vw !important;
+                        max-width: 300px !important;
+                        height: auto !important;
+                        border-radius: 10px !important;
+                    }
+                    .signup-link {
+                        font-size: 0.95rem !important;
+                        margin-top: 10px !important;
+                        width: 100%;
+                        max-width: 350px;
+                        text-align: center;
+                    }
+                }
+            `}</style>
         </div>
     );
 };

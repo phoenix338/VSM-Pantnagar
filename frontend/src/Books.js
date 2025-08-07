@@ -174,7 +174,7 @@ const Books = () => {
     return (
         <>
             <Navbar />
-            <div className="books-page">
+            <div className="books-page main-content-gap">
                 <div className="books-gif-wrapper">
                     <img src={booksGif} alt="Books" className="books-gif" />
                 </div>
@@ -322,6 +322,19 @@ const Books = () => {
                     </div>
                 )}
                 <Footer />
+                {/* Responsive spacing for main content */}
+                <style>{`
+                  @media (max-width: 600px) {
+                    .main-content-gap {
+                      margin-top: 100px !important;
+                    }
+                  }
+                  @media (min-width: 601px) {
+                    .main-content-gap {
+                      margin-top: 60px !important;
+                    }
+                  }
+                `}</style>
             </div>
         </>
     );
