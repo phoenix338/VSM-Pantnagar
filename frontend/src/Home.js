@@ -788,9 +788,11 @@ function Home() {
                                 maxWidth: '200px',
                                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                                 fontSize: '18px',
+                                fontFamily:'open sans',
                                 lineHeight: '1.4',
                                 color: '#333',
                                 textAlign: 'left',
+                                fontWeight: 300,
                                 opacity: currentStep >= 1 ? 1 : 0,
                                 transition: 'opacity 0.6s ease-out 0.6s'
                             }}>
@@ -826,7 +828,7 @@ function Home() {
                             pointerEvents: 'none'
                         }}>
                             <img
-                                src={require('./assets/sunrays.png')}
+                                src={require('./assets/sunraysnew.png')}
                                 alt="Connecting Sunrays"
                                 style={{
                                     width: '100%',
@@ -855,6 +857,8 @@ function Home() {
                                 color: '#333',
                                 textAlign: 'left',
                                 opacity: currentStep >= 2 ? 1 : 0,
+                                fontFamily:'open sans',
+                                fontWeight: 300,
                                 transition: 'opacity 0.6s ease-out 0.6s'
                             }}>
                                 To nurture holistic human development, balancing inner growth with social responsibility and national consciousness.
@@ -901,6 +905,8 @@ function Home() {
                                 lineHeight: '1.5',
                                 color: '#333',
                                 textAlign: 'center',
+                                fontFamily:'open sans',
+                                fontWeight: 300,
                                 opacity: currentStep >= 3 ? 1 : 0,
                                 transition: 'opacity 0.6s ease-out 0.6s'
                             }}>

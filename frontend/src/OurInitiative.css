@@ -29,18 +29,23 @@
 }
 
 .initiative-heading {
-  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-family: 'open sans';
   font-style: normal;
   font-size: 52px;
-  font-weight: 500;
-  margin-bottom: 24px;
+  font-weight: 300;
+  margin-bottom: 64px;
   margin-top: 64px;
   letter-spacing: 1px;
   text-align: center;
+  width: 100%;
+}
+
+.initiative-text-col {
+  align-items: flex-start;
 }
 
 .our-initiative-heading {
-  font-family: 'Apple Chancery', cursive;
+  font-family: 'alex brush', cursive;
   font-size: 64px;
   font-weight: 500;
   color: black;
@@ -95,16 +100,40 @@
   line-height: 1.5;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  /* Center text vertically */
-  align-items: center;
-  /* Center text horizontally */
-  padding: 0 48px;
+  align-items: flex-start;
+  padding: 48px;
   font-size: 1.8rem;
-  /* Reduced from 2rem */
-  font-family: 'Nunito', sans-serif;
-  /* text-align: center; */
+  font-family: 'open sans';
+  font-weight: 300;
 }
+
+.initiative-content-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+}
+
+
+.initiative-text {
+  flex: 0 1 70%;
+  max-width: 70%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.image-slideshow {
+  flex: 0 1 30%;
+  max-width: 30%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 
 .initiative-row.reverse .initiative-text-col {
   color: #fff;
@@ -120,7 +149,7 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items:flex-start;
   padding: 48px;
   position: relative;
 }
@@ -232,6 +261,12 @@
 }
 
 .no-image {
+  flex: 0 1 30%;
+  max-width: 30%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
   display: flex;
   justify-content: center;
   align-items: center;

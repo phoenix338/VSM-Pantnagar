@@ -8,7 +8,13 @@
     align-items: center;
     justify-content: center;
 }
-
+.books-page h1{
+    font-size: 64px;
+    font-family: 'Alex Brush', cursive;
+    color: #DD783C;
+    margin-bottom: 100px;
+    font-weight: 500;
+}
 .books-gif-wrapper {
     width: 100vw;
     display: flex;
@@ -106,7 +112,7 @@
     padding: 120px 2vw 40px;
     width: 100vw;
     margin: 0 auto;
-    font-family: 'Arimo', sans-serif;
+    font-family: 'open sans';
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -182,8 +188,8 @@
     font-size: 48px;
     color: black;
     margin: 0;
-    font-weight: 500;
-    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-weight: 300;
+    font-family: 'open sans';
 
 }
 
@@ -256,7 +262,8 @@
     font-size: 1.2rem;
     color: #333;
     margin: 0;
-    font-weight: 600;
+    font-family: 'open sans';
+    font-weight: 300;
     line-height: 1.4;
 }
 

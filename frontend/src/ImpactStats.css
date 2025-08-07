@@ -42,16 +42,16 @@
 }
 
 .impact-stat-value {
-    font-family: 'Red Hat Display', sans-serif;
+    font-family: 'open sans';
     font-size: 1.8rem;
-    font-weight: 400;
+    font-weight: 500;
     color: #222;
     margin-bottom: 0;
     text-align: center;
 }
 
 .impact-stat-label {
-    font-family: 'Arimo', sans-serif;
+    font-family: 'open sans';
     font-size: 1.1rem;
     color: #222;
     margin-top: 4px;
@@ -80,7 +80,7 @@
 .impact-stat-input {
     width: 80%;
     font-size: 1.2rem;
-    font-family: 'Red Hat Display', sans-serif;
+    font-family: 'open sans';
     text-align: center;
     border: 1.5px solid #e68346;
     border-radius: 8px;
