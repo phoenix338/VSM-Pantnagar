@@ -641,20 +641,25 @@ function Home() {
                         {/* Mobile specific styles */}
                         <style>{`
                             @media (max-width: 600px) {
-                                .event-hero-img,
-                                .event-hero-img img {
-                                    width: 100vw !important;
-                                    height: 220px !important;
-                                    object-fit: cover !important;
-                                    min-height: 220px !important;
-                                    max-width: 100vw !important;
-                                    display: block !important;
-                                    margin: 0 auto !important;
-                                }
-                                .event-hero-img {
-                                    justify-content: center !important;
-                                    align-items: center !important;
-                                }
+                  .event-hero-img {
+                    width: 100% !important;
+                    height: auto !important;
+                    min-height: 0 !important;
+                    max-width: 100% !important;
+                    justify-content: center !important;
+                    align-items: center !important;
+                    overflow: hidden !important;
+                  }
+                  .event-hero-img img {
+                    width: 100% !important;
+                    height: auto !important;
+                    max-width: 100% !important;
+                    min-height: 0 !important;
+                    object-fit: contain !important;
+                    border-radius: 10px !important;
+                    box-shadow: 0 2px 8px #DD783C22 !important;
+                    margin: 0 auto !important;
+                  }
                             }
                         `}</style>
 
@@ -743,7 +748,7 @@ function Home() {
                     </button>
                 </div>
                 {/* Quote of the Day Section - New Design */}
-                <div style={{
+<div style={{
                     width: '100vw',
                     minHeight: 700,
                     position: 'relative',
@@ -1205,27 +1210,69 @@ function Home() {
                 {/* Enhanced mobile and desktop styles for spacing and layout */}
                 <style>{`
                 @media (max-width: 600px) {
-                  html, body {
-                    width: 100vw !important;
-                    min-width: 100vw !important;
-                    max-width: 100vw !important;
-                    overflow-x: hidden !important;
+                  html, body, #root, .App, .main-content, .main-scrollable-content, .main-content-gap, .books-scroll-container, .quote-bg, .quote-frosted, .event-hero-img, .event-hero-img img, footer {
+                    width: 100% !important;
+                    min-width: 0 !important;
+                    max-width: 100% !important;
+                    box-sizing: border-box !important;
                     margin: 0 !important;
                     padding: 0 !important;
+                    overflow-x: hidden !important;
                   }
-                  #root, .App, .main-content, .main-scrollable-content, .books-scroll-container, .quote-bg, .quote-frosted, .event-hero-img, .event-hero-img img, footer {
-                    width: 100vw !important;
-                    min-width: 100vw !important;
-                    max-width: 100vw !important;
-                    box-sizing: border-box !important;
+                  .main-content-gap,
+                  .books-scroll-container,
+                  .quote-bg,
+                  .quote-frosted,
+                  .event-hero-img,
+                  .event-hero-img img {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    min-width: 0 !important;
                     margin: 0 !important;
                     padding-left: 0 !important;
                     padding-right: 0 !important;
                   }
-                  .main-content-gap {
-                    margin-top: 100px !important;
+                  .books-scroll-container > div {
+                    min-width: 140px !important;
+                    max-width: 100% !important;
+                    padding: 8px !important;
+                    font-size: 14px !important;
                   }
-                  /* Remove broad section, div selector to avoid breaking button/icon layouts */
+                  .books-scroll-container img {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    height: auto !important;
+                  }
+                  .reviews-section-root,
+                  .guest-testimonial-section {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    margin-left: 0 !important;
+                    margin-right: 0 !important;
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                  }
+                  .reviews-section-main {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                  }
+                  /* Remove horizontal gap for flex containers */
+                  .main-content-gap > div,
+                  .books-scroll-container,
+                  .reviews-section-main {
+                    gap: 0 !important;
+                  }
+                 /* Prevent any child from overflowing viewport */
+                 * {
+                   box-sizing: border-box !important;
+                   max-width: 100% !important;
+                 }
+                  body {
+                    padding-bottom: 70px !important;
+                  }
+                  .main-content-gap {
+                    margin-top: 50px !important;
+                  }
                   footer {
                     display: block !important;
                     position: relative !important;
@@ -1240,10 +1287,41 @@ function Home() {
                     border-top-right-radius: 12px !important;
                     font-size: 13px !important;
                   }
+                 /* Constrain event carousel arrow button */
+                 .event-arrow-btn {
+                   position: absolute !important;
+                   right: 8px !important;
+                   left: auto !important;
+                   top: 50% !important;
+                   transform: translateY(-50%) !important;
+                   width: 40px !important;
+                   height: 40px !important;
+                   z-index: 10 !important;
+                   box-shadow: 0 2px 8px #DD783C22 !important;
+                 }
+                 /* Decorative images (leaves, overlays, etc) */
+                 .decorative-img {
+                   max-width: 100vw !important;
+                   height: auto !important;
+                   overflow-x: hidden !important;
+                   position: relative !important;
+                 }
                   .event-hero-img,
+                  .event-hero-img {
+                    width: 100% !important;
+                    height: auto !important;
+                    min-height: 0 !important;
+                    max-width: 100% !important;
+                    justify-content: center !important;
+                    align-items: center !important;
+                    overflow: hidden !important;
+                  }
                   .event-hero-img img {
-                    height: 90px !important;
-                    max-width: 95vw !important;
+                    width: 100% !important;
+                    height: auto !important;
+                    max-width: 100% !important;
+                    min-height: 0 !important;
+                    object-fit: contain !important;
                     border-radius: 10px !important;
                     box-shadow: 0 2px 8px #DD783C22 !important;
                     margin: 0 auto !important;
@@ -1257,14 +1335,21 @@ function Home() {
                     border-radius: 10px !important;
                     box-shadow: 0 2px 8px #DD783C22 !important;
                     max-width: 95vw !important;
-                    height: 90px !important;
+                    height: 60px !important;
                     object-fit: cover !important;
                     margin: 0 auto !important;
+                    padding: 0 !important;
                   }
                   .quote-frosted {
                     box-sizing: border-box !important;
-                    padding: 10px 4px !important;
-                    font-size: 15px !important;
+                    padding: 6px 2px !important;
+                    font-size: 12px !important;
+                    min-height: 0 !important;
+                    height: 60px !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    justify-content: center !important;
+                    align-items: center !important;
                   }
                   .books-scroll-container {
                     padding-left: 0 !important;
@@ -1310,9 +1395,6 @@ function Home() {
                     font-size: 15px !important;
                     padding: 10px 0 !important;
                   }
-                  body {
-                    padding-bottom: 70px !important;
-                  }
                   /* Explicit mobile styles for navbar buttons and icons */
                   .navbar-buttons, .navbar .login-btn, .navbar .contribute-btn {
                     display: flex !important;
@@ -1356,4 +1438,4 @@ function Home() {
     );
 }
 
-export default Home; 
+export default Home;
