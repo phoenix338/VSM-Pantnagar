@@ -212,7 +212,9 @@ const Navbar = (props) => {
           <Link to="/login">
             <button className="login-btn" style={{ fontSize: isMobile ? 14 : 16, padding: isMobile ? '6px 16px' : '10px 24px', borderRadius: 8 }}>Login</button>
           </Link>
-          <button className="contribute-btn" style={{ fontSize: isMobile ? 13 : 16, padding: isMobile ? '5px 12px' : '10px 24px', borderRadius: 8, maxWidth: isMobile ? '100px' : undefined, whiteSpace: 'normal', overflowWrap: 'break-word', marginRight: isMobile ? '8px' : undefined }}>Contribute</button>
+          <Link to="/contribute">
+            <button className="contribute-btn" style={{ fontSize: isMobile ? 13 : 16, padding: isMobile ? '5px 12px' : '10px 24px', borderRadius: 8, maxWidth: isMobile ? '100px' : undefined, whiteSpace: 'normal', overflowWrap: 'break-word', marginRight: isMobile ? '8px' : undefined }}>Contribute</button>
+          </Link>
         </div>
       </div>
       // ...existing code...

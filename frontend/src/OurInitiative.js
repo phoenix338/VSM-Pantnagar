@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import './OurInitiative.css';
 import initiativeGif from './assets/gif/initiative.gif';
@@ -29,7 +29,7 @@ const convertTextToLinks = (text) => {
                     rel="noopener noreferrer"
                     style={{
                         color: '#007bff',
-                        textDecoration: 'underline',
+                        textDecoration: 'none',
                         wordBreak: 'break-all'
                     }}
                 >
@@ -223,7 +223,25 @@ const OurInitiative = () => {
                                 <h2 className="initiative-heading">{item.title || `Event ${idx + 1}`}</h2>
                                 <div className="initiative-content-row">
                                     <div className="initiative-text">
-                                        {convertTextToLinks(item.text)}
+                                        {item.text && (
+                                            <p style={{ marginBottom: 8, fontSize: '1.05em', lineHeight: 1.4, textAlign: 'left' }}>
+                                                {(() => {
+                                                    // First, split by 'Contribute page' and render as Link
+                                                    const parts = item.text.split('Contribute page');
+                                                    const withContributeLink = [];
+                                                    for (let i = 0; i < parts.length; i++) {
+                                                        if (i > 0) {
+                                                            withContributeLink.push(
+                                                                <Link key={`contribute-link-${i}`} to="/contribute" style={{ color: '#DD783C', fontWeight: 500, textDecoration: 'none' }}>Contribute page</Link>
+                                                            );
+                                                        }
+                                                        // Now, convert URLs in each part
+                                                        withContributeLink.push(...convertTextToLinks(parts[i]));
+                                                    }
+                                                    return withContributeLink;
+                                                })()}
+                                            </p>
+                                        )}
                                     </div>
                                     {(item.imageUrls && item.imageUrls.length > 0) || item.imageUrl ? (
                                         <div className="image-slideshow">

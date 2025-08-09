@@ -49,67 +49,116 @@ const HomeInitiatives = () => {
     return (
         <section className="home-initiatives-section">
             <h2 className="home-initiatives-title">Our Events</h2>
+            <style>{`
+                @media (max-width: 900px) {
+                    .home-initiatives-list {
+                        flex-direction: column !important;
+                        gap: 18px !important;
+                        padding: 0 4vw !important;
+                    }
+                    .home-initiative-card {
+                        min-width: 0 !important;
+                        max-width: 98vw !important;
+                        margin-bottom: 18px !important;
+                    }
+                    .home-initiative-image {
+                        width: 100% !important;
+                        max-width: 320px !important;
+                        height: auto !important;
+                        border-radius: 12px !important;
+                    }
+                    .home-initiative-summary {
+                        padding: 0 2vw !important;
+                    }
+                }
+                @media (max-width: 600px) {
+                    .home-initiatives-title {
+                        font-size: 28px !important;
+                        margin-bottom: 18px !important;
+                    }
+                    .home-initiative-card {
+                        padding: 10px 4px !important;
+                        border-radius: 10px !important;
+                    }
+                    .home-initiative-image {
+                        max-width: 90vw !important;
+                        border-radius: 8px !important;
+                    }
+                    .home-initiative-summary {
+                        font-size: 15px !important;
+                        padding: 0 1vw !important;
+                    }
+                    .home-initiative-heading {
+                        font-size: 18px !important;
+                    }
+                    .home-initiative-readmore {
+                        font-size: 14px !important;
+                    }
+                }
+            `}</style>
             <div className="home-initiatives-list">
-                {initiatives.map((item, idx) => (
-                    <div
-                        className={`home-initiative-card${expanded === idx ? ' expanded' : ''}`}
-                        key={item._id || idx}
-                    >
-                        <div className="home-initiative-header" onClick={() => handleToggle(idx)}>
-                            <div className="home-initiative-heading">{item.title || `Initiative ${idx + 1}`}</div>
-                            <svg
-                                className={`home-initiative-icon ${expanded === idx ? 'expanded' : ''}`}
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path d="M12 4V20M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
-                        {expanded === idx && (
-                            <div className={`home-initiative-details${idx % 2 === 1 ? ' reverse' : ''}`}>
-                                {(item.imageUrls && item.imageUrls.length > 0) || item.imageUrl ? (
-                                    <div className="home-initiative-image-wrapper">
-                                        {item.imageUrls && item.imageUrls.length > 1 ? (
-                                            <div className="home-initiative-slideshow">
+                {initiatives.map((item, idx) => {
+                    return (
+                        <div
+                            className={`home-initiative-card${expanded === idx ? ' expanded' : ''}`}
+                            key={item._id || idx}
+                        >
+                            <div className="home-initiative-header" onClick={() => handleToggle(idx)}>
+                                <div className="home-initiative-heading">{item.title || `Initiative ${idx + 1}`}</div>
+                                <svg
+                                    className={`home-initiative-icon ${expanded === idx ? 'expanded' : ''}`}
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path d="M12 4V20M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </div>
+                            {expanded === idx && (
+                                <div className={`home-initiative-details${idx % 2 === 1 ? ' reverse' : ''}`}>
+                                    {(item.imageUrls && item.imageUrls.length > 0) || item.imageUrl ? (
+                                        <div className="home-initiative-image-wrapper">
+                                            {item.imageUrls && item.imageUrls.length > 1 ? (
+                                                <div className="home-initiative-slideshow">
+                                                    <img
+                                                        src={item.imageUrls[currentImageIndex[item._id] || 0]}
+                                                        alt="Event"
+                                                        className="home-initiative-image"
+                                                    />
+                                                </div>
+                                            ) : (
                                                 <img
-                                                    src={item.imageUrls[currentImageIndex[item._id] || 0]}
+                                                    src={item.imageUrls && item.imageUrls.length > 0
+                                                        ? item.imageUrls[0]
+                                                        : item.imageUrl}
                                                     alt="Event"
                                                     className="home-initiative-image"
                                                 />
-                                            </div>
-                                        ) : (
-                                            <img
-                                                src={item.imageUrls && item.imageUrls.length > 0
-                                                    ? item.imageUrls[0]
-                                                    : item.imageUrl}
-                                                alt="Event"
-                                                className="home-initiative-image"
-                                            />
+                                            )}
+                                        </div>
+                                    ) : null}
+                                    <div className="home-initiative-summary">
+                                        {item.text && (
+                                            <p style={{ marginBottom: 8, fontSize: '1.05em', lineHeight: 1.4, textAlign: 'left' }}>
+                                                {item.text
+                                                    .match(/[^.?!]+[.?!]+[\])'"`'"`]*|.+/g)
+                                                    .filter(s => s.trim())
+                                                    .slice(0, 3)
+                                                    .map((sentence, i) => sentence.trim())
+                                                    .join(' ')}
+                                            </p>
                                         )}
+                                        <Link to={`/our-events/${item._id}`} className="home-initiative-readmore">
+                                            Read More &rarr;
+                                        </Link>
                                     </div>
-                                ) : null}
-                                <div className="home-initiative-summary">
-                                    {item.text && (
-                                        <p style={{ marginBottom: 8, fontSize: '1.05em', lineHeight: 1.4, textAlign: 'left' }}>
-                                            {item.text
-                                                .match(/[^.?!]+[.?!]+[\])'"`'"`]*|.+/g)
-                                                .filter(s => s.trim())
-                                                .slice(0, 3)
-                                                .map((sentence, i) => sentence.trim())
-                                                .join(' ')}
-                                        </p>
-                                    )}
-                                    <Link to={`/our-events/${item._id}`} className="home-initiative-readmore">
-                                        Read More &rarr;
-                                    </Link>
                                 </div>
-                            </div>
-                        )}
-                    </div>
-                ))}
+                            )}
+                        </div>
+                    );
+                })}
             </div>
         </section>
     );

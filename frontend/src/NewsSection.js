@@ -108,7 +108,7 @@ const NewsSection = () => {
                                     onClick={() => setZoomed(true)}
                                 />
                             </div>
-                            <div className="news-main-title-placeholder">{news[selected].title}</div>
+                            {/* <div className="news-main-title-placeholder">{news[selected].title}</div> */}
                             {isAdmin && (
                                 <button className="timeline-delete-btn" style={{ marginTop: 10 }} onClick={() => handleDelete(news[selected]._id)}>Delete</button>
                             )}
@@ -132,7 +132,7 @@ const NewsSection = () => {
                                     className="news-scroll-image-placeholder"
                                     style={{ objectFit: 'cover', width: 280, height: 200, borderRadius: 20 }}
                                 />
-                                <div className="news-scroll-title-placeholder">{item.title}</div>
+                                {/* <div className="news-scroll-title-placeholder">{item.title}</div> */}
                                 {isAdmin && (
                                     <button className="timeline-delete-btn" style={{ marginTop: 4, fontSize: 12 }} onClick={e => { e.stopPropagation(); handleDelete(item._id); }}>Delete</button>
                                 )}
@@ -169,7 +169,7 @@ const NewsSection = () => {
                     <div className="news-zoom-modal-content" onClick={e => e.stopPropagation()}>
                         <button className="news-zoom-close" onClick={() => setZoomed(false)}>&times;</button>
                         <img src={news[selected].imageUrl} alt={news[selected].title} className="news-zoom-image" />
-                        <div className="news-zoom-title">{news[selected].title}</div>
+                        {/* <div className="news-zoom-title">{news[selected].title}</div> */}
                     </div>
                 </div>
             )}

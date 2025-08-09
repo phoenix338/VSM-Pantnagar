@@ -95,9 +95,10 @@
     flex: 2 1 0;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     padding: 0 32px;
+    min-height: 430px;
 }
 
 .reviews-main-title {
@@ -117,6 +118,7 @@
     line-height: 1.6;
     margin-bottom: 0;
     width: 100%;
+    text-align: center;
 }
 
 .reviews-section-divider {
@@ -280,6 +282,20 @@
 }
 
 @media (max-width: 900px) {
+    .reviews-main-center {
+        flex: unset;
+        padding: 0;
+        min-height: 100px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+    }
+
+    .reviews-main-text {
+        text-align: center;
+        font-size: 1rem;
+    }
+
     .reviews-section-main {
         flex-direction: column;
         gap: 24px;

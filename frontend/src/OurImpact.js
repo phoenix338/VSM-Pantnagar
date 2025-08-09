@@ -18,11 +18,6 @@ const OurImpact = () => (
                 <span className="our-impact-heading-main">Impacts:</span> Flickers Of Change
             </h1>
         </section>
-        <section className="our-impact-explore-section">
-            <div className="our-impact-explore-text">
-                Explore the events to transform the<br />society into
-            </div>
-        </section>
         <ImpactStats />
         <NewsSection />
         <ReviewsSection />

@@ -60,7 +60,7 @@
 
 .home-initiative-heading {
     font-family: 'open sans';
-    font-size: 2.2rem;
+    font-size: 24px;
     color: #222;
     text-align: center;
     font-weight: 300;
@@ -217,7 +217,7 @@
     flex-direction: column;
     justify-content: flex-start;
     font-family: 'open sans';
-    font-size: 1.2rem;
+    font-size: 18px;
     color: #222;
     font-weight: 300;
     line-height: 1.5;

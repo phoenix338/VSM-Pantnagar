@@ -350,31 +350,81 @@ function Home() {
                             </>
                         )}
                     </div>
-                    <button
-                        style={{
-                            position: 'absolute',
-                            left: 61,
-                            top: '50%',
-                            transform: 'translateY(-5%)',
-                            background: '#fff',
-                            color: '#a2592a',
-                            fontSize: 24,
-                            border: 'none',
-                            borderRadius: 10,
-                            padding: '10px 36px',
-                            boxShadow: '0 4px 12px #0002',
-                            cursor: 'pointer',
-                            fontWeight: 500,
-                            zIndex: 2,
-                            width: 156,
-                        }}
-                        onClick={() => {
-                            setShowLandingVideo(false);
-                            setShowIntroScreen(true);
-                        }}
-                    >
-                        Enter
-                    </button>
+                    <div style={{
+                        position: 'absolute',
+                        left: 61,
+                        top: '50%',
+                        transform: 'translateY(-5%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 32,
+                        zIndex: 4
+                    }}>
+                        <button
+                            style={{
+                                background: '#fff',
+                                color: '#a2592a',
+                                fontSize: 24,
+                                border: 'none',
+                                borderRadius: 10,
+                                padding: '10px 36px',
+                                boxShadow: '0 4px 12px #0002',
+                                cursor: 'pointer',
+                                fontWeight: 500,
+                                width: 156,
+                            }}
+                            onClick={() => {
+                                setShowLandingVideo(false);
+                                setShowIntroScreen(true);
+                            }}
+                        >
+                            Enter
+                        </button>
+                        {/* Glowing Circle Element - right of Enter button */}
+                        <div
+                            style={{
+                                width: '60px',
+                                height: '60px',
+                                borderRadius: '50%',
+                                background: 'radial-gradient(circle, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
+                                boxShadow: '0 0 20px #FFD700, 0 0 40px #FFA500, 0 0 60px #FF8C00, inset 0 0 20px rgba(255, 215, 0, 0.3)',
+                                animation: 'glowPulse 2s ease-in-out infinite alternate',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '24px',
+                                color: '#fff',
+                                textShadow: '0 0 10px rgba(255, 255, 255, 0.8)',
+                                transition: 'all 0.3s ease',
+                                transform: 'scale(1)',
+                                cursor: 'pointer',
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.transform = 'scale(1.1)';
+                                e.target.style.boxShadow = '0 0 30px #FFD700, 0 0 60px #FFA500, 0 0 90px #FF8C00, inset 0 0 30px rgba(255, 215, 0, 0.5)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.transform = 'scale(1)';
+                                e.target.style.boxShadow = '0 0 20px #FFD700, 0 0 40px #FFA500, 0 0 60px #FF8C00, inset 0 0 20px rgba(255, 215, 0, 0.3)';
+                            }}
+                            onClick={() => {
+                                // Create a ripple effect
+                                const ripple = document.createElement('div');
+                                ripple.style.cssText = 'position: absolute; top: 50%; left: 50%; width: 0; height: 0; border-radius: 50%; background: rgba(255, 215, 0, 0.6); transform: translate(-50%, -50%); animation: rippleEffect 0.6s ease-out; pointer-events: none;';
+                                document.body.appendChild(ripple);
+                                setTimeout(() => {
+                                    if (ripple && ripple.parentNode) {
+                                        ripple.parentNode.removeChild(ripple);
+                                    }
+                                }, 600);
+                                // Play audio if available
+                                const audio = document.querySelector('audio');
+                                if (audio && audio.paused) {
+                                    audio.play();
+                                }
+                            }}
+                        ></div>
+                    </div>
                     <div style={{ position: 'absolute', right: 10, bottom: 40, zIndex: 3, display: 'flex', alignItems: 'center', width: 320, justifyContent: 'center' }}>
                         <div style={{ height: 2, background: '#dedeb9', flex: 1, marginRight: 16 }} />
                         <button
@@ -389,83 +439,6 @@ function Home() {
                         <div style={{ height: 2, background: '#dedeb9', flex: 1, marginLeft: 16 }} />
                     </div>
 
-                    {/* Glowing Circle Element */}
-                    <div style={{
-                        position: 'absolute',
-                        top: 20,
-                        right: 20,
-                        zIndex: 4,
-                        cursor: 'pointer'
-                    }}>
-                        <div style={{
-                            width: '60px',
-                            height: '60px',
-                            borderRadius: '50%',
-                            background: 'radial-gradient(circle, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
-                            boxShadow: `
-                                0 0 20px #FFD700,
-                                0 0 40px #FFA500,
-                                0 0 60px #FF8C00,
-                                inset 0 0 20px rgba(255, 215, 0, 0.3)
-                            `,
-                            animation: 'glowPulse 2s ease-in-out infinite alternate',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '24px',
-                            color: '#fff',
-                            textShadow: '0 0 10px rgba(255, 255, 255, 0.8)',
-                            transition: 'all 0.3s ease',
-                            transform: 'scale(1)',
-                        }}
-                            onMouseEnter={(e) => {
-                                e.target.style.transform = 'scale(1.1)';
-                                e.target.style.boxShadow = `
-                                0 0 30px #FFD700,
-                                0 0 60px #FFA500,
-                                0 0 90px #FF8C00,
-                                inset 0 0 30px rgba(255, 215, 0, 0.5)
-                            `;
-                            }}
-                            onMouseLeave={(e) => {
-                                e.target.style.transform = 'scale(1)';
-                                e.target.style.boxShadow = `
-                                0 0 20px #FFD700,
-                                0 0 40px #FFA500,
-                                0 0 60px #FF8C00,
-                                inset 0 0 20px rgba(255, 215, 0, 0.3)
-                            `;
-                            }}
-                            onClick={() => {
-                                // Create a ripple effect
-                                const ripple = document.createElement('div');
-                                ripple.style.cssText = `
-                                position: absolute;
-                                top: 50%;
-                                left: 50%;
-                                width: 0;
-                                height: 0;
-                                border-radius: 50%;
-                                background: rgba(255, 215, 0, 0.6);
-                                transform: translate(-50%, -50%);
-                                animation: rippleEffect 0.6s ease-out;
-                                pointer-events: none;
-                            `;
-                                document.body.appendChild(ripple);
-
-                                setTimeout(() => {
-                                    document.body.removeChild(ripple);
-                                }, 600);
-
-                                // Play audio if available
-                                const audio = document.querySelector('audio');
-                                if (audio && audio.paused) {
-                                    audio.play();
-                                }
-                            }}
-                        >
-                        </div>
-                    </div>
                 </div>
             </>
         );
@@ -479,10 +452,10 @@ function Home() {
                 <div style={{ width: '100vw', height: '100vh', background: '#f9f3ec', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'fixed', inset: 0, zIndex: 1500 }}>
                     <div style={{ textAlign: 'center', marginBottom: 32 }}>
                         <div style={{
-                            fontFamily: 'Arial, sans-serif',
+                            fontFamily: 'alex brush',
                             fontStyle: 'normal',
                             fontWeight: 400,
-                            fontSize: 50,
+                            fontSize: 40,
                             color: '#000',
                             marginBottom: 24,
                             opacity: showIntro1 ? 1 : 0,
@@ -491,10 +464,10 @@ function Home() {
                             Come, let's witness the heart warming saga of<br />growth and transformation
                         </div>
                         <div style={{
-                            fontFamily: 'Helvetica',
+                            fontFamily: 'alex brush',
                             fontStyle: 'normal',
                             fontWeight: 400,
-                            fontSize: 48,
+                            fontSize: 45,
                             color: '#FFD700',
                             marginBottom: 40,
                             opacity: showIntro2 ? 1 : 0,
@@ -550,10 +523,10 @@ function Home() {
                             }}>✨</span>
                         </div>
                         <div style={{
-                            fontFamily: 'Georgia, serif',
+                            fontFamily: 'alex brush',
                             fontStyle: 'normal',
                             fontWeight: 400,
-                            fontSize: 45,
+                            fontSize: 40,
                             color: '#000',
                             textAlign: 'center',
                             opacity: showIntro3 ? 1 : 0,
@@ -748,7 +721,7 @@ function Home() {
                     </button>
                 </div>
                 {/* Quote of the Day Section - New Design */}
-<div style={{
+                <div style={{
                     width: '100vw',
                     minHeight: 700,
                     position: 'relative',
@@ -762,18 +735,6 @@ function Home() {
                     {/* Background Image */}
                     <img src={require('./assets/qouteoftheday.jpg')} alt="Quote Background" className="quote-bg" />
                     {/* Quote GIF - above bg, below card */}
-                    <img src={require('./assets/birds2-unscreen.gif')} alt="Quote GIF" style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -40%)',
-                        zIndex: 2,
-                        width: 1500,
-                        height: 1000,
-                        objectFit: 'contain',
-                        pointerEvents: 'none',
-                        opacity: 0.92
-                    }} />
                     {/* Frosted Glass Card */}
                     <div className="quote-frosted" style={{ zIndex: 3 }}>
                         <div className="quote-title">Quote Of The Day:</div>
@@ -849,7 +810,7 @@ function Home() {
                                     transition: 'all 0.8s ease-out'
                                 }}
                             />
-                            <div style={{ fontFamily: 'open sans', color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VISION</div>
+                            <div style={{ fontFamily: 'open sans', color: '#DD783C', fontWeight: 300, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>Vision</div>
                         </div>
 
                         {/* Connecting Sunrays */}
@@ -914,7 +875,7 @@ function Home() {
                                     transition: 'all 0.8s ease-out'
                                 }}
                             />
-                            <div style={{ fontFamily: 'open sans', color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>MISSION</div>
+                            <div style={{ fontFamily: 'open sans', color: '#DD783C', fontWeight: 300, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>Mission</div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -930,7 +891,7 @@ function Home() {
                                     transition: 'all 0.8s ease-out'
                                 }}
                             />
-                            <div style={{ fontFamily: 'open sans', color: '#DD783C', fontWeight: 500, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>VALUES</div>
+                            <div style={{ fontFamily: 'open sans', color: '#DD783C', fontWeight: 300, fontSize: 32, marginTop: 8, letterSpacing: 1 }}>Values</div>
 
                             {/* Text Box below Values */}
                             <div style={{
@@ -959,9 +920,36 @@ function Home() {
                     <div style={{ fontFamily: 'Alex Brush, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 32 }}>
                         Our Impact
                     </div>
-                    <div style={{ background: '#FFE5D0', borderRadius: 48, padding: '48px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 16px #0001', flexWrap: 'wrap', gap: 0 }}>
-                        {/* 1 */}
-                        <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <ImpactStats></ImpactStats>
+                    {/* <div style={{ background: '#FFE5D0', borderRadius: 48, padding: '48px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 16px #0001', flexWrap: 'wrap', gap: 0 }}>
+                    <style>{`
+                        @media (max-width: 900px) {
+                            .main-content-gap .impact-stat-img {
+                                width: 28px !important;
+                                height: 28px !important;
+                            }
+                            .main-content-gap .impact-stat-value {
+                                font-size: 28px !important;
+                            }
+                            .main-content-gap .impact-stat-label {
+                                font-size: 15px !important;
+                            }
+                        }
+                        @media (max-width: 600px) {
+                            .main-content-gap .impact-stat-img {
+                                width: 20px !important;
+                                height: 20px !important;
+                            }
+                            .main-content-gap .impact-stat-value {
+                                font-size: 18px !important;
+                            }
+                            .main-content-gap .impact-stat-label {
+                                font-size: 11px !important;
+                            }
+                        }
+                    `}</style> */}
+                    {/* 1 */}
+                    {/* <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
                                 <img src={require('./assets/famicons_people-outline.png')} alt="Volunteers" style={{ width: 38, height: 38, objectFit: 'contain' }} />
                                 <img src={require('./assets/famicons_people-outline.png')} alt="Volunteers" style={{ width: 38, height: 38, objectFit: 'contain' }} />
@@ -969,9 +957,9 @@ function Home() {
                             </div>
                             <div style={{ fontFamily: 'Red Hat Display, sans-serif', fontSize: 38, fontWeight: 400, color: '#000', marginBottom: 0, fontStyle: 'normal' }}>{impact ? impact.volunteers : '...'}</div>
                             <div style={{ fontFamily: 'Arimo, sans-serif', fontSize: 20, color: '#222', marginTop: 8 }}>Volunteers<br />Engaged</div>
-                        </div>
-                        {/* 2 */}
-                        <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        </div> */}
+                    {/* 2 */}
+                    {/* <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
                                 <img src={require('./assets/Microphone.png')} alt="Events" style={{ width: 38, height: 38, objectFit: 'contain' }} />
                                 <img src={require('./assets/Microphone.png')} alt="Events" style={{ width: 38, height: 38, objectFit: 'contain' }} />
@@ -979,9 +967,9 @@ function Home() {
                             </div>
                             <div style={{ fontFamily: 'Red Hat Display, sans-serif', fontSize: 38, fontWeight: 400, color: '#000', marginBottom: 0, fontStyle: 'normal' }}>{impact ? impact.events : '...'}</div>
                             <div style={{ fontFamily: 'Arimo, sans-serif', fontSize: 20, color: '#222', marginTop: 8 }}>Events<br />Conducted</div>
-                        </div>
-                        {/* 3 */}
-                        <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        </div> */}
+                    {/* 3 */}
+                    {/* <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
                                 <img src={require('./assets/People.png')} alt="People Impacted" style={{ width: 38, height: 38, objectFit: 'contain' }} />
                                 <img src={require('./assets/People.png')} alt="People Impacted" style={{ width: 38, height: 38, objectFit: 'contain' }} />
@@ -989,9 +977,9 @@ function Home() {
                             </div>
                             <div style={{ fontFamily: 'Red Hat Display, sans-serif', fontSize: 38, fontWeight: 400, color: '#000', marginBottom: 0, fontStyle: 'normal' }}>{impact ? impact.people : '...'}</div>
                             <div style={{ fontFamily: 'Arimo, sans-serif', fontSize: 20, color: '#222', marginTop: 8 }}>People<br />Impacted</div>
-                        </div>
-                        {/* 4 */}
-                        <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        </div> */}
+                    {/* 4 */}
+                    {/* <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
                                 <img src={require('./assets/Alarm Clock.png')} alt="Hours" style={{ width: 38, height: 38, objectFit: 'contain' }} />
                                 <img src={require('./assets/Alarm Clock.png')} alt="Hours" style={{ width: 38, height: 38, objectFit: 'contain' }} />
@@ -999,9 +987,9 @@ function Home() {
                             </div>
                             <div style={{ fontFamily: 'Red Hat Display, sans-serif', fontSize: 38, fontWeight: 400, color: '#000', marginBottom: 0, fontStyle: 'normal' }}>{impact ? impact.hours : '...'}</div>
                             <div style={{ fontFamily: 'Arimo, sans-serif', fontSize: 20, color: '#222', marginTop: 8 }}>Hours<br />Contributed</div>
-                        </div>
-                        {/* 5 */}
-                        <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        </div> */}
+                    {/* 5 */}
+                    {/* <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
                                 <img src={require('./assets/Dollar Bag.png')} alt="Donated" style={{ width: 38, height: 38, objectFit: 'contain' }} />
                                 <img src={require('./assets/Dollar Bag.png')} alt="Donated" style={{ width: 38, height: 38, objectFit: 'contain' }} />
@@ -1009,9 +997,9 @@ function Home() {
                             </div>
                             <div style={{ fontFamily: 'Red Hat Display, sans-serif', fontSize: 38, fontWeight: 400, color: '#000', marginBottom: 0, fontStyle: 'normal' }}>{impact ? impact.donors : '...'}</div>
                             <div style={{ fontFamily: 'Arimo, sans-serif', fontSize: 20, color: '#222', marginTop: 8 }}>People<br />Donated</div>
-                        </div>
-                        {/* 6 */}
-                        <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        </div> */}
+                    {/* 6 */}
+                    {/* <div style={{ flex: 1, minWidth: 160, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
                                 <img src={require('./assets/bx_calendar.png')} alt="Years" style={{ width: 38, height: 38, objectFit: 'contain' }} />
                                 <img src={require('./assets/bx_calendar.png')} alt="Years" style={{ width: 38, height: 38, objectFit: 'contain' }} />
@@ -1019,15 +1007,15 @@ function Home() {
                             </div>
                             <div style={{ fontFamily: 'Red Hat Display, sans-serif', fontSize: 38, fontWeight: 400, color: '#000', marginBottom: 0, fontStyle: 'normal' }}>{impact ? impact.years : '...'}</div>
                             <div style={{ fontFamily: 'Arimo, sans-serif', fontSize: 20, color: '#222', marginTop: 8 }}>Years</div>
-                        </div>
-                    </div>
+                        </div> */}
+                    {/* </div> */}
                 </div>
             </div>
 
             {/* Latest Books Section */}
             <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '64px 0', textAlign: 'center' }}>
                 <div style={{ fontFamily: 'Alex Brush, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 48 }}>
-                    Latest Books
+                    Our Publications
                 </div>
                 <div className="books-scroll-container" style={{
                     display: 'flex',
@@ -1107,24 +1095,27 @@ function Home() {
                     </div>
                 ) : (
                     <div className="reviews-section-main">
-                        <div className="reviews-main-center">
+                        <div className="reviews-main-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '420px' }}>
                             {guestTestimonials[selectedGuestIndex] ? (
-                                <>
+                                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                                     <div className="reviews-main-title"></div>
                                     <div className="reviews-main-text">
-                                        "{guestTestimonials[selectedGuestIndex].text}"
+                                        <span style={{ width: '100%', textAlign: 'center', fontSize: '1.1em', lineHeight: 1.5 }}>
+                                            "{guestTestimonials[selectedGuestIndex].text}"
+                                        </span>
                                         <div style={{
                                             textAlign: 'right',
                                             fontStyle: 'normal',
                                             fontWeight: 'bold',
                                             color: '#dd783c',
                                             fontSize: '1rem',
-                                            marginTop: '1rem'
+                                            marginTop: '1rem',
+                                            width: '100%'
                                         }}>
                                             — {guestTestimonials[selectedGuestIndex].name}
                                         </div>
                                     </div>
-                                </>
+                                </div>
                             ) : null}
                         </div>
                         <div className="reviews-section-divider" />
