@@ -67,9 +67,9 @@ const Navbar = (props) => {
         {/* Right side: User name or New and headphones */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12 }}>
           <span style={{ fontFamily: 'Freehand, cursive', fontStyle: 'normal', color: '#FF0000', fontWeight: 500, fontSize: 22, marginRight: 10 }}>
-            {userName ? userName : 'New'}
+            {userName ? `Welcome ${userName}` : 'New'}
           </span>
-          <Link to="/contact" className="navbar-contact-link" style={{ color: '#DD783C', fontFamily: 'open sans', fontWeight: 400, fontSize: 18, textDecoration: 'none', marginLeft: 8 }}>
+          <Link to="/contact" className="navbar-contact-link" style={{ color: '#DD783C',fontFamily:'open sans', fontWeight: 400, fontSize: 18, textDecoration: 'none', marginLeft: 8 }}>
             Contact Us
           </Link>
         </div>

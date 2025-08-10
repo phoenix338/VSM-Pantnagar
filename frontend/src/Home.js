@@ -782,7 +782,7 @@ function Home() {
                                 left: '-20px',
                                 top: '50%',
                                 transform: 'translateY(-50%)',
-                                background: '#FFFDCE',
+                                background: 'light grey',
                                 padding: '16px',
                                 borderRadius: '12px',
                                 maxWidth: '200px',
@@ -847,7 +847,7 @@ function Home() {
                                 right: '-20px',
                                 top: '50%',
                                 transform: 'translateY(-50%)',
-                                background: '#FFFDCE',
+                                background: 'light grey',
                                 padding: '16px',
                                 borderRadius: '12px',
                                 maxWidth: '200px',
@@ -895,7 +895,7 @@ function Home() {
 
                             {/* Text Box below Values */}
                             <div style={{
-                                background: '#FFFDCE',
+                                background: 'light grey',
                                 padding: '20px',
                                 borderRadius: '12px',
                                 maxWidth: '400px',
