@@ -213,15 +213,25 @@ const Books = () => {
                             const selectedBook = selectedBooks[genre._id];
                             const isEven = index % 2 === 1; // 0-based index, so odd numbers are even genres
 
+                            // If no books in genre, skip
                             if (genreBooks.length === 0) return null;
+
+                            // Only show preview modal when a book is clicked from the side scrollbar
+                            const showPreview = bookPreviewModal.show && bookPreviewModal.genreId === genre._id;
+                            const previewBook = showPreview ? bookPreviewModal.book : null;
+                            // Remove localPage state and related logic
+                            const previewCurrentPage = showPreview ? bookPreviewModal.currentPage : 1;
+                            const previewWords = previewBook && previewBook.previewDescription ? previewBook.previewDescription.split(' ') : [];
+                            const previewWordsPerPage = 120;
+                            const previewTotalPages = Math.max(1, Math.ceil(previewWords.length / previewWordsPerPage));
 
                             return (
                                 <div key={genre._id}>
                                     <div className="genre-section">
                                         {/* Genre Title with Genre Image beside it */}
                                         <div className="genre-section-title" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                                            <h2 style={{color:'grey', margin: 0, fontSize: '2rem', fontWeight: '400',fontFamily:'alex brush' }}>{genre.name}</h2>
-                                            <img src={genre.image} alt={genre.name} style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '12px' }} />
+                                            <h2 style={{ color: 'grey', margin: 0, fontSize: '2rem', fontWeight: '400', fontFamily: 'alex brush' }}>{genre.name}</h2>
+                                            {/* <img src={genre.image} alt={genre.name} style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '12px' }} /> */}
                                             {isAdmin && (
                                                 <button
                                                     className="delete-genre-btn"
@@ -236,40 +246,36 @@ const Books = () => {
                                         <div className={`genre-section-content ${isEven ? 'reversed' : ''}`}>
                                             {/* Book Preview Modal-in-place (no cross icon, no genre image here) */}
                                             <div className="genre-image-left" style={{ position: 'relative', height: '100%' }}>
-                                                {bookPreviewModal.show && bookPreviewModal.genreId === genre._id ? (
-                                                    <div className="book-preview-modal-inplace" style={{ width: '100%', height: '100%' }}>
-                                                        <div className="book-modal-content" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                                            <div className="book-modal-info" style={{ flex: 1, overflowY: 'auto', width: '100%' }}>
-                                                                <p className="book-modal-description" style={{ margin: 0, padding: '8px' }}>
+                                                {showPreview && previewBook ? (
+                                                    <div className="book-preview-modal-inplace">
+                                                        <div className="book-modal-content">
+                                                            <div className="book-modal-info">
+                                                                <p className="book-modal-description">
                                                                     {(() => {
-                                                                        if (!bookPreviewModal.book.previewDescription) return '';
-                                                                        const words = bookPreviewModal.book.previewDescription.split(' ');
-                                                                        const wordsPerPage = 55;
-                                                                        const startIdx = (bookPreviewModal.currentPage - 1) * wordsPerPage;
-                                                                        const endIdx = startIdx + wordsPerPage;
-                                                                        return convertTextToLinks(words.slice(startIdx, endIdx).join(' '));
+                                                                        if (!previewBook.previewDescription) return '';
+                                                                        const startIdx = (previewCurrentPage - 1) * previewWordsPerPage;
+                                                                        const endIdx = startIdx + previewWordsPerPage;
+                                                                        return convertTextToLinks(previewWords.slice(startIdx, endIdx).join(' '));
                                                                     })()}
                                                                 </p>
                                                             </div>
-                                                            {bookPreviewModal.totalPages > 1 && (
-                                                                <div className="book-modal-pagination" style={{ marginTop: '8px' }}>
-                                                                    <button
-                                                                        className="pagination-btn prev-btn"
-                                                                        onClick={prevBookPreviewPage}
-                                                                        disabled={bookPreviewModal.currentPage === 1}
-                                                                    >
-                                                                        ‹
-                                                                    </button>
-                                                                    <span className="pagination-text">{bookPreviewModal.currentPage}/{bookPreviewModal.totalPages}</span>
-                                                                    <button
-                                                                        className="pagination-btn next-btn"
-                                                                        onClick={nextBookPreviewPage}
-                                                                        disabled={bookPreviewModal.currentPage === bookPreviewModal.totalPages}
-                                                                    >
-                                                                        ›
-                                                                    </button>
-                                                                </div>
-                                                            )}
+                                                            <div className="book-modal-pagination unified-pagination-width" style={{ marginTop: '8px' }}>
+                                                                <button
+                                                                    className="pagination-btn prev-btn"
+                                                                    onClick={prevBookPreviewPage}
+                                                                    disabled={previewCurrentPage === 1}
+                                                                >
+                                                                    ‹
+                                                                </button>
+                                                                <span className="pagination-text">{previewCurrentPage}/{previewTotalPages}</span>
+                                                                <button
+                                                                    className="pagination-btn next-btn"
+                                                                    onClick={nextBookPreviewPage}
+                                                                    disabled={previewCurrentPage === previewTotalPages}
+                                                                >
+                                                                    ›
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 ) : null}
@@ -279,7 +285,7 @@ const Books = () => {
                                             <div className="selected-book-area">
                                                 {selectedBook && (
                                                     <>
-                                                        <div className="book-cover" onClick={() => handleMainBookClick(selectedBook)}>
+                                                        <div className="book-cover">
                                                             <img src={selectedBook.frontPageImage} alt={selectedBook.title} />
                                                             {isAdmin && (
                                                                 <button
@@ -369,25 +375,23 @@ const Books = () => {
                                         })()}
                                     </p>
                                 </div>
-                                {totalPages > 1 && (
-                                    <div className="book-modal-pagination">
-                                        <button
-                                            className="pagination-btn prev-btn"
-                                            onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
-                                            disabled={currentPage === 1}
-                                        >
-                                            ‹
-                                        </button>
-                                        <span className="pagination-text">{currentPage}/{totalPages}</span>
-                                        <button
-                                            className="pagination-btn next-btn"
-                                            onClick={() => setCurrentPage(currentPage < totalPages ? currentPage + 1 : totalPages)}
-                                            disabled={currentPage === totalPages}
-                                        >
-                                            ›
-                                        </button>
-                                    </div>
-                                )}
+                                <div className="book-modal-pagination unified-pagination-width">
+                                    <button
+                                        className="pagination-btn prev-btn"
+                                        onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                                        disabled={currentPage === 1}
+                                    >
+                                        ‹
+                                    </button>
+                                    <span className="pagination-text">{currentPage}/{totalPages}</span>
+                                    <button
+                                        className="pagination-btn next-btn"
+                                        onClick={() => setCurrentPage(currentPage < totalPages ? currentPage + 1 : totalPages)}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        ›
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

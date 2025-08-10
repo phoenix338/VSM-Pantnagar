@@ -69,12 +69,8 @@ const Navbar = (props) => {
           <span style={{ fontFamily: 'Freehand, cursive', fontStyle: 'normal', color: '#FF0000', fontWeight: 500, fontSize: 22, marginRight: 10 }}>
             {userName ? userName : 'New'}
           </span>
-          <Link to="/contact" className="navbar-headphone-link">
-            <img
-              src={headphones}
-              alt="Customer Support"
-              style={{ width: isMobile ? 28 : undefined, height: isMobile ? 28 : undefined }}
-            />
+          <Link to="/contact" className="navbar-contact-link" style={{ color: '#DD783C', fontFamily: 'open sans', fontWeight: 400, fontSize: 18, textDecoration: 'none', marginLeft: 8 }}>
+            Contact Us
           </Link>
         </div>
       </div>
@@ -133,11 +129,11 @@ const Navbar = (props) => {
             {/* Gallery Dropdown */}
             <li style={{ cursor: 'pointer', position: 'relative' }} className="navbar-item dropdown">
               <span className="dropdown-label">
-                Gallery <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
+                Memory Wall <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
               </span>
               <div className="dropdown-menu">
-                <Link to="/gallery/images" className="dropdown-item">Images</Link>
-                <Link to="/gallery/videos" className="dropdown-item">Videos</Link>
+                <Link to="/gallery/images" className="dropdown-item">Frozen Moments</Link>
+                <Link to="/gallery/videos" className="dropdown-item">Flowing Moments</Link>
               </div>
             </li>
             <li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Books</Link></li>

@@ -118,9 +118,9 @@
 }
 
 .video-overlay .video-name {
-    font-family: 'Nunito', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
+    font-family: 'open sans';
+    font-size: 20px;
+    font-weight: 400;
     color: #181818;
     margin-bottom: 4px;
     padding: 12px 20px 8px 20px;

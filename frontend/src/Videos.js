@@ -149,7 +149,7 @@ const Videos = () => {
                                 Back
                             </button>
 
-                            <h1 className="videos-heading">Videos</h1>
+                            <h1 className="videos-heading">Flowing Moments</h1>
 
                             <div className="videos-header-nav">
                                 <button
@@ -208,7 +208,7 @@ const Videos = () => {
                 ) : (
                     // Grid View
                     <>
-                        <h1 className="videos-heading">Videos</h1>
+                        <h1 className="videos-heading">Flowing Moments</h1>
                         <div className="videos-grid">
                             {videos.map((video, index) => (
                                 <div key={video._id} className="video-container" onClick={() => handleVideoClick(index)}>

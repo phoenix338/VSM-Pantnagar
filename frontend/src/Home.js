@@ -333,10 +333,10 @@ function Home() {
                             left: 61,
                             top: '50%',
                             transform: 'translateY(-40%)',
-                            fontFamily: 'Tiro Devanagari Hindi, serif',
+                            fontFamily: 'alex brush',
                             fontStyle: 'normal',
                             fontWeight: 400,
-                            fontSize: 49,
+                            fontSize: 64,
                             lineHeight: '35px',
                             color: '#DEDEB9',
                             zIndex: 2,
@@ -346,7 +346,7 @@ function Home() {
                     >
                         {showHindi && (
                             <>
-                                Why curse the darkness,<br /><br />Better to light a lamp.
+                                Why to curse the darkness?<br /><br />It is better to light a lamp.
                             </>
                         )}
                     </div>
@@ -916,11 +916,10 @@ function Home() {
                     </div>
                 </div>
                 {/* Our Impact Section */}
-                <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '0 0 64px 0', textAlign: 'center' }}>
-                    <div style={{ fontFamily: 'Alex Brush, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 32 }}>
+                <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '0 0 0 0', textAlign: 'center' }}>
+                    <div style={{ fontFamily: 'Alex Brush, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500 }}>
                         Our Impact
                     </div>
-                    <ImpactStats></ImpactStats>
                     {/* <div style={{ background: '#FFE5D0', borderRadius: 48, padding: '48px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 16px #0001', flexWrap: 'wrap', gap: 0 }}>
                     <style>{`
                         @media (max-width: 900px) {
@@ -1010,6 +1009,8 @@ function Home() {
                         </div> */}
                     {/* </div> */}
                 </div>
+                <ImpactStats></ImpactStats>
+
             </div>
 
             {/* Latest Books Section */}
