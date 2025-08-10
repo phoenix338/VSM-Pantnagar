@@ -19,6 +19,7 @@ const Books = () => {
     const [selectedBookForModal, setSelectedBookForModal] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [bookPreviewModal, setBookPreviewModal] = useState({ show: false, book: null, genreId: null, currentPage: 1, totalPages: 1 });
 
     useEffect(() => {
         fetchGenres();
@@ -65,39 +66,33 @@ const Books = () => {
 
     const isAdmin = user && user.email === ADMIN_EMAIL;
 
-    const handleBookClick = (genreId, book) => { // Modified signature
+    const handleBookClick = (genreId, book) => {
         setSelectedBooks(prev => ({
             ...prev,
             [genreId]: book
         }));
+        // Show preview modal in place of genre icon
+        const wordsPerPage = 55;
+        const words = book.previewDescription ? book.previewDescription.split(' ') : [];
+        setBookPreviewModal({
+            show: true,
+            book,
+            genreId,
+            currentPage: 1,
+            totalPages: Math.max(1, Math.ceil(words.length / wordsPerPage))
+        });
     };
 
-    const handleMainBookClick = (book) => {
-        setSelectedBookForModal(book);
-        setShowModal(true);
-        setCurrentPage(1);
-        // Calculate total pages based on description length
-        const wordsPerPage = 100; // Adjust this number as needed
-        const words = book.previewDescription.split(' ').length;
-        setTotalPages(Math.ceil(words / wordsPerPage));
+    const closeBookPreviewModal = () => {
+        setBookPreviewModal({ show: false, book: null, genreId: null, currentPage: 1, totalPages: 1 });
     };
 
-    const closeModal = () => {
-        setShowModal(false);
-        setSelectedBookForModal(null);
-        setCurrentPage(1);
+    const nextBookPreviewPage = () => {
+        setBookPreviewModal(prev => prev.currentPage < prev.totalPages ? { ...prev, currentPage: prev.currentPage + 1 } : prev);
     };
 
-    const nextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
+    const prevBookPreviewPage = () => {
+        setBookPreviewModal(prev => prev.currentPage > 1 ? { ...prev, currentPage: prev.currentPage - 1 } : prev);
     };
 
     const deleteGenre = async (genreId) => {
@@ -163,6 +158,35 @@ const Books = () => {
         return books.filter(book => book.genre && book.genre._id === genreId);
     };
 
+    const convertTextToLinks = (text) => {
+        if (!text) return '';
+        // Replace 'Available on VSM Motivation' with a link
+        const regex = /(Available on VSM Motivation)/g;
+        return text.split(regex).map((part, idx) => {
+            if (part === 'Available on VSM Motivation') {
+                return <a key={idx} href="https://vsmmotivation.in/" target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'none' }}>Available on VSM Motivation</a>;
+            }
+            return part;
+        });
+    };
+
+    // Fix: Ensure handleMainBookClick and closeModal are defined
+    const handleMainBookClick = (book) => {
+        setSelectedBookForModal(book);
+        setShowModal(true);
+        setCurrentPage(1);
+        // Calculate total pages based on description length
+        const wordsPerPage = 55;
+        const words = book.previewDescription ? book.previewDescription.split(' ') : [];
+        setTotalPages(Math.max(1, Math.ceil(words.length / wordsPerPage)));
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedBookForModal(null);
+        setCurrentPage(1);
+    };
+
     if (loading) return (
         <>
             <Navbar />
@@ -178,7 +202,7 @@ const Books = () => {
                 <div className="books-gif-wrapper">
                     <img src={booksGif} alt="Books" className="books-gif" />
                 </div>
-                <h1 className="books-heading">Books</h1>
+                <h1 className="books-heading">Our Publications</h1>
                 <div className="books-content">
 
 
@@ -194,9 +218,10 @@ const Books = () => {
                             return (
                                 <div key={genre._id}>
                                     <div className="genre-section">
-                                        {/* Genre Title */}
-                                        <div className="genre-section-title">
-                                            <h2>{genre.name}</h2>
+                                        {/* Genre Title with Genre Image beside it */}
+                                        <div className="genre-section-title" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                            <h2 style={{color:'grey', margin: 0, fontSize: '2rem', fontWeight: '400',fontFamily:'alex brush' }}>{genre.name}</h2>
+                                            <img src={genre.image} alt={genre.name} style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '12px' }} />
                                             {isAdmin && (
                                                 <button
                                                     className="delete-genre-btn"
@@ -209,9 +234,45 @@ const Books = () => {
                                         </div>
 
                                         <div className={`genre-section-content ${isEven ? 'reversed' : ''}`}>
-                                            {/* Genre Image */}
-                                            <div className="genre-image-left">
-                                                <img src={genre.image} alt={genre.name} />
+                                            {/* Book Preview Modal-in-place (no cross icon, no genre image here) */}
+                                            <div className="genre-image-left" style={{ position: 'relative', height: '100%' }}>
+                                                {bookPreviewModal.show && bookPreviewModal.genreId === genre._id ? (
+                                                    <div className="book-preview-modal-inplace" style={{ width: '100%', height: '100%' }}>
+                                                        <div className="book-modal-content" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                                            <div className="book-modal-info" style={{ flex: 1, overflowY: 'auto', width: '100%' }}>
+                                                                <p className="book-modal-description" style={{ margin: 0, padding: '8px' }}>
+                                                                    {(() => {
+                                                                        if (!bookPreviewModal.book.previewDescription) return '';
+                                                                        const words = bookPreviewModal.book.previewDescription.split(' ');
+                                                                        const wordsPerPage = 55;
+                                                                        const startIdx = (bookPreviewModal.currentPage - 1) * wordsPerPage;
+                                                                        const endIdx = startIdx + wordsPerPage;
+                                                                        return convertTextToLinks(words.slice(startIdx, endIdx).join(' '));
+                                                                    })()}
+                                                                </p>
+                                                            </div>
+                                                            {bookPreviewModal.totalPages > 1 && (
+                                                                <div className="book-modal-pagination" style={{ marginTop: '8px' }}>
+                                                                    <button
+                                                                        className="pagination-btn prev-btn"
+                                                                        onClick={prevBookPreviewPage}
+                                                                        disabled={bookPreviewModal.currentPage === 1}
+                                                                    >
+                                                                        ‹
+                                                                    </button>
+                                                                    <span className="pagination-text">{bookPreviewModal.currentPage}/{bookPreviewModal.totalPages}</span>
+                                                                    <button
+                                                                        className="pagination-btn next-btn"
+                                                                        onClick={nextBookPreviewPage}
+                                                                        disabled={bookPreviewModal.currentPage === bookPreviewModal.totalPages}
+                                                                    >
+                                                                        ›
+                                                                    </button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ) : null}
                                             </div>
 
                                             {/* Selected Book */}
@@ -296,13 +357,23 @@ const Books = () => {
                             <button className="book-modal-close" onClick={closeModal}>×</button>
                             <div className="book-modal-content">
                                 <div className="book-modal-info">
-                                    <p className="book-modal-description">{selectedBookForModal.previewDescription}</p>
+                                    <p className="book-modal-description">
+                                        {(() => {
+                                            if (!selectedBookForModal.previewDescription) return '';
+                                            const words = selectedBookForModal.previewDescription.split(' ');
+                                            const wordsPerPage = 55;
+                                            const startIdx = (currentPage - 1) * wordsPerPage;
+                                            const endIdx = startIdx + wordsPerPage;
+                                            // Join the page's words and convert to links
+                                            return convertTextToLinks(words.slice(startIdx, endIdx).join(' '));
+                                        })()}
+                                    </p>
                                 </div>
                                 {totalPages > 1 && (
                                     <div className="book-modal-pagination">
                                         <button
                                             className="pagination-btn prev-btn"
-                                            onClick={prevPage}
+                                            onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
                                             disabled={currentPage === 1}
                                         >
                                             ‹
@@ -310,7 +381,7 @@ const Books = () => {
                                         <span className="pagination-text">{currentPage}/{totalPages}</span>
                                         <button
                                             className="pagination-btn next-btn"
-                                            onClick={nextPage}
+                                            onClick={() => setCurrentPage(currentPage < totalPages ? currentPage + 1 : totalPages)}
                                             disabled={currentPage === totalPages}
                                         >
                                             ›
@@ -340,4 +411,4 @@ const Books = () => {
     );
 };
 
-export default Books; 
+export default Books;
