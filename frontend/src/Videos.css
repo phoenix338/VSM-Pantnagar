@@ -122,10 +122,21 @@
     font-size: 20px;
     font-weight: 400;
     color: #181818;
-    margin-bottom: 4px;
-    padding: 12px 20px 8px 20px;
     flex: 1;
     display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.video-overlay .video-desc {
+    font-family: 'open sans';
+    font-size: 15px;
+    font-weight: 300;
+    color: #181818;
+    flex: 1;
+    display: flex;
+    padding-left: 10px;
+
     align-items: center;
 }
 
