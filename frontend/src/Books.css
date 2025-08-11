@@ -258,7 +258,7 @@
 
 .book-cover {
     width: 330px;
-    height: 500px;
+    height: 480px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
@@ -321,7 +321,7 @@
 }
 
 .books-list-container.reverse {
-    height: 450px;
+    height: 550px;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
@@ -329,7 +329,7 @@
     padding: 0;
     padding-left: 15px;
     padding-right: 10px;
-    max-height: 450px;
+    max-height: 550px;
     width: 60%;
     margin: 0;
     direction: rtl;
@@ -735,6 +735,7 @@
     display: flex;
     flex-direction: column;
     height: 550px;
+    width: 300px;
     /* Match .selected-book-area height */
     gap: 0;
     padding: 0;
@@ -745,6 +746,7 @@
     text-align: left;
     flex: 1;
     overflow-y: auto;
+    max-height: 480px;
 }
 
 .book-modal-image {
@@ -768,7 +770,7 @@
 .book-modal-description {
     font-size: 1rem;
     color: #333;
-    line-height: 1.8;
+    line-height: 1.565;
     margin: 0;
     text-align: left;
     font-style: normal;

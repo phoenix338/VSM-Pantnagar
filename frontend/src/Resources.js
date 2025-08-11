@@ -147,11 +147,11 @@ const Resources = () => {
     // Grid View
     return (
         <>
-            <Navbar />
+            <Navbar resources={resources} />
             <div className="videos-page">
                 <h1 className="videos-heading">Resources</h1>
                 <div className="resource-section">
-                    <h2>Talks by Dignitaries</h2>
+                    <h2 id="videos" style={{ scrollMarginTop: 120 }}>Talks by Dignitaries</h2>
                     <div className="videos-grid">
                         {resources.talksByDignitaries?.map((resource, idx) => (
                             <div className="video-container" key={resource._id || idx}>
@@ -172,7 +172,7 @@ const Resources = () => {
                     </div>
                 </div>
                 <div className="resource-section">
-                    <h2>The Unique India</h2>
+                    <h2 id="uniqueindia" style={{ scrollMarginTop: 120 }}>The Unique India</h2>
                     <div className="videos-grid">
                         {resources.uniqueIndia?.map((resource, idx) => (
                             <div className="video-container" key={resource._id || idx}>
@@ -192,7 +192,7 @@ const Resources = () => {
                     </div>
                 </div>
                 <div className="resource-section">
-                    <h2>Miscellaneous</h2>
+                    <h2 id="miscellaneous" style={{ scrollMarginTop: 120 }}>Miscellaneous</h2>
                     <div className="videos-grid">
                         {resources.miscellaneous?.map((resource, idx) => (
                             <div className="video-container" key={resource._id || idx}>
@@ -212,7 +212,7 @@ const Resources = () => {
                     </div>
                 </div>
                 <div className="resource-section">
-                    <h2>eBooks</h2>
+                    <h2 id="ebooks" style={{ scrollMarginTop: 120 }}>eBooks</h2>
                     <div className="ebooks-grid">
                         {resources.eBooks?.map((ebook, idx) => (
                             <div className="ebook-container" key={ebook._id || idx}>
@@ -223,29 +223,8 @@ const Resources = () => {
                         ))}
                     </div>
                 </div>
-                <div className="resource-section">
-                    <h2>eNewsletters</h2>
-                    <div className="enewsletters-grid" style={{display: 'flex', flexWrap: 'wrap', gap: '16px',justifyContent:'center'}}>
-                        {resources.eNewsletters?.map((newsletter, idx) => (
-                            <div className="enewsletter-container" key={newsletter._id || idx}>
-                                <div className="enewsletter-title-wrapper" style={{display: 'flex', alignItems: 'center'}}>
-                                    <span className="enewsletter-title">{newsletter.title}</span>
-                                    <a
-                                        href={newsletter.pdfUrl}
-                                        download
-                                        className="pdf-download-btn"
-                                        title="Download PDF"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{ marginLeft: 12 }}
-                                    >
-                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DD783C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                    </a>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                {/* eNewsletters section removed. Will be shown in Navbar dropdown only. */}
+
                 {user !== null && user.email === ADMIN_EMAIL && (
                     <AdminResourceForms fetchResources={fetchResources} user={user} apiUrl={apiUrl} />
                 )}
@@ -282,11 +261,11 @@ function PDFFlipbookViewer({ url, title }) {
                 error="Failed to load PDF."
             >
                 {numPages && (
-                    <HTMLFlipBook 
-                        width={350} 
-                        height={500} 
-                        showCover={true} 
-                        maxShadowOpacity={0.5} 
+                    <HTMLFlipBook
+                        width={350}
+                        height={500}
+                        showCover={true}
+                        maxShadowOpacity={0.5}
                         className="pdf-flipbook"
                         size="stretch"
                         minWidth={350}
@@ -300,7 +279,7 @@ function PDFFlipbookViewer({ url, title }) {
                         startPage={0}
                         mobileScrollSupport={true}
                         showPageCorners={true}
-                        style={{margin: '0 auto'}}
+                        style={{ margin: '0 auto' }}
                     >
                         {Array.from(new Array(numPages), (el, index) => (
                             <div key={`page_${index + 1}`} className="pdf-flipbook-page">

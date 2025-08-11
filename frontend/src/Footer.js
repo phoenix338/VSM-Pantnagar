@@ -18,7 +18,8 @@ const Footer = () => {
       <div className="footer-links-row">
         <div className="footer-col">
           <Link to="/our-impact" className="footer-link" onClick={handleFooterLinkClick}>Our Impact</Link>
-          <div>Our Events</div>
+          <Link to="/our-events" className="footer-link" onClick={handleFooterLinkClick}>Events Board</Link>
+
           <Link to="/contact" className="footer-link" onClick={handleFooterLinkClick}>Contact Us</Link>
         </div>
         <div className="footer-col">

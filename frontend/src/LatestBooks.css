@@ -1,6 +1,5 @@
 .latest-books-container {
-    width: 100%;
-    max-width: 1200px;
+    width: 100vw;
     margin: 0 auto;
     padding: 40px 0;
 }
@@ -46,8 +45,8 @@
     border-radius: 16px;
     box-shadow: 0 2px 8px #0001;
     padding: 20px;
-    width: 220px;
-    min-width: 220px;
+    width: 170px;
+    min-width: 170px;
     text-align: center;
     flex-shrink: 0;
     transition: transform 0.2s, box-shadow 0.2s;

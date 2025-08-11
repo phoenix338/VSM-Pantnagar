@@ -224,7 +224,7 @@ const OurInitiative = () => {
                                 <div className="initiative-content-row">
                                     <div className="initiative-text">
                                         {item.text && (
-                                            <p style={{ marginBottom: 8, fontSize: '1.05em', lineHeight: 1.4, textAlign: 'left' }}>
+                                            <p style={{marginTop:'0px',fontSize: '1.7vw', lineHeight: 1.4, textAlign: 'left' }}>
                                                 {(() => {
                                                     // First, split by 'Contribute page' and render as Link
                                                     const parts = item.text.split('Contribute page');

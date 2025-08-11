@@ -6,6 +6,26 @@ import { auth } from './firebase';
 import './Home.css';
 
 const Navbar = (props) => {
+  // State for eNewsletters dropdown
+  const [enewsOpen, setEnewsOpen] = useState(false);
+  // Use eNewsletters from props if available
+  const enewsletters = props.resources?.eNewsletters || [];
+  // Smooth scroll handler for anchor links
+  const handleSmoothScroll = (e, anchorId) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    const el = document.getElementById(anchorId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If not found, navigate to /resources and scroll after navigation
+      navigate('/resources');
+      setTimeout(() => {
+        const el2 = document.getElementById(anchorId);
+        if (el2) el2.scrollIntoView({ behavior: 'smooth' });
+      }, 400);
+    }
+  };
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -137,7 +157,42 @@ const Navbar = (props) => {
               </div>
             </li>
             <li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Our Publications</Link></li>
-            <li style={{ cursor: 'pointer' }}><Link to="/resources" style={{ textDecoration: 'none', color: 'inherit' }}>Resources</Link></li>
+            {/* <li style={{ cursor: 'pointer' }}><Link to="/resources" style={{ textDecoration: 'none', color: 'inherit' }}>Resources</Link></li> */}
+            {/* resources Dropdown */}
+            <li style={{ cursor: 'pointer', position: 'relative' }} className="navbar-item dropdown">
+              <span className="dropdown-label">
+                Resources <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
+              </span>
+              <div className="dropdown-menu">
+                <a href="/resources#videos" className="dropdown-item" onClick={e => handleSmoothScroll(e, 'videos')}>Videos</a>
+                <a href="/resources#ebooks" className="dropdown-item" onClick={e => handleSmoothScroll(e, 'ebooks')}>eBooks</a>
+                <span className="dropdown-item" style={{ cursor: 'pointer', position: 'relative' }} onMouseEnter={() => setEnewsOpen(true)} onMouseLeave={() => setEnewsOpen(false)}>
+                  eNewsletters
+                  <svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 4 }}><path d="M7 10l5 5 5-5" stroke="#DD783C" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  {enewsOpen && (
+                    <div className="dropdown-menu" style={{ left: '100%', top: 0, minWidth: 220, position: 'absolute', background: '#fff', boxShadow: '0 2px 8px #0002', zIndex: 2000 }}>
+                      {enewsletters.length === 0 && <div style={{ padding: 12, color: '#888' }}>No eNewsletters found.</div>}
+                      {enewsletters.map((newsletter, idx) => (
+                        <div key={newsletter._id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', borderBottom: '1px solid #eee' }}>
+                          <span style={{ fontSize: 15 }}>{newsletter.title}</span>
+                          <a
+                            href={newsletter.pdfUrl}
+                            download
+                            className="pdf-download-btn"
+                            title="Download PDF"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ marginLeft: 12 }}
+                          >
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DD783C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </span>
+              </div>
+            </li>
             <li style={{ cursor: 'pointer' }}>
               <a
                 href="https://vsmmotivation.in/"

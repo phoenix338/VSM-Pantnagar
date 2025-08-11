@@ -743,9 +743,9 @@ function Home() {
                         justifyContent: 'space-between',
                         alignItems: 'stretch',
                         gap: 0,
-                        width: '100%',
-                        maxWidth: 700,
-                        minHeight: 180,
+                        width: '40vw',
+                        maxWidth: '40vw',
+                        minHeight: '40vh',
                         background: 'rgba(255,255,255,0.7)',
                         borderRadius: 18,
                         boxShadow: '0 2px 16px #DD783C22',
@@ -764,14 +764,14 @@ function Home() {
                         }}>
                             <div className="quote-title" style={{
                                 fontFamily: 'Alex Brush, cursive',
-                                fontSize: 24,
+                                fontSize: '2vw',
                                 color: '#DD783C',
                                 fontWeight: 500,
-                                padding:4,
+                                padding: 4,
                             }}>Quote Of The Day</div>
                             <div className="quote-main" style={{
                                 fontFamily: 'open sans',
-                                fontSize: 22,
+                                fontSize: '1.5vw',
                                 color: '#333',
                                 fontWeight: 400,
                                 marginBottom: 0,
@@ -780,7 +780,7 @@ function Home() {
                             {quoteAuthor && (
                                 <div className="quote-author" style={{
                                     fontFamily: 'open sans',
-                                    fontSize: 18,
+                                    fontSize: '1.5vw',
                                     color: '#888',
                                     fontWeight: 400,
                                     marginTop: 6,
@@ -798,7 +798,7 @@ function Home() {
                         }}>
                             <div style={{
                                 fontFamily: 'Alex Brush, cursive',
-                                fontSize: 28,
+                                fontSize: '2.2vw',
                                 color: '#DD783C',
                                 fontWeight: 500,
                                 marginBottom: 0,
@@ -821,7 +821,7 @@ function Home() {
                             </div> */}
                             <div className="quote-hindu" style={{
                                 fontFamily: 'open sans',
-                                fontSize: 18,
+                                fontSize:'1.5vw',
                                 color: '#333',
                                 fontWeight: 400,
                                 marginBottom: 0,
@@ -863,7 +863,7 @@ function Home() {
                         width: '100%',
                         maxWidth: 1200,
                         margin: '0 auto',
-                        padding: '48px 0 64px 0',
+                        padding: '48px 0 100px 0',
                         textAlign: 'center',
                         opacity: visionMissionVisible ? 1 : 0,
                         transform: visionMissionVisible ? 'translateY(0)' : 'translateY(50px)',
@@ -1125,7 +1125,8 @@ function Home() {
             </div>
 
             {/* Latest Books Section */}
-            <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '0px 0', textAlign: 'center' }}>
+            {/* <div style={{ width: '80vw',alignItems:'center'}}> */}
+            <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '0px 0', textAlign: 'center' }}>
                 <div style={{ fontFamily: 'Alex Brush, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 48 }}>
                     Our Publications
                 </div>
@@ -1134,7 +1135,7 @@ function Home() {
                     gap: '32px',
                     overflowX: 'auto',
                     overflowY: 'hidden',
-                    padding: '0 20px 20px 20px',
+                    padding: '0',
                     scrollbarWidth: 'thin',
                     scrollbarColor: '#DD783C #f0f0f0'
                 }}>
@@ -1193,7 +1194,7 @@ function Home() {
                     ))}
                 </div>
             </div>
-
+            {/* </div> */}
             <HomeInitiatives />
             {/* Guest Testimonials Section (VSM Guest Testimonials) */}
             <section className="reviews-section-root" style={{ marginTop: 64 }}>
@@ -1538,7 +1539,8 @@ function Home() {
             </>
         </div>
 
-    );
-}
+
+    )
+};
 
 export default Home;

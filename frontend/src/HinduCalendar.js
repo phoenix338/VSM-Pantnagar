@@ -417,7 +417,7 @@ const HinduCalendar = () => {
 
     return (
         <>
-            <div style={{ fontSize: 28, color: '#111', margin: '18px 0 0 0', lineHeight: 1.5, textAlign: 'left', display: 'inline-block', fontWeight: 300 }}>
+            <div style={{ fontSize: '1.8vw', color: '#111', margin: '18px 0 0 0', lineHeight: 1.5, textAlign: 'left', display: 'inline-block', fontWeight: 300 }}>
                 <span style={{ fontWeight: 300 }}>तिथि:</span> <span style={{ color: '#DD783C', fontWeight: 300 }}>                                {new Date().toLocaleDateString('hi-IN-u-nu-deva', {
                     day: 'numeric',
                     month: 'long',

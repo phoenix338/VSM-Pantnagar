@@ -230,7 +230,7 @@ const Books = () => {
                                     <div className="genre-section">
                                         {/* Genre Title with Genre Image beside it */}
                                         <div className="genre-section-title" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                                            <h2 style={{ color: 'grey', margin: 0, fontSize: '2rem', fontWeight: '400', fontFamily: 'alex brush' }}>{genre.name}</h2>
+                                            <h2 style={{ color: 'grey', margin: 0, fontSize: '45px', fontWeight: '400', fontFamily: 'alex brush' }}>{genre.name}</h2>
                                             {/* <img src={genre.image} alt={genre.name} style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '12px' }} /> */}
                                             {isAdmin && (
                                                 <button
@@ -251,30 +251,24 @@ const Books = () => {
                                                         <div className="book-modal-content">
                                                             <div className="book-modal-info">
                                                                 <p className="book-modal-description">
-                                                                    {(() => {
-                                                                        if (!previewBook.previewDescription) return '';
-                                                                        const startIdx = (previewCurrentPage - 1) * previewWordsPerPage;
-                                                                        const endIdx = startIdx + previewWordsPerPage;
-                                                                        return convertTextToLinks(previewWords.slice(startIdx, endIdx).join(' '));
-                                                                    })()}
+                                                                    {convertTextToLinks(previewBook.previewDescription)}
                                                                 </p>
                                                             </div>
-                                                            <div className="book-modal-pagination unified-pagination-width" style={{ marginTop: '8px' }}>
-                                                                <button
-                                                                    className="pagination-btn prev-btn"
-                                                                    onClick={prevBookPreviewPage}
-                                                                    disabled={previewCurrentPage === 1}
-                                                                >
-                                                                    ‹
-                                                                </button>
-                                                                <span className="pagination-text">{previewCurrentPage}/{previewTotalPages}</span>
-                                                                <button
-                                                                    className="pagination-btn next-btn"
-                                                                    onClick={nextBookPreviewPage}
-                                                                    disabled={previewCurrentPage === previewTotalPages}
-                                                                >
-                                                                    ›
-                                                                </button>
+                                                            <div className="book-modal-details" style={{ marginTop: 24, fontSize: 16, color: 'black', background: 'white' }}>
+                                                                <div>
+                                                                    {(() => {
+                                                                        if (!previewBook || !previewBook.title) return null;
+                                                                        const firstWord = previewBook.title.split(' ')[0];
+                                                                        if (firstWord === '21' || previewBook.title === 'The Evenings Of Pantnagar') {
+                                                                            return (
+                                                                                <a href="https://vsmmotivation.in/" target="_blank" rel="noopener noreferrer" style={{color:'black',textDecoration: 'none' }}>
+                                                                                    Available On VSM
+                                                                                </a>
+                                                                            );
+                                                                        }
+                                                                        return 'To purchase, contact:';
+                                                                    })()}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -364,33 +358,9 @@ const Books = () => {
                             <div className="book-modal-content">
                                 <div className="book-modal-info">
                                     <p className="book-modal-description">
-                                        {(() => {
-                                            if (!selectedBookForModal.previewDescription) return '';
-                                            const words = selectedBookForModal.previewDescription.split(' ');
-                                            const wordsPerPage = 55;
-                                            const startIdx = (currentPage - 1) * wordsPerPage;
-                                            const endIdx = startIdx + wordsPerPage;
-                                            // Join the page's words and convert to links
-                                            return convertTextToLinks(words.slice(startIdx, endIdx).join(' '));
-                                        })()}
+                                        {convertTextToLinks(selectedBookForModal.previewDescription)}
                                     </p>
-                                </div>
-                                <div className="book-modal-pagination unified-pagination-width">
-                                    <button
-                                        className="pagination-btn prev-btn"
-                                        onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
-                                        disabled={currentPage === 1}
-                                    >
-                                        ‹
-                                    </button>
-                                    <span className="pagination-text">{currentPage}/{totalPages}</span>
-                                    <button
-                                        className="pagination-btn next-btn"
-                                        onClick={() => setCurrentPage(currentPage < totalPages ? currentPage + 1 : totalPages)}
-                                        disabled={currentPage === totalPages}
-                                    >
-                                        ›
-                                    </button>
+
                                 </div>
                             </div>
                         </div>
