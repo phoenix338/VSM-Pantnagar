@@ -1125,7 +1125,7 @@ function Home() {
             </div>
 
             {/* Latest Books Section */}
-            <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '64px 0', textAlign: 'center' }}>
+            <div style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '0px 0', textAlign: 'center' }}>
                 <div style={{ fontFamily: 'Alex Brush, cursive', fontSize: 64, color: '#DD783C', fontWeight: 500, marginBottom: 48 }}>
                     Our Publications
                 </div>

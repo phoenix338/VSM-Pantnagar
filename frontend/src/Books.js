@@ -4,7 +4,7 @@ import { auth } from './firebase';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './Books.css';
-import booksGif from './assets/timeline.gif';
+import booksGif from './assets/books.gif';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;

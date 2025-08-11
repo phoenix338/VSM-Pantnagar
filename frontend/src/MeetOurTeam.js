@@ -3,7 +3,7 @@ import { auth } from './firebase';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './MeetOurTeam.css';
-
+import MeetGIF from './assets/meet-our-team.gif';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -89,6 +89,9 @@ const MeetOurTeam = () => {
     return (
         <div className="meet-our-team-root">
             <Navbar />
+            <div className="meetourteam-hero-section">
+                <img src={MeetGIF} alt="Timeline" className="meetourteam-gif" />
+            </div>
             <div className="meet-our-team-content">
                 <h1 className="meet-our-team-title">Our Team: Lantern bearers</h1>
                 <div className="meet-our-team-grid">
