@@ -13,7 +13,8 @@
 .impact-stat-box {
     background: #FFF7F2;
     border-radius: 24px;
-    border: 1.5px solid #DD783C;
+    /* border: 1.5px solid #DD783C; */
+    
     width: 180px;
     min-width: 180px;
     min-height: 180px;

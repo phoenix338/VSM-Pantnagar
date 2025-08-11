@@ -735,13 +735,124 @@ function Home() {
                     {/* Background Image */}
                     <img src={require('./assets/qouteoftheday.jpg')} alt="Quote Background" className="quote-bg" />
                     {/* Quote GIF - above bg, below card */}
-                    {/* Frosted Glass Card */}
-                    <div className="quote-frosted" style={{ zIndex: 3 }}>
-                        <div className="quote-title">Quote Of The Day:</div>
-                        <div className="quote-main">{quoteOfTheDay}</div>
-                        {quoteAuthor && <div className="quote-author">{quoteAuthor}</div>}
-                        <div className="quote-date">{new Date().toLocaleDateString('en-GB').replace(/\//g, ' / ')}</div>
-                        <div className="quote-hindu"><HinduCalendar /></div>
+                    {/* Frosted Glass Card - Two Column Layout */}
+                    <div className="quote-frosted" style={{
+                        zIndex: 3,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'stretch',
+                        gap: 0,
+                        width: '100%',
+                        maxWidth: 700,
+                        minHeight: 180,
+                        background: 'rgba(255,255,255,0.7)',
+                        borderRadius: 18,
+                        boxShadow: '0 2px 16px #DD783C22',
+                        padding: '32px 24px',
+                        margin: '0 auto',
+                        position: 'relative',
+                    }}>
+                        {/* Left Section: Quote Title and Quote */}
+                        <div style={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            paddingRight: 24,
+                            borderRight: '1.5px solid #e0e0e0',
+                        }}>
+                            <div className="quote-title" style={{
+                                fontFamily: 'Alex Brush, cursive',
+                                fontSize: 24,
+                                color: '#DD783C',
+                                fontWeight: 500,
+                                padding:4,
+                            }}>Quote Of The Day</div>
+                            <div className="quote-main" style={{
+                                fontFamily: 'open sans',
+                                fontSize: 22,
+                                color: '#333',
+                                fontWeight: 400,
+                                marginBottom: 0,
+                                lineHeight: 1.5,
+                            }}>{quoteOfTheDay}</div>
+                            {quoteAuthor && (
+                                <div className="quote-author" style={{
+                                    fontFamily: 'open sans',
+                                    fontSize: 18,
+                                    color: '#888',
+                                    fontWeight: 400,
+                                    marginTop: 6,
+                                }}>— {quoteAuthor}</div>
+                            )}
+                        </div>
+                        {/* Right Section: Calendar Info in Hindi */}
+                        <div style={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'flex-start',
+                            alignItems: 'flex-start',
+                            paddingLeft: 24,
+                        }}>
+                            <div style={{
+                                fontFamily: 'Alex Brush, cursive',
+                                fontSize: 28,
+                                color: '#DD783C',
+                                fontWeight: 500,
+                                marginBottom: 0,
+                            }}>Calendar</div>
+                            {/* <div
+                                className="quote-date"
+                                style={{
+                                    fontFamily: 'open sans',
+                                    fontSize: 18,
+                                    color: '#333',
+                                    fontWeight: 400,
+                                    marginBottom: 8,
+                                }}
+                            >
+                                {new Date().toLocaleDateString('hi-IN-u-nu-deva', {
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric'
+                                })}
+                            </div> */}
+                            <div className="quote-hindu" style={{
+                                fontFamily: 'open sans',
+                                fontSize: 18,
+                                color: '#333',
+                                fontWeight: 400,
+                                marginBottom: 0,
+                            }}>
+                                <HinduCalendar hindi={true} />
+                            </div>
+                        </div>
+                        {/* Responsive stacking for mobile */}
+                        <style>{`
+                            @media (max-width: 600px) {
+                                .quote-frosted {
+                                    flex-direction: column !important;
+                                    padding: 16px 6px !important;
+                                    min-height: 0 !important;
+                                }
+                                .quote-frosted > div {
+                                    padding: 0 !important;
+                                    border: none !important;
+                                }
+                                .quote-title {
+                                    font-size: 22px !important;
+                                    margin-bottom: 8px !important;
+                                }
+                                .quote-main {
+                                    font-size: 15px !important;
+                                }
+                                .quote-author {
+                                    font-size: 13px !important;
+                                }
+                            }
+                        `}</style>
                     </div>
                 </div>
 
@@ -1036,7 +1147,7 @@ function Home() {
                             maxWidth: '350px',
                             flexShrink: 0,
                             padding: '20px',
-                            backgroundColor: '#FFE7D7',
+                            backgroundColor: '#FFF7F2',
                             borderRadius: '16px',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                             border: '1px solid #e0e0e0',

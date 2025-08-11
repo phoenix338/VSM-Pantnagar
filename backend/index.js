@@ -32,6 +32,7 @@ const Genre = require('./Genre');
 const Video = require('./Video');
 const Resource = require('./Resource');
 const TestimonialFromGuest = require('./TestimonialFromGuest');
+const EventReview = require('./EventReview');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -599,24 +600,102 @@ app.delete('/videos/:id', adminAuth, async (req, res) => {
   }
 });
 
-// Get all resources
+// Get all resources (five sections)
+const TalksByDignitary = require('./TalksByDignitary');
+const UniqueIndiaResource = require('./UniqueIndiaResource');
+const MiscResource = require('./MiscResource');
+const EBook = require('./EBook');
+const ENewsletter = require('./ENewsletter');
+const ebookPdfUpload = require('./ebookPdfUpload');
+
+// PDF upload endpoint for eBooks
+app.use('/upload-ebook-pdf', ebookPdfUpload);
+
+// PDF upload endpoint for eNewsletters (reuse logic, different folder)
+const enewsletterPdfUpload = express.Router();
+const enewsletterStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'enewsletters',
+    resource_type: 'raw',
+    allowed_formats: ['pdf'],
+  },
+});
+const enewsletterUpload = multer({ storage: enewsletterStorage });
+enewsletterPdfUpload.post('/', enewsletterUpload.single('pdf'), (req, res) => {
+  if (!req.file || !req.file.path) return res.status(400).json({ error: 'PDF is required' });
+  res.status(201).json({ pdfUrl: req.file.path });
+});
+app.use('/upload-enewsletter-pdf', enewsletterPdfUpload);
+
 app.get('/resources', async (req, res) => {
   try {
-    const resources = await Resource.find().sort({ createdAt: -1 });
-    res.json(resources);
+    const [talksByDignitaries, uniqueIndia, miscellaneous, eBooks, eNewsletters] = await Promise.all([
+      TalksByDignitary.find().sort({ createdAt: -1 }),
+      UniqueIndiaResource.find().sort({ createdAt: -1 }),
+      MiscResource.find().sort({ createdAt: -1 }),
+      EBook.find().sort({ createdAt: -1 }),
+      ENewsletter.find().sort({ createdAt: -1 })
+    ]);
+    res.json({ talksByDignitaries, uniqueIndia, miscellaneous, eBooks, eNewsletters });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch resources' });
   }
 });
 
-// Add resource (admin only)
+// Add eBook
+app.post('/ebooks', adminAuth, async (req, res) => {
+  try {
+    const { title, pdfUrl } = req.body;
+    if (!title || !pdfUrl) {
+      return res.status(400).json({ error: 'Title and PDF URL are required for eBook.' });
+    }
+    const ebook = new EBook({ title, pdfUrl });
+    await ebook.save();
+    res.status(201).json(ebook);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add eBook' });
+  }
+});
+
+// Add eNewsletter
+app.post('/enewsletters', adminAuth, async (req, res) => {
+  try {
+    const { title, pdfUrl } = req.body;
+    if (!title || !pdfUrl) {
+      return res.status(400).json({ error: 'Title and PDF URL are required for eNewsletter.' });
+    }
+    const enewsletter = new ENewsletter({ title, pdfUrl });
+    await enewsletter.save();
+    res.status(201).json(enewsletter);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add eNewsletter' });
+  }
+});
+
+// Add resource (admin only, to correct section)
 app.post('/resources', adminAuth, async (req, res) => {
   try {
-    const { title, url } = req.body;
-    if (!title || !url) {
-      return res.status(400).json({ error: 'Title and URL are required' });
+    const { section, title, url, designation } = req.body;
+    let resource;
+    if (section === 'talksByDignitaries') {
+      if (!title || !url || !designation) {
+        return res.status(400).json({ error: 'Title, URL, and designation are required for Talks by Dignitaries.' });
+      }
+      resource = new TalksByDignitary({ title, url, designation });
+    } else if (section === 'uniqueIndia') {
+      if (!title || !url) {
+        return res.status(400).json({ error: 'Title and URL are required for The Unique India.' });
+      }
+      resource = new UniqueIndiaResource({ title, url });
+    } else if (section === 'miscellaneous') {
+      if (!title || !url) {
+        return res.status(400).json({ error: 'Title and URL are required for Miscellaneous.' });
+      }
+      resource = new MiscResource({ title, url });
+    } else {
+      return res.status(400).json({ error: 'Invalid section.' });
     }
-    const resource = new Resource({ title, url });
     await resource.save();
     res.status(201).json(resource);
   } catch (err) {
@@ -659,6 +738,72 @@ app.post('/guest-testimonials', async (req, res) => {
     res.status(500).json({ error: 'Failed to submit testimonial.' });
   }
 });
+// Submit a new event review (logged-in user)
+app.post('/event-reviews', async (req, res) => {
+  try {
+    const { eventId, name, collegeOrOccupation, text } = req.body;
+
+    if (!eventId || !name || !collegeOrOccupation || !text) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const review = new EventReview({
+      eventId,
+      name,
+      collegeOrOccupation,
+      text,
+      status: 'pending',
+    });
+
+    await review.save();
+    res.status(201).json({ message: 'Review submitted for approval' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get approved event reviews (signed-in users)
+app.get('/event-reviews/:eventId', async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const reviews = await EventReview.find({ eventId, status: 'approved' }).sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get all event reviews (admin)
+app.get('/event-reviews/admin/:eventId', adminAuth, async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const reviews = await EventReview.find({ eventId }).sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Approve event review (admin)
+app.patch('/event-reviews/:reviewId/approve', adminAuth, async (req, res) => {
+  try {
+    await EventReview.findByIdAndUpdate(req.params.reviewId, { status: 'approved' });
+    res.json({ message: 'Review approved' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Reject event review (admin)
+app.patch('/event-reviews/:reviewId/reject', adminAuth, async (req, res) => {
+  try {
+    await EventReview.findByIdAndUpdate(req.params.reviewId, { status: 'rejected' });
+    res.json({ message: 'Review rejected' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.post('/contact', async (req, res) => {
   try {

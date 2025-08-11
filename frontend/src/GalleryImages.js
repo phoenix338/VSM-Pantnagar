@@ -158,7 +158,7 @@ const GalleryImages = () => {
                                 Back
                             </button>
 
-                            <h1 className="gallery-heading">Frozen Moments</h1>
+                            <h1 className="gallery-heading">Dignitaries Who Graced VSM</h1>
 
                             <div className="gallery-header-nav">
                                 <button
@@ -200,7 +200,7 @@ const GalleryImages = () => {
                 ) : (
                     // Grid View
                     <>
-                        <h1 className="gallery-heading">Frozen Moments</h1>
+                        <h1 className="gallery-heading">Dignitaries Who Graced VSM</h1>
                         <div className="gallery-grid">
                             {galleryImages.map((item, index) => (
                                 <div className="gallery-img-container" key={item._id}>

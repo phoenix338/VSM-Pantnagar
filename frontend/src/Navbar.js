@@ -69,7 +69,7 @@ const Navbar = (props) => {
           <span style={{ fontFamily: 'Freehand, cursive', fontStyle: 'normal', color: '#FF0000', fontWeight: 500, fontSize: 22, marginRight: 10 }}>
             {userName ? `Welcome ${userName}` : 'New'}
           </span>
-          <Link to="/contact" className="navbar-contact-link" style={{ color: '#DD783C',fontFamily:'open sans', fontWeight: 400, fontSize: 18, textDecoration: 'none', marginLeft: 8 }}>
+          <Link to="/contact" className="navbar-contact-link" style={{ color: '#DD783C', fontFamily: 'open sans', fontWeight: 400, fontSize: 18, textDecoration: 'none', marginLeft: 8 }}>
             Contact Us
           </Link>
         </div>
@@ -120,7 +120,7 @@ const Navbar = (props) => {
                 Events <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
               </span>
               <div className="dropdown-menu">
-                <Link to="/our-events" className="dropdown-item">Our Events</Link>
+                <Link to="/our-events" className="dropdown-item">Events Board</Link>
                 <Link to="/events/upcoming" className="dropdown-item">Upcoming Events</Link>
                 <Link to="/events/upcoming" state={{ scrollTo: 'previous' }} className="dropdown-item">Previous Events</Link>
                 <a href="https://www.youthariseawake.org/" target="_blank" rel="noopener noreferrer" className="dropdown-item">YUVA</a>
@@ -136,7 +136,7 @@ const Navbar = (props) => {
                 <Link to="/gallery/videos" className="dropdown-item">Flowing Moments</Link>
               </div>
             </li>
-            <li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Books</Link></li>
+            <li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Our Publications</Link></li>
             <li style={{ cursor: 'pointer' }}><Link to="/resources" style={{ textDecoration: 'none', color: 'inherit' }}>Resources</Link></li>
             <li style={{ cursor: 'pointer' }}>
               <a

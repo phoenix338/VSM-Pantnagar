@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from './Navbar';
 import { auth } from './firebase';
 import './Videos.css'; // Reuse Videos styles for consistent look
-
+import './Resources.css'
+import { Document, Page, pdfjs } from 'react-pdf';
+import HTMLFlipBook from 'react-pageflip';
+pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.js`;
 const RENDER_API_URL = process.env.REACT_APP_API_URL;
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -27,7 +30,7 @@ const Resources = () => {
             const res = await fetch(`${RENDER_API_URL}/resources`);
             if (res.ok) {
                 const data = await res.json();
-                setResources(data);
+                setResources(data); // data: { talksByDignitaries, uniqueIndia, miscellaneous }
             }
         } catch (err) {
             console.log('Failed to fetch resources:', err.message);
@@ -54,61 +57,12 @@ const Resources = () => {
         </>
     );
 
-    if (!resources.length) return (
+    if (!resources || (!resources.talksByDignitaries?.length && !resources.uniqueIndia?.length && !resources.miscellaneous?.length)) return (
         <>
             <Navbar />
             <div className="videos-loading">No resources found.</div>
-            {/* Admin Form, even if no resources yet */}
             {user !== null && user.email === ADMIN_EMAIL && (
-                <div className="videos-admin-form">
-                    <form onSubmit={async (e) => {
-                        e.preventDefault();
-                        setSubmitting(true);
-                        setFormMsg('');
-                        try {
-                            const adminPassword = prompt('Enter admin password:');
-                            if (!adminPassword) throw new Error('Password is required');
-                            if (!form.title || !form.url) throw new Error('Title and URL are required');
-                            // No need to convert YouTube URL here; handled by getYouTubeEmbedUrl at render time
-                            const res = await fetch(`${apiUrl}/resources`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    email: user.email,
-                                    password: adminPassword
-                                },
-                                body: JSON.stringify(form)
-                            });
-                            if (!res.ok) throw new Error('Failed to add resource');
-                            setForm({ title: '', url: '' });
-                            setFormMsg('Resource added!');
-                            fetchResources();
-                        } catch (err) {
-                            setFormMsg('Error: ' + err.message);
-                        }
-                        setSubmitting(false);
-                    }}>
-                        <h3>Add New Resource</h3>
-                        <input
-                            type="text"
-                            placeholder="Resource Title"
-                            value={form.title}
-                            onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))}
-                            required
-                        />
-                        <input
-                            type="url"
-                            placeholder="Resource URL (e.g. YouTube, Google Drive, etc)"
-                            value={form.url}
-                            onChange={e => setForm(prev => ({ ...prev, url: e.target.value }))}
-                            required
-                        />
-                        <button type="submit" disabled={submitting}>
-                            {submitting ? 'Adding...' : 'Add Resource'}
-                        </button>
-                        {formMsg && <p className="form-msg">{formMsg}</p>}
-                    </form>
-                </div>
+                <AdminResourceForms fetchResources={fetchResources} user={user} apiUrl={apiUrl} />
             )}
         </>
     );
@@ -196,78 +150,305 @@ const Resources = () => {
             <Navbar />
             <div className="videos-page">
                 <h1 className="videos-heading">Resources</h1>
-                <div className="videos-grid">
-                    {resources.map((resource, idx) => (
-                        <div className="video-container" key={resource._id || idx} onClick={() => setSelectedResourceIndex(idx)}>
-                            <div className="video-wrapper">
-                                <iframe
-                                    src={getYouTubeEmbedUrl(resource.url)}
-                                    title={resource.title}
-                                    className="video-iframe"
-                                    allowFullScreen
-                                />
+                <div className="resource-section">
+                    <h2>Talks by Dignitaries</h2>
+                    <div className="videos-grid">
+                        {resources.talksByDignitaries?.map((resource, idx) => (
+                            <div className="video-container" key={resource._id || idx}>
+                                <div className="video-wrapper">
+                                    <iframe
+                                        src={getYouTubeEmbedUrl(resource.url)}
+                                        title={resource.title}
+                                        className="video-iframe"
+                                        allowFullScreen
+                                    />
+                                </div>
+                                <div className="video-overlay">
+                                    <div className="video-name">{resource.title}</div>
+                                    <div className="video-desc">{resource.designation}</div>
+                                </div>
                             </div>
-                            <div className="video-overlay">
-                                <div className="video-name">{resource.title}</div>
-                                <div className="video-desc">{resource.description}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                {/* Admin Form */}
-                {user !== null && user.email === ADMIN_EMAIL && (
-                    <div className="videos-admin-form">
-                        <form onSubmit={async (e) => {
-                            e.preventDefault();
-                            setSubmitting(true);
-                            setFormMsg('');
-                            try {
-                                const adminPassword = prompt('Enter admin password:');
-                                if (!adminPassword) throw new Error('Password is required');
-                                if (!form.title || !form.url) throw new Error('Title and URL are required');
-                                const res = await fetch(`${apiUrl}/resources`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        email: user.email,
-                                        password: adminPassword
-                                    },
-                                    body: JSON.stringify(form)
-                                });
-                                if (!res.ok) throw new Error('Failed to add resource');
-                                setForm({ title: '', url: '' });
-                                setFormMsg('Resource added!');
-                                fetchResources();
-                            } catch (err) {
-                                setFormMsg('Error: ' + err.message);
-                            }
-                            setSubmitting(false);
-                        }}>
-                            <h3>Add New Resource</h3>
-                            <input
-                                type="text"
-                                placeholder="Resource Title"
-                                value={form.title}
-                                onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))}
-                                required
-                            />
-                            <input
-                                type="url"
-                                placeholder="Resource URL (e.g. YouTube, Google Drive, etc)"
-                                value={form.url}
-                                onChange={e => setForm(prev => ({ ...prev, url: e.target.value }))}
-                                required
-                            />
-                            <button type="submit" disabled={submitting}>
-                                {submitting ? 'Adding...' : 'Add Resource'}
-                            </button>
-                            {formMsg && <p className="form-msg">{formMsg}</p>}
-                        </form>
+                        ))}
                     </div>
+                </div>
+                <div className="resource-section">
+                    <h2>The Unique India</h2>
+                    <div className="videos-grid">
+                        {resources.uniqueIndia?.map((resource, idx) => (
+                            <div className="video-container" key={resource._id || idx}>
+                                <div className="video-wrapper">
+                                    <iframe
+                                        src={getYouTubeEmbedUrl(resource.url)}
+                                        title={resource.title}
+                                        className="video-iframe"
+                                        allowFullScreen
+                                    />
+                                </div>
+                                <div className="video-overlay">
+                                    <div className="video-name">{resource.title}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="resource-section">
+                    <h2>Miscellaneous</h2>
+                    <div className="videos-grid">
+                        {resources.miscellaneous?.map((resource, idx) => (
+                            <div className="video-container" key={resource._id || idx}>
+                                <div className="video-wrapper">
+                                    <iframe
+                                        src={getYouTubeEmbedUrl(resource.url)}
+                                        title={resource.title}
+                                        className="video-iframe"
+                                        allowFullScreen
+                                    />
+                                </div>
+                                <div className="video-overlay">
+                                    <div className="video-name">{resource.title}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="resource-section">
+                    <h2>eBooks</h2>
+                    <div className="ebooks-grid">
+                        {resources.eBooks?.map((ebook, idx) => (
+                            <div className="ebook-container" key={ebook._id || idx}>
+                                {/* <div className="ebook-title">{ebook.title}</div> */}
+                                {/* Flipbook viewer placeholder */}
+                                <PDFFlipbookViewer url={ebook.pdfUrl} title={ebook.title} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="resource-section">
+                    <h2>eNewsletters</h2>
+                    <div className="enewsletters-grid" style={{display: 'flex', flexWrap: 'wrap', gap: '16px',justifyContent:'center'}}>
+                        {resources.eNewsletters?.map((newsletter, idx) => (
+                            <div className="enewsletter-container" key={newsletter._id || idx}>
+                                <div className="enewsletter-title-wrapper" style={{display: 'flex', alignItems: 'center'}}>
+                                    <span className="enewsletter-title">{newsletter.title}</span>
+                                    <a
+                                        href={newsletter.pdfUrl}
+                                        download
+                                        className="pdf-download-btn"
+                                        title="Download PDF"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ marginLeft: 12 }}
+                                    >
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DD783C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                {user !== null && user.email === ADMIN_EMAIL && (
+                    <AdminResourceForms fetchResources={fetchResources} user={user} apiUrl={apiUrl} />
                 )}
             </div>
         </>
     );
 };
+
+// Flipbook PDF viewer for eBooks using react-pdf and react-pageflip
+function PDFFlipbookViewer({ url, title }) {
+    const [numPages, setNumPages] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState(null);
+
+    function onDocumentLoadSuccess({ numPages }) {
+        setNumPages(numPages);
+        setLoading(false);
+    }
+    function onDocumentLoadError(err) {
+        setError('Failed to load PDF');
+        setLoading(false);
+    }
+
+    return (
+        <div className="flipbook-viewer">
+            <h4 style={{ textAlign: 'center', margin: 8 }}>{title}</h4>
+            {loading && <div>Loading PDF...</div>}
+            {error && <div style={{ color: 'red' }}>{error}</div>}
+            <Document
+                file={url}
+                onLoadSuccess={onDocumentLoadSuccess}
+                onLoadError={onDocumentLoadError}
+                loading="Loading PDF..."
+                error="Failed to load PDF."
+            >
+                {numPages && (
+                    <HTMLFlipBook 
+                        width={350} 
+                        height={500} 
+                        showCover={true} 
+                        maxShadowOpacity={0.5} 
+                        className="pdf-flipbook"
+                        size="stretch"
+                        minWidth={350}
+                        maxWidth={800}
+                        minHeight={500}
+                        maxHeight={1000}
+                        drawShadow={true}
+                        flippingTime={600}
+                        useMouseEvents={true}
+                        usePortrait={false}
+                        startPage={0}
+                        mobileScrollSupport={true}
+                        showPageCorners={true}
+                        style={{margin: '0 auto'}}
+                    >
+                        {Array.from(new Array(numPages), (el, index) => (
+                            <div key={`page_${index + 1}`} className="pdf-flipbook-page">
+                                <Page
+                                    pageNumber={index + 1}
+                                    width={350}
+                                    renderTextLayer={false}
+                                    renderAnnotationLayer={false}
+                                />
+                            </div>
+                        ))}
+                    </HTMLFlipBook>
+                )}
+            </Document>
+        </div>
+    );
+}
+
+// Admin form component for all five sections
+function AdminResourceForms({ fetchResources, user, apiUrl }) {
+    const [submitting, setSubmitting] = React.useState(false);
+    const [formMsg, setFormMsg] = React.useState('');
+    const [talkForm, setTalkForm] = React.useState({ title: '', url: '', designation: '' });
+    const [uniqueIndiaForm, setUniqueIndiaForm] = React.useState({ title: '', url: '' });
+    const [miscForm, setMiscForm] = React.useState({ title: '', url: '' });
+    const [ebookForm, setEbookForm] = React.useState({ title: '', pdfUrl: '' });
+    const [enewsletterForm, setEnewsletterForm] = React.useState({ title: '', pdfUrl: '' });
+
+    const handleSubmit = async (section, form) => {
+        setSubmitting(true);
+        setFormMsg('');
+        try {
+            const adminPassword = prompt('Enter admin password:');
+            if (!adminPassword) throw new Error('Password is required');
+            let url = `${apiUrl}/resources`;
+            let body = { ...form, section };
+            let headers = {
+                'Content-Type': 'application/json',
+                email: user.email,
+                password: adminPassword
+            };
+            // Route to correct endpoint for eBooks and eNewsletters
+            if (section === 'ebooks') {
+                url = `${apiUrl}/ebooks`;
+                body = { title: form.title, pdfUrl: form.pdfUrl };
+            } else if (section === 'enewsletters') {
+                url = `${apiUrl}/enewsletters`;
+                body = { title: form.title, pdfUrl: form.pdfUrl };
+            }
+            const res = await fetch(url, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(body)
+            });
+            if (!res.ok) throw new Error('Failed to add resource');
+            setFormMsg('Resource added!');
+            setTalkForm({ title: '', url: '', designation: '' });
+            setUniqueIndiaForm({ title: '' });
+            setMiscForm({ title: '' });
+            fetchResources();
+        } catch (err) {
+            setFormMsg('Error: ' + err.message);
+        }
+        setSubmitting(false);
+    };
+
+    return (
+        <div className="videos-admin-form">
+            <form onSubmit={e => { e.preventDefault(); handleSubmit('talksByDignitaries', talkForm); }}>
+                <h3>Add Talk by Dignitary</h3>
+                <input type="text" placeholder="Title" value={talkForm.title} onChange={e => setTalkForm(f => ({ ...f, title: e.target.value }))} required />
+                <input type="url" placeholder="Video URL" value={talkForm.url} onChange={e => setTalkForm(f => ({ ...f, url: e.target.value }))} required />
+                <input type="text" placeholder="Designation" value={talkForm.designation} onChange={e => setTalkForm(f => ({ ...f, designation: e.target.value }))} required />
+                <button type="submit" disabled={submitting}>Add</button>
+            </form>
+            <form onSubmit={e => { e.preventDefault(); handleSubmit('uniqueIndia', uniqueIndiaForm); }}>
+                <h3>Add Unique India Resource</h3>
+                <input type="text" placeholder="Title" value={uniqueIndiaForm.title} onChange={e => setUniqueIndiaForm(f => ({ ...f, title: e.target.value }))} required />
+                <input type="url" placeholder="Video URL" value={uniqueIndiaForm.url || ''} onChange={e => setUniqueIndiaForm(f => ({ ...f, url: e.target.value }))} required />
+                <button type="submit" disabled={submitting}>Add</button>
+            </form>
+            <form onSubmit={e => { e.preventDefault(); handleSubmit('miscellaneous', miscForm); }}>
+                <h3>Add Miscellaneous Resource</h3>
+                <input type="text" placeholder="Title" value={miscForm.title} onChange={e => setMiscForm(f => ({ ...f, title: e.target.value }))} required />
+                <input type="url" placeholder="Video URL" value={miscForm.url || ''} onChange={e => setMiscForm(f => ({ ...f, url: e.target.value }))} required />
+                <button type="submit" disabled={submitting}>Add</button>
+            </form>
+            <form onSubmit={e => { e.preventDefault(); if (!ebookForm.pdfUrl) { setFormMsg('Please upload a PDF before submitting.'); return; } handleSubmit('ebooks', ebookForm); }}>
+                <h3>Add eBook</h3>
+                <input type="text" placeholder="Title" value={ebookForm.title || ''} onChange={e => setEbookForm(f => ({ ...f, title: e.target.value }))} required />
+
+                <input type="file" accept="application/pdf" onChange={async e => {
+                    if (e.target.files && e.target.files[0]) {
+                        const file = e.target.files[0];
+                        const formData = new FormData();
+                        formData.append('pdf', file);
+                        setFormMsg('Uploading PDF...');
+                        try {
+                            const res = await fetch(`${apiUrl}/upload-ebook-pdf`, {
+                                method: 'POST',
+                                body: formData
+                            });
+                            const data = await res.json();
+                            if (data.pdfUrl) {
+                                setEbookForm(f => ({ ...f, pdfUrl: data.pdfUrl }));
+                                setFormMsg('PDF uploaded!');
+                            } else {
+                                setFormMsg('Failed to upload PDF');
+                            }
+                        } catch (err) {
+                            setFormMsg('Error uploading PDF');
+                        }
+                    }
+                }} />
+                <button type="submit" disabled={submitting}>Add</button>
+            </form>
+            <form onSubmit={e => { e.preventDefault(); if (!enewsletterForm.pdfUrl) { setFormMsg('Please upload a PDF before submitting.'); return; } handleSubmit('enewsletters', enewsletterForm); }}>
+                <h3>Add eNewsletter</h3>
+                <input type="text" placeholder="Title" value={enewsletterForm.title || ''} onChange={e => setEnewsletterForm(f => ({ ...f, title: e.target.value }))} required />
+
+                <input type="file" accept="application/pdf" onChange={async e => {
+                    if (e.target.files && e.target.files[0]) {
+                        const file = e.target.files[0];
+                        const formData = new FormData();
+                        formData.append('pdf', file);
+                        setFormMsg('Uploading PDF...');
+                        try {
+                            const res = await fetch(`${apiUrl}/upload-enewsletter-pdf`, {
+                                method: 'POST',
+                                body: formData
+                            });
+                            const data = await res.json();
+                            if (data.pdfUrl) {
+                                setEnewsletterForm(f => ({ ...f, pdfUrl: data.pdfUrl }));
+                                setFormMsg('PDF uploaded!');
+                            } else {
+                                setFormMsg('Failed to upload PDF');
+                            }
+                        } catch (err) {
+                            setFormMsg('Error uploading PDF');
+                        }
+                    }
+                }} />
+                <button type="submit" disabled={submitting}>Add</button>
+            </form>
+            {formMsg && <p className="form-msg">{formMsg}</p>}
+        </div>
+    );
+}
 
 export default Resources;

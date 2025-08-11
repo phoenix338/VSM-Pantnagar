@@ -18,18 +18,16 @@ const Footer = () => {
       <div className="footer-links-row">
         <div className="footer-col">
           <Link to="/our-impact" className="footer-link" onClick={handleFooterLinkClick}>Our Impact</Link>
-          <div>Our Projects</div>
-          <div>Stories</div>
+          <div>Our Events</div>
           <Link to="/contact" className="footer-link" onClick={handleFooterLinkClick}>Contact Us</Link>
         </div>
         <div className="footer-col">
-          <div>Get Involved</div>
-          <Link to="/books" className="footer-link" onClick={handleFooterLinkClick}>Books</Link>
-          <Link to="/events/upcoming" className="footer-link" onClick={handleFooterLinkClick}>Events</Link>
+          <Link to="/contribute" className="footer-link" onClick={handleFooterLinkClick}>Contribute</Link>
+          <Link to="/books" className="footer-link" onClick={handleFooterLinkClick}>Our Publications</Link>
         </div>
         <div className="footer-col right-col">
           <div><b>Samadhan<span className="footer-asterisk">*</span></b></div>
-          <div><b>Calender<span className="footer-asterisk">*</span></b></div>
+          <div><b>Calendar<span className="footer-asterisk">*</span></b></div>
           <div><b>Blog<span className="footer-asterisk">*</span></b></div>
         </div>
       </div>

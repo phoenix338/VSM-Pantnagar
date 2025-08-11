@@ -26,7 +26,7 @@
 }
 
 .home-initiative-card {
-    background: #FFE7D7;
+    background: #FFF7F2;
     border-radius: 18px;
     box-shadow: 0 2px 12px #0001;
     padding: 0;
@@ -41,7 +41,7 @@
 }
 
 .home-initiative-card.expanded {
-    background: #FFE7D7;
+    background: #FFF7F2;
     box-shadow: 0 4px 24px #e6834622;
 }
 
