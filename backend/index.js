@@ -145,6 +145,77 @@ app.delete('/initiatives/:id', adminAuth, async (req, res) => {
   }
 });
 
+// Models
+const ImagesSubsection = require('./ImagesSubsection');
+
+// Add new subsection (admin only)
+app.post('/images-subsections', adminAuth, async (req, res) => {
+  try {
+    const { name } = req.body;
+    const subsection = new ImagesSubsection({ name });
+    await subsection.save();
+    res.status(201).json(subsection);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Get all subsections
+app.get('/images-subsections', async (req, res) => {
+  try {
+    const subsections = await ImagesSubsection.find().sort({ name: 1 });
+    res.json(subsections);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+const OtherImages = require('./OtherImages');
+
+// Get all other images entries
+app.get('/other-images', async (req, res) => {
+  try {
+    const otherImagesEntries = await OtherImages.find().sort({ createdAt: -1 });
+    res.json(otherImagesEntries);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Add new other images entry (admin only)
+app.post('/other-images', adminAuth, upload.array('images', 10), async (req, res) => {
+  try {
+    const { subsection } = req.body;
+    if (!subsection) {
+      return res.status(400).json({ error: 'Subsection name is required' });
+    }
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'At least one image is required' });
+    }
+
+    // Extract URLs from uploaded files (Cloudinary or wherever)
+    const urls = req.files.map(file => file.path);
+
+    const newEntry = new OtherImages({ subsection, urls });
+    await newEntry.save();
+
+    res.status(201).json(newEntry);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Delete an other images entry by id (admin only)
+app.delete('/other-images/:id', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await OtherImages.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // Get impact values
 app.get('/impact', async (req, res) => {
   try {

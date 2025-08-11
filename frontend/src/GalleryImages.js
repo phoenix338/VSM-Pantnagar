@@ -8,8 +8,10 @@ const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
 const GalleryImages = () => {
     const [galleryImages, setGalleryImages] = useState([]);
+    const [otherImages, setOtherImages] = useState([]);
+    const [imagesSubsections, setImagesSubsections] = useState([]);
     const [user, setUser] = useState(null);
-    const [form, setForm] = useState({ title: '', description: '', image: null });
+    const [form, setForm] = useState({ titles: [''], descriptions: [''], images: [], imagesSubsection: '' });
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [formMsg, setFormMsg] = useState('');
@@ -19,9 +21,34 @@ const GalleryImages = () => {
 
     useEffect(() => {
         fetchGalleryImages();
+        fetchOtherImages();
+        fetchImagesSubsections();
         const unsubscribe = auth.onAuthStateChanged(setUser);
         return () => unsubscribe();
     }, []);
+
+    const fetchOtherImages = async () => {
+        try {
+            const res = await fetch(`${RENDER_API_URL}/other-images`);
+            if (res.ok) {
+                const data = await res.json();
+                setOtherImages(data);
+            }
+        } catch (err) {
+            console.log('Failed to fetch other images:', err.message);
+        }
+    };
+    const fetchImagesSubsections = async () => {
+        try {
+            const res = await fetch(`${RENDER_API_URL}/images-subsections`);
+            if (res.ok) {
+                const data = await res.json();
+                setImagesSubsections(data);
+            }
+        } catch (err) {
+            console.log('Failed to fetch images subsections:', err.message);
+        }
+    };
 
     const fetchGalleryImages = async () => {
         // Try localhost first, then fall back to Render
@@ -53,13 +80,16 @@ const GalleryImages = () => {
         try {
             const adminPassword = prompt('Enter admin password:');
             if (!adminPassword) throw new Error('Password is required');
-            if (!form.image) throw new Error('Image is required');
-
+            if (!form.images.length) throw new Error('At least one image is required');
+            if (!form.imagesSubsection) throw new Error('Please select an image subsection');
+            for (let i = 0; i < form.images.length; i++) {
+                if (!form.titles[i] || !form.descriptions[i]) throw new Error('Each image must have a title and description');
+            }
             const formData = new FormData();
-            formData.append('title', form.title);
-            formData.append('description', form.description);
-            formData.append('image', form.image);
-
+            form.titles.forEach(t => formData.append('title', t));
+            form.descriptions.forEach(d => formData.append('description', d));
+            form.images.forEach(img => formData.append('images', img));
+            formData.append('imagesSubsection', form.imagesSubsection);
             const res = await fetch(`${apiUrl}/gallery-images`, {
                 method: 'POST',
                 headers: {
@@ -68,18 +98,56 @@ const GalleryImages = () => {
                 },
                 body: formData
             });
-
-            if (!res.ok) throw new Error('Failed to add image');
-
-            setForm({ title: '', description: '', image: null });
+            if (!res.ok) throw new Error('Failed to add images');
+            setForm({ titles: [''], descriptions: [''], images: [], imagesSubsection: '', newSubsectionName: '' });
             if (fileInputRef.current) fileInputRef.current.value = '';
-            setFormMsg('Image added!');
+            setFormMsg('Images added!');
             fetchGalleryImages();
         } catch (err) {
             setFormMsg('Error: ' + err.message);
         }
         setSubmitting(false);
     };
+    const handleAddotherimages = async (e) => {
+        e.preventDefault();
+        setSubmitting(true);
+        setFormMsg('');
+
+        try {
+            const adminPassword = prompt('Enter admin password:');
+            if (!adminPassword) throw new Error('Password is required');
+            if (!form.images.length) throw new Error('At least one image is required');
+            if (!form.imagesSubsection) throw new Error('Please select an image subsection');
+
+            // Prepare form data for the backend
+            const formData = new FormData();
+            formData.append('subsection', form.imagesSubsection);
+
+            form.images.forEach((img) => {
+                formData.append('images', img); // appending multiple files under 'images' key
+            });
+
+            const res = await fetch(`${apiUrl}/other-images`, {   // <----- THIS endpoint
+                method: 'POST',
+                headers: {
+                    email: user.email,
+                    password: adminPassword,
+                },
+                body: formData,
+            });
+
+            if (!res.ok) throw new Error('Failed to add images');
+
+            setForm({ images: [], imagesSubsection: '' });
+            if (fileInputRef.current) fileInputRef.current.value = '';
+            setFormMsg('Images added!');
+            fetchOtherImages();
+        } catch (err) {
+            setFormMsg('Error: ' + err.message);
+        }
+        setSubmitting(false);
+    };
+
 
     const handleDelete = async id => {
         const adminPassword = prompt('Enter admin password:');
@@ -93,7 +161,6 @@ const GalleryImages = () => {
                     password: adminPassword
                 }
             });
-
             if (!res.ok) throw new Error('Failed to delete image');
             fetchGalleryImages();
         } catch (err) {
@@ -101,8 +168,32 @@ const GalleryImages = () => {
         }
     };
 
+    const handleDeleteOtherImage = async id => {
+        const adminPassword = prompt('Enter admin password:');
+        if (!adminPassword) return;
+        try {
+            const res = await fetch(`${apiUrl}/other-images/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    email: user.email,
+                    password: adminPassword
+                }
+            });
+            if (!res.ok) throw new Error('Failed to delete image');
+            fetchOtherImages();
+        } catch (err) {
+            alert('Error: ' + err.message);
+        }
+    };
+
     const handleImageChange = e => {
-        setForm({ ...form, image: e.target.files[0] });
+        const files = Array.from(e.target.files);
+        setForm({
+            ...form,
+            images: files,
+            titles: files.map((_, i) => form.titles[i] || ''),
+            descriptions: files.map((_, i) => form.descriptions[i] || '')
+        });
     };
 
     const handleImageClick = (index) => {
@@ -148,41 +239,29 @@ const GalleryImages = () => {
         <>
             <Navbar />
             <div className="gallery-page">
+                {/* Gallery Images Section */}
                 {selectedImageIndex !== null ? (
                     // Carousel View
                     <div className="gallery-carousel-view">
-                        {/* Header with Back, Gallery, and Navigation */}
                         <div className="gallery-carousel-header">
-                            <button className="gallery-back-btn" onClick={() => setSelectedImageIndex(null)}>
+                            <button className="gallery-back-btn" onClick={closeModal}>
                                 <img src={require('./assets/lets-icons_back.png')} alt="Back" />
                                 Back
                             </button>
-
-                            <h1 className="gallery-heading">Dignitaries Who Graced VSM</h1>
-
+                            <div style={{ color: '#dd783c', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>Dignitaries Who Graced VSM</div>
                             <div className="gallery-header-nav">
-                                <button
-                                    className="gallery-nav-btn"
-                                    onClick={prevImage}
-                                >
+                                <button className="gallery-nav-btn" onClick={prevImage}>
                                     <img src={require('./assets/lucide_move-left.png')} alt="Previous" />
                                 </button>
-                                <button
-                                    className="gallery-nav-btn"
-                                    onClick={nextImage}
-                                >
+                                <button className="gallery-nav-btn" onClick={nextImage}>
                                     <img src={require('./assets/lucide_move-left.png')} alt="Next" />
                                 </button>
                             </div>
                         </div>
-
                         <div className="gallery-carousel-container">
-                            {/* Previous Image - always show */}
                             <div className="gallery-side-image prev" onClick={prevImage}>
                                 <img src={prevImageData ? prevImageData.imageUrl : galleryImages[galleryImages.length - 1].imageUrl} alt="Previous" />
                             </div>
-
-                            {/* Center Image */}
                             <div className="gallery-center-image">
                                 <img src={currentImage.imageUrl} alt={currentImage.title} />
                                 <div className="gallery-image-details">
@@ -190,17 +269,15 @@ const GalleryImages = () => {
                                     <p>{currentImage.description}</p>
                                 </div>
                             </div>
-
-                            {/* Next Image - always show */}
                             <div className="gallery-side-image next" onClick={nextImage}>
                                 <img src={nextImageData ? nextImageData.imageUrl : galleryImages[0].imageUrl} alt="Next" />
                             </div>
                         </div>
                     </div>
                 ) : (
-                    // Grid View
                     <>
-                        <h1 className="gallery-heading">Dignitaries Who Graced VSM</h1>
+                        <h1 className="gallery-heading">Frozen Moments</h1>
+                        <div style={{ color: '#dd783c', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>Dignitaries Who Graced VSM</div>
                         <div className="gallery-grid">
                             {galleryImages.map((item, index) => (
                                 <div className="gallery-img-container" key={item._id}>
@@ -231,48 +308,133 @@ const GalleryImages = () => {
                                 </div>
                             ))}
                         </div>
-                    </>
-                )}
 
-                {isAdmin && (
-                    <div className="gallery-admin-form">
-                        <form onSubmit={handleAdd}>
-                            <h3>Add Gallery Image</h3>
-                            <input
-                                name="title"
-                                placeholder="Image Title"
-                                value={form.title}
-                                onChange={e => setForm({ ...form, title: e.target.value })}
-                                required
-                            />
-                            <textarea
-                                name="description"
-                                placeholder="Image Description"
-                                value={form.description}
-                                onChange={e => setForm({ ...form, description: e.target.value })}
-                                required
-                                style={{ minHeight: 80, resize: 'vertical' }}
-                            />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                ref={fileInputRef}
-                                required
-                            />
-                            <button type="submit" disabled={submitting}>
-                                {submitting ? 'Adding...' : 'Add Image'}
-                            </button>
-                            {formMsg && (
-                                <div style={{
-                                    marginTop: 8,
-                                    color: formMsg.startsWith('Error') ? 'red' : 'green'
-                                }}>
-                                    {formMsg}
+                        {/* Admin form (for both sections) */}
+                        {isAdmin && (
+                            <div className="gallery-admin-form">
+                                <form onSubmit={handleAddotherimages}>
+                                    <h3>Add Other Images</h3>
+                                    {/* Select subsection */}
+                                    <select
+                                        value={form.imagesSubsection}
+                                        onChange={e => setForm({ ...form, imagesSubsection: e.target.value })}
+                                        required
+                                    >
+                                        <option value="">Select Image Subsection</option>
+                                        {imagesSubsections.map(sub => (
+                                            <option key={sub._id} value={sub.name}>{sub.name}</option>
+                                        ))}
+                                    </select>
+                                    {/* File upload */}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        onChange={handleImageChange}
+                                        ref={fileInputRef}
+                                        required
+                                    />
+                                    {/* Preview uploaded files */}
+                                    {form.images.length > 0 && form.images.map((img, idx) => (
+                                        <div key={idx} style={{
+                                            marginBottom: 10,
+                                            border: '1px solid #eee',
+                                            padding: 10,
+                                            borderRadius: 6
+                                        }}>
+                                            <b>Image {idx + 1}:</b> {img.name}
+                                        </div>
+                                    ))}
+                                    {/* Submit button */}
+                                    <button type="submit" disabled={submitting}>
+                                        {submitting ? 'Adding...' : 'Add Images'}
+                                    </button>
+                                    {/* Form message */}
+                                    {formMsg && (
+                                        <div style={{
+                                            marginTop: 8,
+                                            color: formMsg.startsWith('Error') ? 'red' : 'green'
+                                        }}>
+                                            {formMsg}
+                                        </div>
+                                    )}
+                                </form>
+                                {/* Add new subsection */}
+                                <form
+                                    onSubmit={async e => {
+                                        e.preventDefault();
+                                        setSubmitting(true);
+                                        setFormMsg('');
+                                        try {
+                                            const adminPassword = prompt('Enter admin password:');
+                                            if (!adminPassword) throw new Error('Password is required');
+                                            if (!form.newSubsectionName) throw new Error('Name is required');
+                                            const res = await fetch(`${apiUrl}/images-subsections`, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    email: user.email,
+                                                    password: adminPassword
+                                                },
+                                                body: JSON.stringify({ name: form.newSubsectionName })
+                                            });
+                                            if (!res.ok) throw new Error('Failed to add subsection');
+                                            setFormMsg('Subsection added!');
+                                            setForm(f => ({ ...f, newSubsectionName: '' }));
+                                            fetchImagesSubsections();
+                                        } catch (err) {
+                                            setFormMsg('Error: ' + err.message);
+                                        }
+                                        setSubmitting(false);
+                                    }}
+                                    style={{ marginTop: 32, borderTop: '1px solid #ddd', paddingTop: 24 }}
+                                >
+                                    <h4>Add Gallery Subsection</h4>
+                                    <input
+                                        type="text"
+                                        placeholder="New subsection name"
+                                        value={form.newSubsectionName || ''}
+                                        onChange={e => setForm({ ...form, newSubsectionName: e.target.value })}
+                                        required
+                                    />
+                                    <button type="submit" disabled={submitting}>
+                                        {submitting ? 'Adding...' : 'Add Subsection'}
+                                    </button>
+                                </form>
+                            </div>
+                        )}
+
+                        {/* Other Images Section (grouped by subsection) */}
+                        {otherImages.map((entry) => (
+                            <div key={entry._id} style={{ marginBottom: 32 }}>
+                                <div style={{ color: '#dd783c', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>{entry.subsection}</div>
+                                <div className="gallery-grid">
+                                    {entry.urls.map((url, idx) => (
+                                        <div className="gallery-img-container-other" key={entry._id + '-' + idx}>
+                                            <div className="gallery-img-wrapper">
+                                                <img
+                                                    src={url}
+                                                    alt={`Other Image ${idx + 1}`}
+                                                    className="gallery-img-other"
+                                                />
+                                                {isAdmin && (
+                                                    <button
+                                                        className="gallery-delete-btn"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDeleteOtherImage(entry._id);
+                                                        }}
+                                                    >
+                                                        ×
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            )}
-                        </form>
-                    </div>
+                            </div>
+                        ))}
+                    </>
                 )}
             </div>
         </>
