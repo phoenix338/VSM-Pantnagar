@@ -184,7 +184,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #FFE4D6 0%, #F5D4C3 100%);
+    background: #fdf6f1;
 }
 
 .events-gif {

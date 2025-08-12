@@ -23,6 +23,7 @@ const Book = require('./Book');
 const Initiative = require('./Initiative');
 const Impact = require('./Impact');
 const TeamMember = require('./TeamMember');
+const patron = require('./patrons');
 const TimelineEvent = require('./TimelineEvent');
 const Event = require('./Event');
 const News = require('./News');
@@ -274,7 +275,30 @@ app.post('/upload-multiple-images', adminAuth, upload.array('images', 10), (req,
   const imageUrls = req.files.map(file => file.path);
   res.json({ imageUrls });
 });
+app.get('/patrons', async (req, res) => {
+  try {
+    const members = await patron.find().sort({ createdAt: 1 });
+    res.json(members);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
+// Add a new team member (admin only, with image upload)
+app.post('/patrons', adminAuth, upload.single('image'), async (req, res) => {
+  try {
+    const { name, designation, link } = req.body;
+    const imageUrl = req.file && req.file.path;
+    if (!name || !designation || !imageUrl) {
+      return res.status(400).json({ error: 'Name, designation and image are required' });
+    }
+    const member = new patron({ name, designation, imageUrl, link });
+    await member.save();
+    res.status(201).json(member);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 // Get all team members
 app.get('/team', async (req, res) => {
   try {

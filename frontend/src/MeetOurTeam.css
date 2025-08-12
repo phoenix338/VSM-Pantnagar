@@ -9,7 +9,7 @@
 .meetourteam-hero-section {
     width: 100vw;
     min-height: 40vh;
-    background: #FFF1E7;
+    background: #fdf6f1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -60,7 +60,7 @@
 }
 
 .team-founder-name {
-    font-family: 'Oranienbaum', serif;
+    font-family: 'open sans',sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 4px;
@@ -68,7 +68,7 @@
 }
 
 .team-founder-designation {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'open sans',sans-serif;
     font-size: 1.1rem;
     color: #444;
     text-align: center;
@@ -119,9 +119,9 @@
 }
 
 .team-member-name {
-    font-family: 'Oranienbaum', serif;
+    font-family: 'open sans', sans-serif;
     font-size: 1.15rem;
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 2px;
     text-align: center;
     flex-shrink: 0;
