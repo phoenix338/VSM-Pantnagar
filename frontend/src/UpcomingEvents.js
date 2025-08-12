@@ -4,7 +4,7 @@ import { auth } from './firebase';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './Events.css';
-import eventsGif from './assets/gif/events.gif';
+// import eventsGif from './assets/gif/events.gif';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
@@ -238,7 +238,7 @@ const UpcomingEvents = () => {
             <Navbar />
             <div className="events-page">
                 <div className="events-gif-wrapper">
-                    <img src={eventsGif} alt="Events" className="events-gif" />
+                    {/* <img src={eventsGif} alt="Events" className="events-gif" /> */}
                 </div>
                 <h1 className="events-heading">Events: Lights Ahead</h1>
                 <div className="events-container">

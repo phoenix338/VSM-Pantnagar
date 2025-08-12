@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import './OurInitiative.css';
-import initiativeGif from './assets/gif/initiative.gif';
+import initiativeGif from './assets/gif/events.mp4';
 import { auth } from './firebase';
 import Footer from './Footer';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
@@ -207,7 +207,13 @@ const OurInitiative = () => {
             <Navbar />
             <div className="initiative-page main-content-gap">
                 <div className="initiative-gif-wrapper">
-                    <img src={initiativeGif} alt="Our Initiative" className="initiative-gif" />
+                    <video
+                        src={require('./assets/gif/events.mp4')}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    />
                 </div>
                 <h1 className="our-initiative-heading">Our Events</h1>
                 <div className="initiatives-list">
@@ -224,7 +230,7 @@ const OurInitiative = () => {
                                 <div className="initiative-content-row">
                                     <div className="initiative-text">
                                         {item.text && (
-                                            <p style={{marginTop:'0px',fontSize: '1.7vw', lineHeight: 1.4, textAlign: 'left' }}>
+                                            <p style={{ marginTop: '0px', fontSize: '1.7vw', lineHeight: 1.4, textAlign: 'left' }}>
                                                 {(() => {
                                                     // First, split by 'Contribute page' and render as Link
                                                     const parts = item.text.split('Contribute page');
