@@ -248,7 +248,7 @@ const GalleryImages = () => {
                                 <img src={require('./assets/lets-icons_back.png')} alt="Back" />
                                 Back
                             </button>
-                            <div style={{ color: '#dd783c', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>Dignitaries Who Graced VSM</div>
+                            <div style={{ color: 'grey', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>Dignitaries Who Graced VSM</div>
                             <div className="gallery-header-nav">
                                 <button className="gallery-nav-btn" onClick={prevImage}>
                                     <img src={require('./assets/lucide_move-left.png')} alt="Previous" />
@@ -277,7 +277,7 @@ const GalleryImages = () => {
                 ) : (
                     <>
                         <h1 className="gallery-heading">Frozen Moments</h1>
-                        <div style={{ color: '#dd783c', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>Dignitaries Who Graced VSM</div>
+                        <div style={{ color: 'grey', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>Dignitaries Who Graced VSM</div>
                         <div className="gallery-grid">
                             {galleryImages.map((item, index) => (
                                 <div className="gallery-img-container" key={item._id}>
@@ -407,7 +407,7 @@ const GalleryImages = () => {
                         {/* Other Images Section (grouped by subsection) */}
                         {otherImages.map((entry) => (
                             <div key={entry._id} style={{ marginBottom: 32 }}>
-                                <div style={{ color: '#dd783c', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>{entry.subsection}</div>
+                                <div style={{ color: 'grey', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>{entry.subsection}</div>
                                 <div className="gallery-grid">
                                     {entry.urls.map((url, idx) => (
                                         <div className="gallery-img-container-other" key={entry._id + '-' + idx}>

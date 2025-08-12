@@ -92,7 +92,7 @@ const NewsSection = () => {
     return (
         <div className="news-section-root">
             <div className="news-section-header-row">
-                <h2 className="news-section-title">News</h2>
+                <h2 className="news-section-title">VSM In News</h2>
                 <div className="news-section-horizontal-line" />
             </div>
             <div className="news-section-main">

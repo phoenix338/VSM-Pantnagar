@@ -193,7 +193,7 @@ const Navbar = (props) => {
                           <span style={{ fontSize: 15 }}>{newsletter.title}</span>
                           <a
                             href={newsletter.pdfUrl}
-                            download
+                            download={newsletter.title ? `${newsletter.title.replace(/\s+/g, '_')}.pdf` : 'newsletter.pdf'}
                             className="pdf-download-btn"
                             title="Download PDF"
                             target="_blank"

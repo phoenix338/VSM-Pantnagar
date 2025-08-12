@@ -261,9 +261,9 @@ const Books = () => {
                                                                         const firstWord = previewBook.title.split(' ')[0];
                                                                         if (firstWord === '21' || previewBook.title === 'The Evenings Of Pantnagar') {
                                                                             return (
-                                                                                <a href="https://vsmmotivation.in/" target="_blank" rel="noopener noreferrer" style={{color:'black',textDecoration: 'none' }}>
-                                                                                    Available On VSM
-                                                                                </a>
+                                                                                <span>
+                                                                                    To purchase visit: <a href="https://vsmmotivation.in/" target="_blank" rel="noopener noreferrer" style={{ }}>https://vsmmotivation.in/</a>
+                                                                                </span>
                                                                             );
                                                                         }
                                                                         return 'To purchase, contact:';
