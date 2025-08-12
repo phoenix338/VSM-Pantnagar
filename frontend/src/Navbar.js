@@ -8,8 +8,24 @@ import './Home.css';
 const Navbar = (props) => {
   // State for eNewsletters dropdown
   const [enewsOpen, setEnewsOpen] = useState(false);
-  // Use eNewsletters from props if available
-  const enewsletters = props.resources?.eNewsletters || [];
+  // State for resources
+  const [resources, setResources] = useState({});
+  const enewsletters = resources.eNewsletters || [];
+
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const res = await fetch(process.env.REACT_APP_API_URL + '/resources');
+        if (res.ok) {
+          const data = await res.json();
+          setResources(data);
+        }
+      } catch (err) {
+        // Optionally handle error
+      }
+    };
+    fetchResources();
+  }, []);
   // Smooth scroll handler for anchor links
   const handleSmoothScroll = (e, anchorId) => {
     e.preventDefault();
