@@ -165,7 +165,7 @@ const MeetOurTeam = () => {
                             <div className="team-member-designation">{mem.designation}</div>
                             {mem.link && (
                                 <div className="team-member-email">
-                                    <a>{mem.link}</a>
+                                    <a href={mem.link} target='_blank'>{mem.link}</a>
                                 </div>
                             )}
                             {isAdmin && (
