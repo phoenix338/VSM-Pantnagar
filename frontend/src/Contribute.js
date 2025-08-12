@@ -30,7 +30,7 @@ const Contribute = () => {
                 </div>
                 <div className="contribute-tabs-section">
                     <div className="contribute-light-banner" style={{ background: '#D9D9D9', borderTopLeftRadius: 8, borderTopRightRadius: 8, border: '1px solid #bbb', borderBottom: 'none', textAlign: 'center', padding: '18px 0 8px 0' }}>
-                        <span style={{ fontFamily: 'Alex Brush, cursive', fontSize: '2rem', color: 'black', fontWeight: 400 }}>Be the Light - Save Taxes</span>
+                        <span style={{ fontFamily: 'Alex Brush, cursive', fontSize: '2rem', color: 'black', fontWeight: 400 }}>Be the Light</span>
                     </div>
                     <div className="contribute-tabs">
                         <button
@@ -56,7 +56,7 @@ const Contribute = () => {
                         {activeTab === 'donate' && (
                             <div className="donate-content">
                                 <h2>Monetary Contributions</h2>
-                                <p>Your generous contributions to Vivekananda Swadhyay Mandal will help us bring our events to life and spread the spirit of service. These contributions are eligible for exemption under Section 80G.</p>
+                                <p>Your generous contributions to Vivekananda Swadhyay Mandal will help us bring our events to life and spread the spirit of service. <b>These contributions are eligible for exemption under Section 80G.</b></p>
                                 <div className="donate-event-dropdown">
                                     <label htmlFor="event-select" style={{ fontFamily: 'open sans', fontWeight: '500' }}><b>Select Event:</b></label>
                                     <select
