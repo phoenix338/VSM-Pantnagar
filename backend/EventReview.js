@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-
+const mongoose = require('mongoose');
 const eventReviewSchema = new mongoose.Schema({
     eventId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -32,4 +31,4 @@ const eventReviewSchema = new mongoose.Schema({
     },
 });
 
-export default mongoose.model("EventReview", eventReviewSchema);
+module.exports = mongoose.model("EventReview", eventReviewSchema);

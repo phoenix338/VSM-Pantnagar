@@ -10,7 +10,7 @@ const RENDER_API_URL = process.env.REACT_APP_API_URL;
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
 const Resources = () => {
-    const [resources, setResources] = useState([]);
+    const [resources, setResources] = useState({});
     const [loading, setLoading] = useState(true);
     const [selectedResourceIndex, setSelectedResourceIndex] = useState(null);
     const [user, setUser] = useState(null);

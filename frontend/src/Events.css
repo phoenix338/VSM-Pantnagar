@@ -252,6 +252,7 @@ body {
     box-shadow: none;
     transition: none;
     position: relative;
+    margin-bottom: 100px;
 }
 
 .event-date-marker {
@@ -564,4 +565,114 @@ body {
         margin-top: 18px !important;
         padding: 10px !important;
     }
+}
+
+.event-reviews {
+    margin-top: 1rem;
+}
+
+.review-card {
+    background: #fafafa;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #eee;
+}
+
+.review-text {
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.review-author {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+/* === Admin Actions === */
+.admin-review-actions {
+    margin-top: 0.5rem;
+}
+
+.admin-review-actions button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.admin-review-actions button:first-child {
+    background: #4caf50;
+    color: white;
+}
+
+.admin-review-actions button:last-child {
+    background: #f44336;
+    color: white;
+}
+
+.status {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.status.approved {
+    color: #4caf50;
+}
+
+.status.rejected {
+    color: #f44336;
+}
+
+/* === Review Form === */
+.toggle-review-btn {
+    display: inline-block;
+    background: #FFE4D6;
+    color: #DD783C;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background 0.3s ease;
+    text-align: center;
+    font-size: 16px;
+    align-self: center;
+    margin-bottom: 50px;
+    cursor: pointer;
+}
+.review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.review-form input,
+.review-form textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.review-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.review-form button {
+    align-self: flex-start;
+    padding: 0.5rem 1rem;
+    background: #DD783C;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.form-msg {
+    font-size: 0.85rem;
+    color: green;
 }

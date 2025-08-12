@@ -34,9 +34,11 @@ const UpcomingEvents = () => {
 
     useEffect(() => {
         // Scroll to previous events section if specified
-        if (location.state?.scrollTo === 'previous' && previousEventsRef.current) {
+        if (location.state?.scrollTo === 'previous') {
             setTimeout(() => {
-                previousEventsRef.current.scrollIntoView({ behavior: 'smooth' });
+                if (previousEventsRef.current) {
+                    previousEventsRef.current.scrollIntoView({ behavior: 'smooth' });
+                }
             }, 500);
         }
     }, [location.state, events]);
@@ -77,9 +79,6 @@ const UpcomingEvents = () => {
                 throw new Error('Banner image is required');
             }
 
-            const adminPassword = prompt('Enter admin password:');
-            if (!adminPassword) throw new Error('Password is required');
-
             const formData = new FormData();
             formData.append('title', form.title);
             formData.append('date', form.date);
@@ -90,8 +89,7 @@ const UpcomingEvents = () => {
             const res = await fetch(`${API_URL}/events`, {
                 method: 'POST',
                 headers: {
-                    email: user.email,
-                    password: adminPassword
+                    email: user.email
                 },
                 body: formData
             });
@@ -112,14 +110,10 @@ const UpcomingEvents = () => {
         setSubmitting(true);
         setFormMsg('');
         try {
-            const adminPassword = prompt('Enter admin password:');
-            if (!adminPassword) throw new Error('Password is required');
-
             const res = await fetch(`${API_URL}/events/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    email: user.email,
-                    password: adminPassword
+                    email: user.email
                 }
             });
 
@@ -137,15 +131,107 @@ const UpcomingEvents = () => {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    if (loading) {
-        return (
-            <>
-                <Navbar />
-                <div className="events-loading">Loading events...</div>
-                <Footer />
-            </>
-        );
-    }
+
+    // Review logic for previous events
+    const [reviews, setReviews] = useState({});
+    const [showForm, setShowForm] = useState({});
+    const [reviewForm, setReviewForm] = useState({});
+    const [submittingReview, setSubmittingReview] = useState(false);
+    const [formMsgReview, setFormMsgReview] = useState('');
+    const [adminReviewError, setAdminReviewError] = useState('');
+
+    useEffect(() => {
+        // Fetch reviews for each previous event
+        const prevEvents = events.filter(event => new Date(event.date) < new Date());
+        if (prevEvents.length > 0) {
+            prevEvents.forEach(event => fetchReviews(event._id));
+        }
+    }, [events]);
+
+    // Assuming you already have isAdmin state from your auth context/session
+    const fetchReviews = async (eventId) => {
+        setAdminReviewError('');
+        try {
+            const res = await fetch(`${API_URL}/event-reviews/${eventId}`);
+            const data = await res.json();
+
+            const filteredData = isAdmin
+                ? data
+                : data.filter(rev => rev.status === 'approved');
+
+            setReviews(prev => ({
+                ...prev,
+                [eventId]: filteredData
+            }));
+        } catch (err) {
+            setAdminReviewError('Error fetching reviews.');
+            console.error(err);
+        }
+    };
+
+    // Approve review
+    const handleApproveReview = async (eventId, reviewId) => {
+        try {
+            const res = await fetch(`${API_URL}/event-reviews/${reviewId}/approve`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!res.ok) throw new Error('Failed to approve review');
+
+            setReviews(prev => ({
+                ...prev,
+                [eventId]: prev[eventId].map(rev =>
+                    rev._id === reviewId ? { ...rev, status: 'approved' } : rev
+                )
+            }));
+        } catch (err) {
+            console.error(err);
+            alert('Error approving review');
+        }
+    };
+
+    // Reject review
+    const handleRejectReview = async (eventId, reviewId) => {
+        try {
+            const res = await fetch(`${API_URL}/event-reviews/${reviewId}`, {
+                method: 'DELETE'
+            });
+
+            if (!res.ok) throw new Error('Failed to reject review');
+
+            setReviews(prev => ({
+                ...prev,
+                [eventId]: prev[eventId].filter(rev => rev._id !== reviewId)
+            }));
+        } catch (err) {
+            console.error(err);
+            alert('Error rejecting review');
+        }
+    };
+
+
+    const handleSubmitReview = async (eventId) => {
+        setSubmittingReview(true);
+        setFormMsgReview('');
+        try {
+            const res = await fetch(`${API_URL}/event-reviews`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    eventId,
+                    ...reviewForm[eventId]
+                })
+            });
+            if (!res.ok) throw new Error('Failed to submit review');
+            setFormMsgReview('Review submitted for approval!');
+            setReviewForm(prev => ({ ...prev, [eventId]: { name: '', collegeOrOccupation: '', text: '' } }));
+            fetchReviews(eventId);
+        } catch (err) {
+            setFormMsgReview('Error: ' + err.message);
+        }
+        setSubmittingReview(false);
+    };
 
     return (
         <>
@@ -204,18 +290,20 @@ const UpcomingEvents = () => {
                         <h2>Previous Events</h2>
                     </div>
 
-                    {events.filter(event => new Date(event.date) < new Date()).length === 0 ? (
-                        <div className="no-events">
-                            <p>No previous events at the moment. Check back soon!</p>
-                        </div>
-                    ) : (
-                        <div className="events-grid">
-                            {events.filter(event => new Date(event.date) < new Date()).map(event => {
-                                const eventDate = new Date(event.date);
-                                const month = eventDate.toLocaleDateString('en-US', { month: 'short' });
-                                const year = eventDate.getFullYear();
-                                const day = eventDate.getDate();
+                    {events
+                        .filter(event => new Date(event.date) < new Date()) // past events
+                        .map(event => {
+                            const eventDate = new Date(event.date);
+                            const month = eventDate.toLocaleDateString('en-US', { month: 'short' });
+                            const year = eventDate.getFullYear();
+                            const day = eventDate.getDate();
 
+                            const eventReviews = reviews[event._id] || [];
+                            const isFormVisible = showForm[event._id] || false;
+                            const reviewData = reviewForm[event._id] || { name: '', collegeOrOccupation: '', text: '' };
+
+                            // Only show reviews section if logged in
+                            if (!user) {
                                 return (
                                     <div key={event._id} className="event-item">
                                         <div className="event-date-marker">
@@ -230,9 +318,130 @@ const UpcomingEvents = () => {
                                         </div>
                                     </div>
                                 );
-                            })}
-                        </div>
-                    )}
+                            }
+
+                            return (
+                                <div key={event._id} className="event-item">
+                                    <div className="event-date-marker">
+                                        <div className="event-date-month">{month}</div>
+                                        <div className="event-date-year">{year}</div>
+                                        <div className="event-date-day">{day}</div>
+                                    </div>
+
+                                    <div className="event-content-wrapper">
+                                        <div className="event-card">
+                                            <img src={event.bannerImage} alt={event.title} />
+                                        </div>
+
+                                        {/* Reviews List */}
+                                        <div className="event-reviews">
+                                            {eventReviews.length > 0 ? (
+                                                eventReviews.map((rev) => (
+                                                    <div key={rev._id} className="review-card">
+                                                        <p className="review-text">"{rev.text}"</p>
+                                                        <p className="review-author">
+                                                            — {rev.name}, {rev.collegeOrOccupation}
+                                                        </p>
+
+                                                        {/* Admin controls */}
+                                                        {isAdmin && (
+                                                            <div className="admin-review-actions">
+                                                                {rev.status === 'pending' && (
+                                                                    <>
+                                                                        <button onClick={() => handleApproveReview(event._id, rev._id)}>
+                                                                            Approve
+                                                                        </button>
+                                                                        <button onClick={() => handleRejectReview(event._id, rev._id)}>
+                                                                            Reject
+                                                                        </button>
+                                                                    </>
+                                                                )}
+                                                                {rev.status === 'approved' && (
+                                                                    <span className="status approved">✅ Approved</span>
+                                                                )}
+                                                                {rev.status === 'rejected' && (
+                                                                    <span className="status rejected">❌ Rejected</span>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="no-reviews">No reviews yet.</p>
+                                            )}
+                                        </div>
+
+                                        {/* Only normal users see "Write a Review" */}
+                                        {!isAdmin && (
+                                            <>
+                                                <a
+                                                    className="toggle-review-btn"
+                                                    onClick={() =>
+                                                        setShowForm(prev => ({
+                                                            ...prev,
+                                                            [event._id]: !isFormVisible
+                                                        }))
+                                                    }
+                                                >
+                                                    {isFormVisible ? 'Hide Review' : 'Write a Review'}
+                                                </a>
+
+                                                {/* Review Form */}
+                                                {isFormVisible && (
+                                                    <div className="review-form">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Your Name"
+                                                            value={reviewData.name}
+                                                            onChange={(e) =>
+                                                                setReviewForm(prev => ({
+                                                                    ...prev,
+                                                                    [event._id]: { ...reviewData, name: e.target.value }
+                                                                }))
+                                                            }
+                                                            required
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            placeholder="College / Occupation"
+                                                            value={reviewData.collegeOrOccupation}
+                                                            onChange={(e) =>
+                                                                setReviewForm(prev => ({
+                                                                    ...prev,
+                                                                    [event._id]: { ...reviewData, collegeOrOccupation: e.target.value }
+                                                                }))
+                                                            }
+                                                            required
+                                                        />
+                                                        <textarea
+                                                            placeholder="Your Review"
+                                                            value={reviewData.text}
+                                                            onChange={(e) =>
+                                                                setReviewForm(prev => ({
+                                                                    ...prev,
+                                                                    [event._id]: { ...reviewData, text: e.target.value }
+                                                                }))
+                                                            }
+                                                            required
+                                                        ></textarea>
+                                                        <button
+                                                            onClick={() => handleSubmitReview(event._id)}
+                                                            disabled={submittingReview}
+                                                        >
+                                                            {submittingReview ? 'Submitting...' : 'Submit Review'}
+                                                        </button>
+                                                        {formMsgReview && <p className="form-msg">{formMsgReview}</p>}
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+
+
 
                     {isAdmin && (
                         <div className="events-admin">

@@ -743,6 +743,15 @@ app.post('/enewsletters', adminAuth, async (req, res) => {
     res.status(500).json({ error: 'Failed to add eNewsletter' });
   }
 });
+// Get all eNewsletters
+app.get('/enewsletters', async (req, res) => {
+  try {
+    const enewsletters = await ENewsletter.find().sort({ createdAt: -1 });
+    res.json(enewsletters);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch eNewsletters' });
+  }
+});
 
 // Add resource (admin only, to correct section)
 app.post('/resources', adminAuth, async (req, res) => {
@@ -832,17 +841,29 @@ app.post('/event-reviews', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// Get approved event reviews (signed-in users)
-app.get('/event-reviews/:eventId', async (req, res) => {
+app.get('/event-reviews', async (req, res) => {
   try {
-    const { eventId } = req.params;
-    const reviews = await EventReview.find({ eventId, status: 'approved' }).sort({ createdAt: -1 });
+    const reviews = await EventReview.find().sort({ createdAt: -1 });
     res.json(reviews);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+// Get approved event reviews (signed-in users)
+// Get ALL reviews for a specific event (no restrictions)
+app.get('/event-reviews/:eventId', async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    const reviews = await EventReview.find({ eventId }).sort({ createdAt: -1 });
+
+    res.json(reviews);
+  } catch (err) {
+    console.error('Error fetching reviews:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 
 // Get all event reviews (admin)
 app.get('/event-reviews/admin/:eventId', adminAuth, async (req, res) => {

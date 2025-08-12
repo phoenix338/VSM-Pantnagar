@@ -160,11 +160,12 @@ const PreviousEvents = () => {
                                                 <img src={event.bannerImage} alt={event.title} />
                                             </div>
                                             {user && (
-                                                <div>
+                                                <div className="collapsible-review-section">
                                                     <button
+                                                        className="toggle-review-form-btn"
                                                         onClick={() => setShowForm(prev => ({ ...prev, [event._id]: !prev[event._id] }))}
                                                     >
-                                                        {showForm[event._id] ? 'Hide Review Form' : 'Write Review'}
+                                                        {showForm[event._id] ? 'Hide Review Form' : 'Write Event Review'}
                                                     </button>
                                                     {showForm[event._id] && (
                                                         <div className="review-form">
@@ -206,18 +207,29 @@ const PreviousEvents = () => {
                                                     {reviews[event._id].length === 0 ? (
                                                         <p>No reviews yet.</p>
                                                     ) : (
-                                                        reviews[event._id].map(r => (
-                                                            <div key={r._id} className={`review-item ${r.status}`}>
-                                                                <p><strong>{r.name}</strong> ({r.collegeOrOccupation})</p>
-                                                                <p>{r.text}</p>
-                                                                {isAdmin && r.status === 'pending' && (
-                                                                    <div>
-                                                                        <button onClick={() => handleApprove(r._id, event._id)}>Approve</button>
-                                                                        <button onClick={() => handleReject(r._id, event._id)}>Reject</button>
+                                                        (isAdmin
+                                                            ? reviews[event._id].map(r => (
+                                                                <div key={r._id} className={`review-item ${r.status}`}>
+                                                                    <p><strong>{r.name}</strong> ({r.collegeOrOccupation})</p>
+                                                                    <p>{r.text}</p>
+                                                                    <span className="review-status">Status: {r.status}</span>
+                                                                    {r.status === 'pending' && (
+                                                                        <div className="admin-review-actions">
+                                                                            <button onClick={() => handleApprove(r._id, event._id)}>Approve</button>
+                                                                            <button onClick={() => handleReject(r._id, event._id)}>Reject</button>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            ))
+                                                            : reviews[event._id]
+                                                                .filter(r => r.status === 'approved')
+                                                                .map(r => (
+                                                                    <div key={r._id} className="review-item approved">
+                                                                        <p><strong>{r.name}</strong> ({r.collegeOrOccupation})</p>
+                                                                        <p>{r.text}</p>
                                                                     </div>
-                                                                )}
-                                                            </div>
-                                                        ))
+                                                                ))
+                                                        )
                                                     )}
                                                 </div>
                                             )}
