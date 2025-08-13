@@ -423,11 +423,7 @@ const HinduCalendar = () => {
                     month: 'long',
                     year: 'numeric'
                 })}</span><br />
-                <span style={{ fontWeight: 300 }}>नक्षत्र:</span> <span style={{ color: '#DD783C', fontWeight: 300 }}>{calendarData?.nakshatra}</span><br />
                 <span style={{ fontWeight: 300 }}>वार:</span> <span style={{ color: '#DD783C', fontWeight: 300 }}>{calendarData?.vara}</span>
-                {calendarData?.special && (
-                    <><br /><span style={{ fontWeight: 300, color: '#111' }}>उत्सवः</span> <span style={{ color: '#DD783C', fontWeight: 300 }}>{calendarData.special}</span></>
-                )}
             </div>
         </>
     );
