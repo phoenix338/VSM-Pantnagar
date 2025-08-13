@@ -103,19 +103,19 @@ const Navbar = (props) => {
       <div style={{ background: '#DCDCDC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: isMobile ? '0 8px' : '0 2vw', position: 'fixed', top: 0, left: 0, width: '100vw', height: 44, zIndex: 1000, boxSizing: 'border-box' }}>
         <div style={{ flex: 1 }} />
         {/* Centered Search Bar */}
-        {!isMobile && (
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', background: '#444', borderRadius: 20, padding: '0 14px', height: 28, minWidth: 180 }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CCCCCC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 6 }}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-              <input
-                type="text"
-                placeholder="Search"
-                style={{ background: '#444', border: 'none', borderRadius: 20, color: '#fff', padding: '2px 8px', width: 110, outline: 'none', fontSize: 13 }}
-                className="search-input"
-              />
-            </div>
-          </div>
-        )}
+        {/* {!isMobile && (
+          // <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+          //   <div style={{ display: 'flex', alignItems: 'center', background: '#444', borderRadius: 20, padding: '0 14px', height: 28, minWidth: 180 }}>
+          //     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CCCCCC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 6 }}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+          //     <input
+          //       type="text"
+          //       placeholder="Search"
+          //       style={{ background: '#444', border: 'none', borderRadius: 20, color: '#fff', padding: '2px 8px', width: 110, outline: 'none', fontSize: 13 }}
+          //       className="search-input"
+          //     />
+          //   </div>
+          // </div>
+        )} */}
         {/* Right side: User name or New and headphones */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12 }}>
           <span style={{ fontFamily: 'Freehand, cursive', fontStyle: 'normal', color: 'grey', fontWeight: 500, fontSize: 22, marginRight: 10 }}>
