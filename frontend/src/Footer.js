@@ -27,9 +27,8 @@ const Footer = () => {
           <Link to="/books" className="footer-link" onClick={handleFooterLinkClick}>Our Publications</Link>
         </div>
         <div className="footer-col right-col">
-          <div><b>Samadhan<span className="footer-asterisk">*</span></b></div>
-          <div><b>Calendar<span className="footer-asterisk">*</span></b></div>
-          <div><b>Blog<span className="footer-asterisk">*</span></b></div>
+          <Link to="/#calendar" className="footer-link" onClick={handleFooterLinkClick}>Calendar<span className="footer-asterisk">*</span></Link>
+
         </div>
       </div>
       <div className="footer-bottom-wrapper">

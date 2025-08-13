@@ -707,49 +707,59 @@ const ebookPdfUpload = require('./ebookPdfUpload');
 app.use('/upload-ebook-pdf', ebookPdfUpload);
 
 // PDF upload endpoint for eNewsletters (reuse logic, different folder)
+// ===== eNewsletters PDF Upload (as "image" so Cloudinary treats like an image) =====
 const enewsletterPdfUpload = express.Router();
 
 const enewsletterStorage = new CloudinaryStorage({
-  cloudinary: cloudinary,
+  cloudinary,
   params: {
     folder: 'enewsletters',
-    resource_type: 'raw',
+    resource_type: 'image',            // Treat PDF as image
     use_filename: true,
     unique_filename: false,
     format: 'pdf',
     allowed_formats: ['pdf'],
     public_id: (req, file) => {
-      // Store without spaces for safety
       return file.originalname
-        .replace(/\.[^/.]+$/, "")   // remove extension
-        .replace(/[^a-zA-Z0-9_-]/g, "_"); // only safe chars
+        .replace(/\.[^/.]+$/, "")       // remove extension
+        .replace(/[^a-zA-Z0-9_-]/g, "_"); // safe chars only
     }
   },
 });
 
 const enewsletterUpload = multer({ storage: enewsletterStorage });
 
-enewsletterPdfUpload.post('/', enewsletterUpload.single('pdf'), (req, res) => {
-  if (!req.file || !req.file.path) {
-    return res.status(400).json({ error: 'PDF is required' });
+enewsletterPdfUpload.post('/', enewsletterUpload.single('pdf'), async (req, res) => {
+  try {
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ error: 'PDF is required' });
+    }
+
+    const originalName = req.file.originalname.replace(/\.[^/.]+$/, "");
+    const safeDownloadName = originalName.replace(/[^a-zA-Z0-9_-]/g, "_");
+
+    // Construct Cloudinary "image" PDF download URL
+    const downloadUrl = req.file.path.replace(
+      "/upload/",
+      `/upload/fl_attachment:`
+    );
+
+    // Save to DB
+    // const newNewsletter = new ENewsletter({
+    //   title: originalName,
+    //   pdfUrl: downloadUrl
+    // });
+    // await newNewsletter.save();
+
+    res.status(201).json({
+      title: originalName,
+      pdfUrl: downloadUrl
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error uploading PDF' });
   }
-
-  // The original name from user (for display)
-  const originalName = req.file.originalname.replace(/\.[^/.]+$/, "");
-
-  // The public_id in Cloudinary (already safe due to public_id rule above)
-  const safePublicId = req.file.filename || originalName.replace(/[^a-zA-Z0-9_-]/g, "_");
-
-  // Construct the Cloudinary auto-download link
-  const downloadUrl = req.file.path.replace(
-    "/raw/upload/",
-    `/raw/upload/fl_attachment:${safePublicId}.pdf/`
-  );
-
-  res.status(201).json({
-    pdfUrl: downloadUrl,      // direct download link
-    displayName: originalName // human-friendly display name
-  });
 });
 
 app.use('/upload-enewsletter-pdf', enewsletterPdfUpload);

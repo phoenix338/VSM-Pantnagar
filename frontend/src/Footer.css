@@ -41,7 +41,7 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
-    font-family: 'Arimo', sans-serif;
+    font-family: 'open sans', sans-serif;
     font-size: 20px;
     color: #181818;
     font-weight: 400;
@@ -50,6 +50,10 @@
 .footer-link {
     text-decoration: none;
     color: #181818;
+    font-family: 'open sans', sans-serif;
+    font-weight: 400;
+
+
     transition: color 0.3s ease;
     cursor: pointer;
 }

@@ -352,11 +352,12 @@ function Home() {
                     </div>
                     <div style={{
                         position: 'absolute',
-                        left: 61,
                         top: '50%',
+                        left: 121,
                         transform: 'translateY(-5%)',
                         display: 'flex',
                         alignItems: 'center',
+                        width: '757',
                         gap: 32,
                         zIndex: 4
                     }}>
@@ -424,19 +425,17 @@ function Home() {
                                 }
                             }}
                         ></div>
-                    </div>
-                    <div style={{ position: 'absolute', right: 10, bottom: 40, zIndex: 3, display: 'flex', alignItems: 'center', width: 320, justifyContent: 'center' }}>
-                        <div style={{ height: 2, background: '#dedeb9', flex: 1, marginRight: 16 }} />
-                        <button
-                            style={{ background: '#fff', color: '#a2592a', fontSize: 24, border: 'none', borderRadius: 10, padding: '10px 36px', boxShadow: '0 4px 12px #0002', cursor: 'pointer', fontWeight: 500, width: 156 }}
-                            onClick={() => {
-                                setShowLandingVideo(false);
-                                setShowIntroScreen(false);
-                            }}
-                        >
-                            Skip
-                        </button>
-                        <div style={{ height: 2, background: '#dedeb9', flex: 1, marginLeft: 16 }} />
+                        <div>
+                            <button
+                                style={{ background: '#fff', color: '#a2592a', fontSize: 24, border: 'none', borderRadius: 10, padding: '10px 36px', boxShadow: '0 4px 12px #0002', cursor: 'pointer', fontWeight: 500, width: 156 }}
+                                onClick={() => {
+                                    setShowLandingVideo(false);
+                                    setShowIntroScreen(false);
+                                }}
+                            >
+                                Skip
+                            </button>
+                        </div>
                     </div>
 
                 </div>
@@ -450,13 +449,13 @@ function Home() {
             <>
                 <Navbar resetHome={resetHome} />
                 <div style={{ width: '100vw', height: '100vh', background: '#f9f3ec', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'fixed', inset: 0, zIndex: 1500 }}>
-                    <div style={{ textAlign: 'center', marginBottom: 32 }}>
+                    <div style={{ width: '70%', textAlign: 'center', marginBottom: 32 }}>
                         <div style={{
-                            fontFamily: 'alex brush',
-                            fontStyle: 'normal',
+                            fontFamily: 'times new roman',
+                            fontStyle: 'italic',
                             fontWeight: 400,
-                            fontSize: 40,
-                            color: '#000',
+                            fontSize: 30,
+                            color: 'grey',
                             marginBottom: 24,
                             opacity: showIntro1 ? 1 : 0,
                             transition: 'opacity 0.8s',
@@ -467,9 +466,10 @@ function Home() {
                             fontFamily: 'alex brush',
                             fontStyle: 'normal',
                             fontWeight: 400,
-                            fontSize: 45,
-                            color: '#FFD700',
-                            marginBottom: 40,
+                            fontSize: 65,
+                            color: '#e7c60fc4',
+                            marginTop: 20,
+                            marginBottom: 10,
                             opacity: showIntro2 ? 1 : 0,
                             transition: 'opacity 0.8s',
                             position: 'relative',
@@ -523,12 +523,12 @@ function Home() {
                             }}>✨</span>
                         </div>
                         <div style={{
-                            fontFamily: 'alex brush',
-                            fontStyle: 'normal',
+                            fontFamily: 'times new roman',
+                            fontStyle: 'italic',
                             fontWeight: 400,
-                            fontSize: 40,
-                            color: '#000',
-                            textAlign: 'center',
+                            fontSize: 30,
+                            color: 'grey',
+                            textAlign: 'right',
                             opacity: showIntro3 ? 1 : 0,
                             transition: 'opacity 0.8s',
                         }}>
@@ -721,7 +721,7 @@ function Home() {
                     </button>
                 </div>
                 {/* Quote of the Day Section - New Design */}
-                <div style={{
+                <section id="calendar" style={{
                     width: '100vw',
                     minHeight: 700,
                     position: 'relative',
@@ -821,7 +821,7 @@ function Home() {
                             </div> */}
                             <div className="quote-hindu" style={{
                                 fontFamily: 'open sans',
-                                fontSize:'1.5vw',
+                                fontSize: '1.5vw',
                                 color: '#333',
                                 fontWeight: 400,
                                 marginBottom: 0,
@@ -854,7 +854,7 @@ function Home() {
                             }
                         `}</style>
                     </div>
-                </div>
+                </section>
 
                 {/* Vision, Mission and Values Section */}
                 <div

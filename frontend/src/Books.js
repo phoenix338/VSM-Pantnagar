@@ -200,9 +200,10 @@ const Books = () => {
             <Navbar />
             <div className="books-page main-content-gap">
                 <div className="books-gif-wrapper">
-                    <img src={booksGif} alt="Books" className="books-gif" />
+                    {/* <img src={booksGif} alt="Books" className="books-gif" /> */}
+                    <h1 className="books-heading">Our Publications</h1>
+
                 </div>
-                <h1 className="books-heading">Our Publications</h1>
                 <div className="books-content">
 
 
@@ -262,7 +263,7 @@ const Books = () => {
                                                                         if (firstWord === '21' || previewBook.title === 'The Evenings Of Pantnagar') {
                                                                             return (
                                                                                 <span>
-                                                                                    To purchase visit: <a href="https://vsmmotivation.in/" target="_blank" rel="noopener noreferrer" style={{ }}>https://vsmmotivation.in/</a>
+                                                                                    To purchase visit: <a href="https://vsmmotivation.in/" target="_blank" rel="noopener noreferrer" style={{}}>https://vsmmotivation.in/</a>
                                                                                 </span>
                                                                             );
                                                                         }

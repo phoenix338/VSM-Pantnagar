@@ -11,7 +11,23 @@ const Navbar = (props) => {
   // State for resources
   const [resources, setResources] = useState({});
   const enewsletters = resources.eNewsletters || [];
+  const [user, setUser] = useState(null);
 
+  // Watch Firebase authentication state
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = () => {
+    auth.signOut()
+      .then(() => {
+        setUser(null);
+      })
+      .catch(err => {
+        console.error('Logout error:', err);
+      });
+  };
   useEffect(() => {
     const fetchResources = async () => {
       try {
@@ -102,7 +118,7 @@ const Navbar = (props) => {
         )}
         {/* Right side: User name or New and headphones */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12 }}>
-          <span style={{ fontFamily: 'Freehand, cursive', fontStyle: 'normal', color: '#FF0000', fontWeight: 500, fontSize: 22, marginRight: 10 }}>
+          <span style={{ fontFamily: 'Freehand, cursive', fontStyle: 'normal', color: 'grey', fontWeight: 500, fontSize: 22, marginRight: 10 }}>
             {userName ? `Welcome ${userName}` : 'New'}
           </span>
           <Link to="/contact" className="navbar-contact-link" style={{ color: '#DD783C', fontFamily: 'open sans', fontWeight: 400, fontSize: 18, textDecoration: 'none', marginLeft: 8 }}>
@@ -163,6 +179,8 @@ const Navbar = (props) => {
               </div>
             </li>
             {/* Gallery Dropdown */}
+            <li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Our Publications</Link></li>
+
             <li style={{ cursor: 'pointer', position: 'relative' }} className="navbar-item dropdown">
               <span className="dropdown-label">
                 Memory Wall <span style={{ fontSize: 13 }}><svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 0 }}><path d="M7 10l5 5 5-5" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
@@ -172,7 +190,6 @@ const Navbar = (props) => {
                 <Link to="/gallery/videos" className="dropdown-item">Flowing Moments</Link>
               </div>
             </li>
-            <li style={{ cursor: 'pointer' }}><Link to="/books" style={{ textDecoration: 'none', color: 'inherit' }}>Our Publications</Link></li>
             {/* <li style={{ cursor: 'pointer' }}><Link to="/resources" style={{ textDecoration: 'none', color: 'inherit' }}>Resources</Link></li> */}
             {/* resources Dropdown */}
             <li style={{ cursor: 'pointer', position: 'relative' }} className="navbar-item dropdown">
@@ -275,14 +292,50 @@ const Navbar = (props) => {
           )
         )}
         {/* Right side: Login and Contribute buttons (always visible, not in hamburger) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginLeft: isMobile ? 'auto' : undefined }}>
+        {/* <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginLeft: isMobile ? 'auto' : undefined }}>
           <Link to="/login">
             <button className="login-btn" style={{ fontSize: isMobile ? 14 : 16, padding: isMobile ? '6px 16px' : '10px 24px', borderRadius: 8 }}>Login</button>
           </Link>
           <Link to="/contribute">
             <button className="contribute-btn" style={{ fontSize: isMobile ? 13 : 16, padding: isMobile ? '5px 12px' : '10px 24px', borderRadius: 8, maxWidth: isMobile ? '100px' : undefined, whiteSpace: 'normal', overflowWrap: 'break-word', marginRight: isMobile ? '8px' : undefined }}>Contribute</button>
           </Link>
+        </div> */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="login-btn"
+              style={{ fontSize: 16, padding: '10px 24px', borderRadius: 8 }}
+            >
+              Logout
+            </button>
+          ) : (
+            <Link to="/login">
+              <button
+                className="login-btn"
+                style={{ fontSize: 16, padding: '10px 24px', borderRadius: 8 }}
+              >
+                Login
+              </button>
+            </Link>
+          )}
+
+          <Link to="/contribute">
+            <button
+              className="contribute-btn"
+              style={{
+                fontSize: 16,
+                padding: '10px 24px',
+                borderRadius: 8,
+                whiteSpace: 'normal',
+                overflowWrap: 'break-word'
+              }}
+            >
+              Contribute
+            </button>
+          </Link>
         </div>
+
       </div>
       // ...existing code...
     </>

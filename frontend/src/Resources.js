@@ -3,12 +3,13 @@ import Navbar from './Navbar';
 import { auth } from './firebase';
 import './Videos.css'; // Reuse Videos styles for consistent look
 import './Resources.css'
+import Footer from './Footer';
+
 import { Document, Page, pdfjs } from 'react-pdf';
 import HTMLFlipBook from 'react-pageflip';
 pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.js`;
 const RENDER_API_URL = process.env.REACT_APP_API_URL;
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
-
 const Resources = () => {
     const [resources, setResources] = useState({});
     const [loading, setLoading] = useState(true);
@@ -54,6 +55,7 @@ const Resources = () => {
         <>
             <Navbar />
             <div className="videos-loading">Loading resources...</div>
+            <Footer />
         </>
     );
 
@@ -64,6 +66,8 @@ const Resources = () => {
             {user !== null && user.email === ADMIN_EMAIL && (
                 <AdminResourceForms fetchResources={fetchResources} user={user} apiUrl={apiUrl} />
             )}
+            <Footer />
+
         </>
     );
 
@@ -140,6 +144,7 @@ const Resources = () => {
                         </div>
                     </div>
                 </div>
+                <Footer />
             </>
         );
     }
@@ -229,6 +234,8 @@ const Resources = () => {
                     <AdminResourceForms fetchResources={fetchResources} user={user} apiUrl={apiUrl} />
                 )}
             </div>
+            <Footer />
+
         </>
     );
 };
