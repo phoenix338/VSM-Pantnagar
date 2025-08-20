@@ -79,6 +79,9 @@ const UpcomingEvents = () => {
                 throw new Error('Banner image is required');
             }
 
+            const adminPassword = prompt('Enter admin password:');
+            if (!adminPassword) throw new Error('Password is required');
+
             const formData = new FormData();
             formData.append('title', form.title);
             formData.append('date', form.date);
@@ -89,7 +92,8 @@ const UpcomingEvents = () => {
             const res = await fetch(`${API_URL}/events`, {
                 method: 'POST',
                 headers: {
-                    email: user.email
+                    email: user.email,
+                    password: adminPassword
                 },
                 body: formData
             });
@@ -280,6 +284,36 @@ const UpcomingEvents = () => {
                                                     Register
                                                 </a>
                                             )}
+                                            {/* Admin delete button for upcoming events */}
+                                            {isAdmin && (
+                                                <button
+                                                    className="event-delete-btn"
+                                                    style={{ marginTop: '10px' }}
+                                                    onClick={() => {
+                                                        if (window.confirm('Are you sure you want to delete this event?')) {
+                                                            const adminPassword = prompt('Enter admin password:');
+                                                            if (!adminPassword) return;
+                                                            setSubmitting(true);
+                                                            setFormMsg('');
+                                                            fetch(`${API_URL}/events/${event._id}`, {
+                                                                method: 'DELETE',
+                                                                headers: {
+                                                                    email: user.email,
+                                                                    password: adminPassword
+                                                                }
+                                                            })
+                                                                .then(res => {
+                                                                    if (!res.ok) throw new Error('Failed to delete event');
+                                                                    setEvents(prev => prev.filter(e => e._id !== event._id));
+                                                                    setFormMsg('Event deleted!');
+                                                                })
+                                                                .catch(err => setFormMsg('Error: ' + err.message))
+                                                                .finally(() => setSubmitting(false));
+                                                        }
+                                                    }}
+                                                    disabled={submitting}
+                                                >Delete Event</button>
+                                            )}
                                         </div>
                                     </div>
                                 );
@@ -316,6 +350,36 @@ const UpcomingEvents = () => {
                                             <div className="event-card">
                                                 <img src={event.bannerImage} alt={event.title} />
                                             </div>
+                                            {/* Admin delete button for previous events */}
+                                            {isAdmin && (
+                                                <button
+                                                    className="event-delete-btn"
+                                                    style={{ marginTop: '10px' }}
+                                                    onClick={() => {
+                                                        if (window.confirm('Are you sure you want to delete this event?')) {
+                                                            const adminPassword = prompt('Enter admin password:');
+                                                            if (!adminPassword) return;
+                                                            setSubmitting(true);
+                                                            setFormMsg('');
+                                                            fetch(`${API_URL}/events/${event._id}`, {
+                                                                method: 'DELETE',
+                                                                headers: {
+                                                                    email: user.email,
+                                                                    password: adminPassword
+                                                                }
+                                                            })
+                                                                .then(res => {
+                                                                    if (!res.ok) throw new Error('Failed to delete event');
+                                                                    setEvents(prev => prev.filter(e => e._id !== event._id));
+                                                                    setFormMsg('Event deleted!');
+                                                                })
+                                                                .catch(err => setFormMsg('Error: ' + err.message))
+                                                                .finally(() => setSubmitting(false));
+                                                        }
+                                                    }}
+                                                    disabled={submitting}
+                                                >Delete Event</button>
+                                            )}
                                         </div>
                                     </div>
                                 );
@@ -436,6 +500,36 @@ const UpcomingEvents = () => {
                                                 )}
                                             </>
                                         )}
+                                        {/* Admin delete button for previous events */}
+                                        {isAdmin && (
+                                            <button
+                                                className="event-delete-btn"
+                                                style={{ marginTop: '10px' }}
+                                                onClick={() => {
+                                                    if (window.confirm('Are you sure you want to delete this event?')) {
+                                                        const adminPassword = prompt('Enter admin password:');
+                                                        if (!adminPassword) return;
+                                                        setSubmitting(true);
+                                                        setFormMsg('');
+                                                        fetch(`${API_URL}/events/${event._id}`, {
+                                                            method: 'DELETE',
+                                                            headers: {
+                                                                email: user.email,
+                                                                password: adminPassword
+                                                            }
+                                                        })
+                                                            .then(res => {
+                                                                if (!res.ok) throw new Error('Failed to delete event');
+                                                                setEvents(prev => prev.filter(e => e._id !== event._id));
+                                                                setFormMsg('Event deleted!');
+                                                            })
+                                                            .catch(err => setFormMsg('Error: ' + err.message))
+                                                            .finally(() => setSubmitting(false));
+                                                    }
+                                                }}
+                                                disabled={submitting}
+                                            >Delete Event</button>
+                                        )}
                                     </div>
                                 </div>
                             );
@@ -483,7 +577,12 @@ const UpcomingEvents = () => {
                                     accept="image/*"
                                     onChange={handleFileChange}
                                     required
+
                                 />
+                                <p style={{ fontSize: "12px", color: "#666", marginTop: "4px" }}>
+                                    Image should look good if dimensions are <b>1440×500px</b>. <br />
+                                    Supported formats: <b>JPG, JPEG, PNG</b>.
+                                </p>
                                 <button type="submit" disabled={submitting}>
                                     {submitting ? 'Adding Event...' : 'Add Event'}
                                 </button>

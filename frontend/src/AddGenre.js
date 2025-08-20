@@ -3,7 +3,7 @@ import { auth } from './firebase';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './AdminForms.css';
-
+import { Link } from 'react-router-dom';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -33,16 +33,12 @@ const AddGenre = () => {
         setFormMsg('');
 
         try {
-            if (!selectedFile) {
-                throw new Error('Genre image is required');
-            }
 
             const adminPassword = prompt('Enter admin password:');
             if (!adminPassword) throw new Error('Password is required');
 
             const formData = new FormData();
             formData.append('name', form.name);
-            formData.append('image', selectedFile);
 
             const res = await fetch(`${API_URL}/genres`, {
                 method: 'POST',
@@ -56,7 +52,6 @@ const AddGenre = () => {
             if (!res.ok) throw new Error('Failed to add genre');
 
             setForm({ name: '' });
-            setSelectedFile(null);
             setFormMsg('Genre added successfully!');
         } catch (err) {
             setFormMsg('Error: ' + err.message);
@@ -96,7 +91,7 @@ const AddGenre = () => {
                             />
                         </div>
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label htmlFor="image">Genre Image</label>
                             <input
                                 type="file"
@@ -106,11 +101,16 @@ const AddGenre = () => {
                                 required
                             />
                             <p className="form-help">Upload a square image for best results</p>
-                        </div>
+                        </div> */}
 
                         <button type="submit" disabled={submitting}>
                             {submitting ? 'Adding...' : 'Add Genre'}
                         </button>
+                        <Link to="/books">
+                            <button type="button">
+                                Cancel
+                            </button>
+                        </Link>
 
                         {formMsg && (
                             <div className={`form-msg ${formMsg.includes('Error') ? 'error' : 'success'}`}>

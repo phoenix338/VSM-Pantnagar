@@ -163,7 +163,7 @@ const Navbar = (props) => {
               <div className="dropdown-menu">
                 <Link to="/our-impact" className="dropdown-item">Our Impact</Link>
                 <Link to="/meet-our-team" className="dropdown-item">Meet Our Team</Link>
-                <Link to="/timeline" className="dropdown-item">Timeline</Link>
+                {/* <Link to="/timeline" className="dropdown-item">Timeline</Link> */}
               </div>
             </li>
             {/* Events Dropdown */}
@@ -252,7 +252,7 @@ const Navbar = (props) => {
                     <ul style={{ listStyle: 'none', paddingLeft: 16, marginTop: 8 }}>
                       <li><Link to="/our-impact" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setMobileMenuOpen(false)}>Our Impact</Link></li>
                       <li><Link to="/meet-our-team" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setMobileMenuOpen(false)}>Meet Our Team</Link></li>
-                      <li><Link to="/timeline" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setMobileMenuOpen(false)}>Timeline</Link></li>
+                      {/* <li><Link to="/timeline" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setMobileMenuOpen(false)}>Timeline</Link></li> */}
                     </ul>
                   )}
                 </li>

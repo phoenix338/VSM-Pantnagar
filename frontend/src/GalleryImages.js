@@ -119,16 +119,26 @@ const GalleryImages = () => {
             if (!form.images.length) throw new Error('At least one image is required');
             if (!form.imagesSubsection) throw new Error('Please select an image subsection');
 
-            // Prepare form data for the backend
+            // Check if subsection exists in DB
+            const subsectionExists = imagesSubsections.some(sub => sub.name === form.imagesSubsection);
+
             const formData = new FormData();
             formData.append('subsection', form.imagesSubsection);
-
             form.images.forEach((img) => {
-                formData.append('images', img); // appending multiple files under 'images' key
+                formData.append('images', img);
             });
 
-            const res = await fetch(`${apiUrl}/other-images`, {   // <----- THIS endpoint
-                method: 'POST',
+            let endpoint = `${apiUrl}/other-images`;
+            let method = 'POST';
+
+            if (subsectionExists) {
+                // If subsection exists, use PATCH to append images
+                endpoint = `${apiUrl}/other-images/append`;
+                method = 'PATCH';
+            }       
+
+            const res = await fetch(endpoint, {
+                method,
                 headers: {
                     email: user.email,
                     password: adminPassword,

@@ -3,7 +3,7 @@ import { auth } from './firebase';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './AdminForms.css';
-
+import { Link } from 'react-router-dom';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -179,15 +179,19 @@ const AddBook = () => {
                         <button type="submit" disabled={submitting}>
                             {submitting ? 'Adding...' : 'Add Book'}
                         </button>
-
+                        <Link to="/books">
+                            <button type="button">
+                                Cancel
+                            </button>
+                        </Link>
                         {formMsg && (
                             <div className={`form-msg ${formMsg.includes('Error') ? 'error' : 'success'}`}>
                                 {formMsg}
                             </div>
                         )}
-            </form>
+                    </form>
                 </div>
-        </div>
+            </div>
             <Footer />
         </>
     );

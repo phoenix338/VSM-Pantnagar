@@ -208,7 +208,7 @@ const OurInitiative = () => {
             <div className="initiative-page main-content-gap">
                 <div className="initiative-gif-wrapper">
                     <video
-                        src={require('./assets/gif/events.mp4')}
+                        src={require('./assets/gif/events1.mp4')}
                         autoPlay
                         loop
                         muted

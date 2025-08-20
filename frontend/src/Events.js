@@ -240,6 +240,7 @@ const Events = () => {
                             onChange={handleFileChange}
                             required
                         />
+
                         <button type="submit" disabled={submitting}>
                             {submitting ? 'Adding...' : 'Add Event'}
                         </button>

@@ -91,15 +91,15 @@
     border-left: 6px solid #dd783c;
     padding-left: 24px;
     gap: 18px;
+    max-height: 700px;
 }
 
 .news-scroll-list {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    max-height: 700px;
     overflow-y: auto;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 

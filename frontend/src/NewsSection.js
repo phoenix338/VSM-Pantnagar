@@ -99,7 +99,7 @@ const NewsSection = () => {
                 <div className="news-main-left">
                     {news[selected] ? (
                         <>
-                            <div className="news-main-image-placeholder">
+                            <div className="news-main-image-placeholder" style={{ position: 'relative' }}>
                                 <img
                                     src={news[selected].imageUrl}
                                     alt={news[selected].title}
@@ -107,11 +107,39 @@ const NewsSection = () => {
                                     style={{ cursor: 'zoom-in' }}
                                     onClick={() => setZoomed(true)}
                                 />
+                                {/* Delete cross icon for admin */}
+                                {isAdmin && (
+                                    <button
+                                        className="news-delete-cross"
+                                        style={{
+                                            position: 'absolute',
+                                            top: 8,
+                                            right: 8,
+                                            background: 'rgba(255,255,255,0.85)',
+                                            border: 'none',
+                                            borderRadius: '50%',
+                                            width: 32,
+                                            height: 32,
+                                            fontSize: 22,
+                                            color: '#dd783c',
+                                            cursor: 'pointer',
+                                            boxShadow: '0 2px 8px #0002',
+                                            zIndex: 2
+                                        }}
+                                        title="Delete News"
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            if (window.confirm('Are you sure you want to delete this news item?')) {
+                                                handleDelete(news[selected]._id);
+                                            }
+                                        }}
+                                        disabled={submitting}
+                                    >
+                                        &times;
+                                    </button>
+                                )}
                             </div>
                             {/* <div className="news-main-title-placeholder">{news[selected].title}</div> */}
-                            {isAdmin && (
-                                <button className="timeline-delete-btn" style={{ marginTop: 10 }} onClick={() => handleDelete(news[selected]._id)}>Delete</button>
-                            )}
                         </>
                     ) : (
                         <div className="news-main-image-placeholder" />

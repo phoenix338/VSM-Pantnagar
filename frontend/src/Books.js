@@ -241,6 +241,7 @@ const Books = () => {
                                                 >
                                                     ×
                                                 </button>
+
                                             )}
                                         </div>
 
@@ -273,7 +274,35 @@ const Books = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                ) : null}
+                                                ) : (
+                                                    selectedBook && selectedBook.previewDescription ? (
+                                                        <div className="book-preview-modal-inplace">
+                                                            <div className="book-modal-content">
+                                                                <div className="book-modal-info">
+                                                                    <p className="book-modal-description">
+                                                                        {convertTextToLinks(selectedBook.previewDescription)}
+                                                                    </p>
+                                                                </div>
+                                                                <div className="book-modal-details" style={{ marginTop: 24, fontSize: 16, color: 'black', background: 'white' }}>
+                                                                    <div>
+                                                                        {(() => {
+                                                                            if (!selectedBook || !selectedBook.title) return null;
+                                                                            const firstWord = selectedBook.title.split(' ')[0];
+                                                                            if (firstWord === '21' || selectedBook.title === 'The Evenings Of Pantnagar') {
+                                                                                return (
+                                                                                    <span>
+                                                                                        To purchase visit: <a href="https://vsmmotivation.in/" target="_blank" rel="noopener noreferrer" style={{}}>https://vsmmotivation.in/</a>
+                                                                                    </span>
+                                                                                );
+                                                                            }
+                                                                            return 'To purchase, contact:';
+                                                                        })()}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ) : null
+                                                )}
                                             </div>
 
                                             {/* Selected Book */}

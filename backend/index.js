@@ -206,6 +206,34 @@ app.post('/other-images', adminAuth, upload.array('images', 10), async (req, res
   }
 });
 
+// PATCH endpoint to append images to an existing subsection
+app.patch('/other-images/append', adminAuth, upload.array('images', 10), async (req, res) => {
+  try {
+    const { subsection } = req.body;
+    if (!subsection) {
+      return res.status(400).json({ error: 'Subsection name is required' });
+    }
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'At least one image is required' });
+    }
+
+    // Find the entry for the subsection
+    const entry = await OtherImages.findOne({ subsection });
+    if (!entry) {
+      return res.status(404).json({ error: 'Subsection not found' });
+    }
+
+    // Extract URLs from uploaded files
+    const newUrls = req.files.map(file => file.path);
+    entry.urls = [...entry.urls, ...newUrls];
+    await entry.save();
+
+    res.json(entry);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // Delete an other images entry by id (admin only)
 app.delete('/other-images/:id', adminAuth, async (req, res) => {
   try {
@@ -545,11 +573,12 @@ app.get('/events/previous', async (req, res) => {
 app.post('/events', adminAuth, upload.single('bannerImage'), async (req, res) => {
   try {
     const { title, date, venue, googleFormLink } = req.body;
-    if (!title || !date || !venue || !googleFormLink || !req.file || !req.file.path) {
-      return res.status(400).json({ error: 'All fields and banner image are required' });
+    if (!title || !date || !venue || !req.file || !req.file.path) {
+      return res.status(400).json({ error: 'Title, date, venue, and banner image are required' });
     }
     const bannerImage = req.file.path;
-    const event = new Event({ title, date, venue, googleFormLink, bannerImage });
+    const event = new Event({ title, date, venue, bannerImage });
+    if (googleFormLink) event.googleFormLink = googleFormLink;
     await event.save();
     res.status(201).json(event);
   } catch (err) {
@@ -582,10 +611,10 @@ app.get('/genres', async (req, res) => {
 app.post('/genres', adminAuth, upload.single('image'), async (req, res) => {
   try {
     const { name } = req.body;
-    if (!name || !req.file || !req.file.path) {
-      return res.status(400).json({ error: 'Name and image are required' });
+    if (!name) {
+      return res.status(400).json({ error: 'Name required' });
     }
-    const image = req.file.path;
+    const image = null;
     const genre = new Genre({ name, image });
     await genre.save();
     res.status(201).json(genre);
