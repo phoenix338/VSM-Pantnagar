@@ -208,7 +208,11 @@ const Videos = () => {
                 ) : (
                     // Grid View
                     <>
-                        <h1 className="videos-heading">Flowing Moments</h1>
+                        <div className="videos-gif-wrapper">
+                            {/* <img src={booksGif} alt="Books" className="books-gif" /> */}
+                            <h1 className="videos-heading">Flowing Moments</h1>
+
+                        </div>
                         <div className="videos-grid">
                             {videos.map((video, index) => (
                                 <div key={video._id} className="video-container" onClick={() => handleVideoClick(index)}>

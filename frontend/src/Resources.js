@@ -91,6 +91,7 @@ const Resources = () => {
                                 <img src={require('./assets/lets-icons_back.png')} alt="Back" />
                                 Back
                             </button>
+
                             <h1 className="videos-heading">Resources</h1>
                             <div className="videos-header-nav">
                                 <button
@@ -154,7 +155,11 @@ const Resources = () => {
         <>
             <Navbar resources={resources} />
             <div className="videos-page">
-                <h1 className="videos-heading">Resources</h1>
+                <div className="resources-gif-wrapper">
+                    {/* <img src={booksGif} alt="Books" className="books-gif" /> */}
+                    <h1 className="videos-heading">Resources</h1>
+
+                </div>
                 <div className="resource-section">
                     <h2 id="videos" style={{ scrollMarginTop: 120 }}>Talks by Dignitaries</h2>
                     <div className="videos-grid">
@@ -269,16 +274,16 @@ function PDFFlipbookViewer({ url, title }) {
             >
                 {numPages && (
                     <HTMLFlipBook
-                        width={350}
-                        height={500}
+                        width={500}
+                        height={700}
                         showCover={true}
                         maxShadowOpacity={0.5}
                         className="pdf-flipbook"
                         size="stretch"
-                        minWidth={350}
-                        maxWidth={800}
-                        minHeight={500}
-                        maxHeight={1000}
+                        minWidth={500}
+                        maxWidth={500}
+                        minHeight={700}
+                        maxHeight={700}
                         drawShadow={true}
                         flippingTime={600}
                         useMouseEvents={true}
@@ -292,7 +297,7 @@ function PDFFlipbookViewer({ url, title }) {
                             <div key={`page_${index + 1}`} className="pdf-flipbook-page">
                                 <Page
                                     pageNumber={index + 1}
-                                    width={350}
+                                    width={500}
                                     renderTextLayer={false}
                                     renderAnnotationLayer={false}
                                 />

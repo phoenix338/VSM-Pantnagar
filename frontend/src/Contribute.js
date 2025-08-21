@@ -52,7 +52,7 @@ const Contribute = () => {
                         {activeTab === 'volunteer' && (
                             <div className="volunteer-content">
                                 <h2>Become a Volunteer</h2>
-                                <p>If you’re from outside Pantnagar, and interested in joining us, you can register for our <Link to='/our-events/6892319848e8f44bcb659a3e' className='volunteer-cap'>Campus Ambassador Program!</Link>  Please reach out to <b>[Name/Contact Person]</b> and register today.</p>
+                                <p>If you’re from outside Pantnagar, and interested in joining us, you can register for our <Link to='/our-events/6892319848e8f44bcb659a3e' className='volunteer-cap'>Campus Ambassador Program!</Link>  Please reach out to<br></br> <b>Ms. Shweta Gupta<br></br> Email: 19sg09@gmail.com<br></br> Contact: 91-7895309339 </b> and register today.</p>
                             </div>
                         )}
                         {activeTab === 'donate' && (

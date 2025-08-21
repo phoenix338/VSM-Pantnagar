@@ -43,7 +43,7 @@ const Footer = () => {
             <b>Don't miss the chance to be a part of</b>
             <FaInstagram className="footer-icon" />
             <FaFacebook className="footer-icon" />
-            <FaXTwitter className="footer-icon" />
+            {/* <FaXTwitter className="footer-icon" /> */}
             <FaYoutube className="footer-icon" />
           </div>
         </div>

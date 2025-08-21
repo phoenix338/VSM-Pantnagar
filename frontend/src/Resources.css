@@ -35,6 +35,26 @@
   padding: 0 16px;
 }
 
+.resources-gif-wrapper {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fdf6f1;
+  height: 50vh;
+  margin-top: -50px;
+  margin-bottom: 50px;
+}
+
+.videos-heading {
+  font-size: 100px;
+  font-family: 'Alex Brush', cursive;
+  color: #DD783C;
+  margin-bottom: 80px;
+  font-weight: 500;
+  margin-top: 120px;
+}
+
 .resource-container {
   display: flex;
   flex-direction: column;
@@ -150,10 +170,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #FFF7F2;
   padding: 32px 0 40px 0;
   border-radius: 18px;
-  box-shadow: 0 8px 32px #0002;
   margin: 24px auto;
   max-width: 98vw;
   width: 50vw;
@@ -177,7 +195,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f8ff;
   border-radius: 0 0 12px 12px;
   box-shadow: 0 2px 8px #0001;
   height: 100%;
