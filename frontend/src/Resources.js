@@ -4,7 +4,6 @@ import { auth } from './firebase';
 import './Videos.css'; // Reuse Videos styles for consistent look
 import './Resources.css'
 import Footer from './Footer';
-
 import { Document, Page, pdfjs } from 'react-pdf';
 import HTMLFlipBook from 'react-pageflip';
 pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.js`;
@@ -38,6 +37,7 @@ const Resources = () => {
         }
         setLoading(false);
     };
+    const isAdmin = user && user.email === ADMIN_EMAIL;
 
     const prevResource = () => {
         setSelectedResourceIndex((prev) =>
@@ -177,6 +177,50 @@ const Resources = () => {
                                     <div className="video-name">{resource.title}</div>
                                     <div className="video-desc">{resource.designation}</div>
                                 </div>
+                                {/* Delete Button for Admin */}
+                                {isAdmin && (
+                                    <button
+                                        style={{
+                                            position: 'absolute',
+                                            top: 5,
+                                            right: 5,
+                                            background: '#ff4444',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '50%',
+                                            width: 24,
+                                            height: 24,
+                                            fontSize: 16,
+                                            cursor: 'pointer'
+                                        }}
+                                        onClick={async () => {
+                                            const confirmDelete = window.confirm(`Delete "${resource.title}"?`);
+                                            if (!confirmDelete) return;
+
+                                            const adminPassword = prompt('Enter admin password:');
+                                            if (!adminPassword) return;
+
+                                            try {
+                                                const res = await fetch(`${apiUrl}/talks-by-dignitaries/${resource._id}`, {
+                                                    method: 'DELETE',
+                                                    headers: {
+                                                        email: user.email,
+                                                        password: adminPassword
+                                                    }
+                                                });
+                                                if (!res.ok) {
+                                                    const errData = await res.json();
+                                                    throw new Error(errData.error || 'Failed to delete resource');
+                                                }
+                                                fetchResources(); // refresh list
+                                            } catch (err) {
+                                                alert('Error: ' + err.message);
+                                            }
+                                        }}
+                                    >
+                                        ×
+                                    </button>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -197,6 +241,49 @@ const Resources = () => {
                                 <div className="video-overlay">
                                     <div className="video-name">{resource.title}</div>
                                 </div>
+                                {isAdmin && (
+                                    <button
+                                        style={{
+                                            position: 'absolute',
+                                            top: 5,
+                                            right: 5,
+                                            background: '#ff4444',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '50%',
+                                            width: 24,
+                                            height: 24,
+                                            fontSize: 16,
+                                            cursor: 'pointer'
+                                        }}
+                                        onClick={async () => {
+                                            const confirmDelete = window.confirm(`Delete "${resource.title}"?`);
+                                            if (!confirmDelete) return;
+
+                                            const adminPassword = prompt('Enter admin password:');
+                                            if (!adminPassword) return;
+
+                                            try {
+                                                const res = await fetch(`${apiUrl}/unique-india/${resource._id}`, {
+                                                    method: 'DELETE',
+                                                    headers: {
+                                                        email: user.email,
+                                                        password: adminPassword
+                                                    }
+                                                });
+                                                if (!res.ok) {
+                                                    const errData = await res.json();
+                                                    throw new Error(errData.error || 'Failed to delete resource');
+                                                }
+                                                fetchResources(); // refresh list
+                                            } catch (err) {
+                                                alert('Error: ' + err.message);
+                                            }
+                                        }}
+                                    >
+                                        ×
+                                    </button>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -217,6 +304,49 @@ const Resources = () => {
                                 <div className="video-overlay">
                                     <div className="video-name">{resource.title}</div>
                                 </div>
+                                {isAdmin && (
+                                    <button
+                                        style={{
+                                            position: 'absolute',
+                                            top: 5,
+                                            right: 5,
+                                            background: '#ff4444',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '50%',
+                                            width: 24,
+                                            height: 24,
+                                            fontSize: 16,
+                                            cursor: 'pointer'
+                                        }}
+                                        onClick={async () => {
+                                            const confirmDelete = window.confirm(`Delete "${resource.title}"?`);
+                                            if (!confirmDelete) return;
+
+                                            const adminPassword = prompt('Enter admin password:');
+                                            if (!adminPassword) return;
+
+                                            try {
+                                                const res = await fetch(`${apiUrl}/miscellaneous/${resource._id}`, {
+                                                    method: 'DELETE',
+                                                    headers: {
+                                                        email: user.email,
+                                                        password: adminPassword
+                                                    }
+                                                });
+                                                if (!res.ok) {
+                                                    const errData = await res.json();
+                                                    throw new Error(errData.error || 'Failed to delete resource');
+                                                }
+                                                fetchResources(); // refresh list
+                                            } catch (err) {
+                                                alert('Error: ' + err.message);
+                                            }
+                                        }}
+                                    >
+                                        ×
+                                    </button>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -225,11 +355,53 @@ const Resources = () => {
                     <h2 id="ebooks" style={{ scrollMarginTop: 120 }}>eBooks</h2>
                     <div className="ebooks-grid">
                         {resources.eBooks?.map((ebook, idx) => (
-                            <div className="ebook-container" key={ebook._id || idx}>
+                            <div className="ebook-container" key={ebook._id || idx} style={{ position: 'relative' }}>
                                 {/* <div className="ebook-title">{ebook.title}</div> */}
                                 {/* Flipbook viewer placeholder */}
                                 <PDFFlipbookViewer url={ebook.pdfUrl} title={ebook.title} />
+                                {isAdmin && (
+                                    <button
+                                        style={{
+                                            position: 'absolute',
+                                            top: 30,
+                                            right: 200,
+                                            background: '#ff4444',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '50%',
+                                            width: 24,
+                                            height: 24,
+                                            fontSize: 16,
+                                            cursor: 'pointer',
+                                            zIndex: 10
+                                        }}
+                                        onClick={async () => {
+                                            const confirmDelete = window.confirm(`Delete eBook "${ebook.title}"?`);
+                                            if (!confirmDelete) return;
+
+                                            const adminPassword = prompt('Enter admin password:');
+                                            if (!adminPassword) return;
+
+                                            try {
+                                                const res = await fetch(`${apiUrl}/ebooks/${ebook._id}`, {
+                                                    method: 'DELETE',
+                                                    headers: {
+                                                        email: user.email,
+                                                        password: adminPassword
+                                                    }
+                                                });
+                                                if (!res.ok) throw new Error('Failed to delete eBook');
+                                                fetchResources(); // refresh list
+                                            } catch (err) {
+                                                alert('Error: ' + err.message);
+                                            }
+                                        }}
+                                    >
+                                        ×
+                                    </button>
+                                )}
                             </div>
+
                         ))}
                     </div>
                 </div>

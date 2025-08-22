@@ -34,6 +34,7 @@ const Video = require('./Video');
 const Resource = require('./Resource');
 const TestimonialFromGuest = require('./TestimonialFromGuest');
 const EventReview = require('./EventReview');
+const ImageSubsection = require('./ImagesSubsection');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -176,7 +177,7 @@ const OtherImages = require('./OtherImages');
 // Get all other images entries
 app.get('/other-images', async (req, res) => {
   try {
-    const otherImagesEntries = await OtherImages.find().sort({ createdAt: -1 });
+    const otherImagesEntries = await OtherImages.find().sort({ createdAt: 1 });
     res.json(otherImagesEntries);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -207,6 +208,7 @@ app.post('/other-images', adminAuth, upload.array('images', 10), async (req, res
 });
 
 // PATCH endpoint to append images to an existing subsection
+// PATCH endpoint to append images or create subsection if not exists
 app.patch('/other-images/append', adminAuth, upload.array('images', 10), async (req, res) => {
   try {
     const { subsection } = req.body;
@@ -217,15 +219,52 @@ app.patch('/other-images/append', adminAuth, upload.array('images', 10), async (
       return res.status(400).json({ error: 'At least one image is required' });
     }
 
+    // Extract URLs from uploaded files
+    const newUrls = req.files.map(file => file.path);
+
+    // Try finding the subsection
+    let entry = await OtherImages.findOne({ subsection });
+
+    if (entry) {
+      // ✅ Subsection found → append images
+      entry.urls = [...entry.urls, ...newUrls];
+      await entry.save();
+    } else {
+      // ❌ Subsection not found → create new
+      entry = new OtherImages({
+        subsection,
+        urls: newUrls
+      });
+      await entry.save();
+    }
+
+    res.json(entry);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// PATCH endpoint to delete images from an existing subsection
+app.patch('/other-images/delete', adminAuth, async (req, res) => {
+  try {
+    const { subsection, urlsToDelete } = req.body;
+
+    if (!subsection) {
+      return res.status(400).json({ error: 'Subsection name is required' });
+    }
+    if (!urlsToDelete || !Array.isArray(urlsToDelete) || urlsToDelete.length === 0) {
+      return res.status(400).json({ error: 'At least one image URL is required to delete' });
+    }
+
     // Find the entry for the subsection
     const entry = await OtherImages.findOne({ subsection });
     if (!entry) {
       return res.status(404).json({ error: 'Subsection not found' });
     }
 
-    // Extract URLs from uploaded files
-    const newUrls = req.files.map(file => file.path);
-    entry.urls = [...entry.urls, ...newUrls];
+    // Filter out the images that need to be deleted
+    entry.urls = entry.urls.filter(url => !urlsToDelete.includes(url));
+
     await entry.save();
 
     res.json(entry);
@@ -234,16 +273,28 @@ app.patch('/other-images/append', adminAuth, upload.array('images', 10), async (
   }
 });
 
+
 // Delete an other images entry by id (admin only)
+// DELETE endpoint to remove an entire subsection
 app.delete('/other-images/:id', adminAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    await OtherImages.findByIdAndDelete(id);
-    res.json({ success: true });
+
+    // Delete subsection from OtherImages
+    const entry = await OtherImages.findByIdAndDelete(id);
+    if (!entry) {
+      return res.status(404).json({ error: 'Subsection not found' });
+    }
+
+    // Also delete it from ImageSubsection collection
+    await ImageSubsection.findOneAndDelete({ name: entry.subsection });
+
+    res.json({ message: 'Subsection deleted successfully from both collections', entry });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
+
 
 // Get impact values
 app.get('/impact', async (req, res) => {
@@ -874,6 +925,60 @@ app.post('/resources', adminAuth, async (req, res) => {
     res.status(201).json(resource);
   } catch (err) {
     res.status(500).json({ error: 'Failed to add resource' });
+  }
+});
+// DELETE eBook
+app.delete('/ebooks/:id', adminAuth, async (req, res) => {
+  try {
+    const ebook = await EBook.findByIdAndDelete(req.params.id);
+    if (!ebook) return res.status(404).json({ error: 'eBook not found' });
+    res.json({ message: 'eBook deleted successfully', ebook });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete eBook' });
+  }
+});
+
+// DELETE eNewsletter
+app.delete('/enewsletters/:id', adminAuth, async (req, res) => {
+  try {
+    const enewsletter = await ENewsletter.findByIdAndDelete(req.params.id);
+    if (!enewsletter) return res.status(404).json({ error: 'eNewsletter not found' });
+    res.json({ message: 'eNewsletter deleted successfully', enewsletter });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete eNewsletter' });
+  }
+});
+
+// DELETE Talks by Dignitaries
+app.delete('/talks-by-dignitaries/:id', adminAuth, async (req, res) => {
+  try {
+    const talk = await TalksByDignitary.findByIdAndDelete(req.params.id);
+    if (!talk) return res.status(404).json({ error: 'Talk not found' });
+    res.json({ message: 'Talk deleted successfully', talk });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete talk' });
+  }
+});
+
+// DELETE Unique India Resource
+app.delete('/unique-india/:id', adminAuth, async (req, res) => {
+  try {
+    const uniqueIndia = await UniqueIndiaResource.findByIdAndDelete(req.params.id);
+    if (!uniqueIndia) return res.status(404).json({ error: 'Unique India resource not found' });
+    res.json({ message: 'Unique India resource deleted successfully', uniqueIndia });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete Unique India resource' });
+  }
+});
+
+// DELETE Miscellaneous Resource
+app.delete('/miscellaneous/:id', adminAuth, async (req, res) => {
+  try {
+    const misc = await MiscResource.findByIdAndDelete(req.params.id);
+    if (!misc) return res.status(404).json({ error: 'Miscellaneous resource not found' });
+    res.json({ message: 'Miscellaneous resource deleted successfully', misc });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete Miscellaneous resource' });
   }
 });
 

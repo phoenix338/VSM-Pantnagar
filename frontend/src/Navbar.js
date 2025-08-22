@@ -4,7 +4,8 @@ import logo from './assets/VSM-icon.png';
 import headphones from './assets/hugeicons_customer-support.png';
 import { auth } from './firebase';
 import './Home.css';
-
+const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
+const RENDER_API_URL = process.env.REACT_APP_API_URL;
 const Navbar = (props) => {
   // State for eNewsletters dropdown
   const [enewsOpen, setEnewsOpen] = useState(false);
@@ -12,13 +13,13 @@ const Navbar = (props) => {
   const [resources, setResources] = useState({});
   const enewsletters = resources.eNewsletters || [];
   const [user, setUser] = useState(null);
-
+  const [apiUrl, setApiUrl] = useState(RENDER_API_URL);
   // Watch Firebase authentication state
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
     return () => unsubscribe();
   }, []);
-
+  const isAdmin = user && user.email === ADMIN_EMAIL;
   const handleLogout = () => {
     auth.signOut()
       .then(() => {
@@ -219,6 +220,51 @@ const Navbar = (props) => {
                           >
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DD783C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
                           </a>
+                          {/* Delete Button */}
+                          {isAdmin && (
+                            <button
+                              style={{
+                                background: '#ff4444',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: 20,
+                                height: 20,
+                                fontSize: 14,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}
+                              title="Delete eNewsletter"
+                              onClick={async () => {
+                                const confirmDelete = window.confirm(`Delete eNewsletter "${newsletter.title}"?`);
+                                if (!confirmDelete) return;
+
+                                const adminPassword = prompt('Enter admin password:');
+                                if (!adminPassword) return;
+
+                                try {
+                                  const res = await fetch(`${apiUrl}/enewsletters/${newsletter._id}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                      email: user.email,
+                                      password: adminPassword
+                                    }
+                                  });
+                                  if (!res.ok) {
+                                    const errData = await res.json();
+                                    throw new Error(errData.error || 'Failed to delete eNewsletter');
+                                  }
+                                  // fetchEnewsletters(); // Refresh the list
+                                } catch (err) {
+                                  alert('Error: ' + err.message);
+                                }
+                              }}
+                            >
+                              ×
+                            </button>
+                          )}
                         </div>
                       ))}
                     </div>

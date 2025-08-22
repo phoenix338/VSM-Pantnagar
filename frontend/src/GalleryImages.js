@@ -177,24 +177,52 @@ const GalleryImages = () => {
             alert('Error: ' + err.message);
         }
     };
-
-    const handleDeleteOtherImage = async id => {
+    const handleDeleteOtherImage = async (subsection, url) => {
         const adminPassword = prompt('Enter admin password:');
         if (!adminPassword) return;
+
         try {
-            const res = await fetch(`${apiUrl}/other-images/${id}`, {
-                method: 'DELETE',
+            const res = await fetch(`${apiUrl}/other-images/delete`, {
+                method: 'PATCH',
                 headers: {
+                    'Content-Type': 'application/json',
                     email: user.email,
                     password: adminPassword
-                }
+                },
+                body: JSON.stringify({
+                    subsection,
+                    urlsToDelete: [url]
+                })
             });
-            if (!res.ok) throw new Error('Failed to delete image');
-            fetchOtherImages();
+
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || 'Failed to delete image');
+            }
+
+            fetchOtherImages(); // refresh list
         } catch (err) {
             alert('Error: ' + err.message);
         }
     };
+
+    // const handleDeleteOtherImage = async id => {
+    //     const adminPassword = prompt('Enter admin password:');
+    //     if (!adminPassword) return;
+    //     try {
+    //         const res = await fetch(`${apiUrl}/other-images/${id}`, {
+    //             method: 'DELETE',
+    //             headers: {
+    //                 email: user.email,
+    //                 password: adminPassword
+    //             }
+    //         });
+    //         if (!res.ok) throw new Error('Failed to delete image');
+    //         fetchOtherImages();
+    //     } catch (err) {
+    //         alert('Error: ' + err.message);
+    //     }
+    // };
 
     const handleImageChange = e => {
         const files = Array.from(e.target.files);
@@ -323,11 +351,131 @@ const GalleryImages = () => {
                             ))}
                         </div>
 
+
+                        {/* Other Images Section (grouped by subsection) */}
+                        {otherImages.map((entry) => (
+                            <div key={entry._id} style={{ marginBottom: 32 }}>
+                                <div style={{ position: 'relative', color: 'grey', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>{entry.subsection}
+                                    {isAdmin && (
+                                        <button
+                                            style={{
+                                                marginLeft: '10px',
+                                                right: 0,
+                                                top: 0,
+                                                background: '#ff4444',
+                                                border: 'none',
+                                                borderRadius: '8px',
+                                                color: 'white',
+                                                padding: '4px 8px',
+                                                cursor: 'pointer'
+                                            }}
+                                            onClick={async () => {
+                                                const confirmDelete = window.confirm(
+                                                    `Are you sure you want to delete subsection "${entry.subsection}"?`
+                                                );
+                                                if (!confirmDelete) return;
+
+                                                const adminPassword = prompt('Enter admin password:');
+                                                if (!adminPassword) return;
+
+                                                try {
+                                                    const res = await fetch(`${apiUrl}/other-images/${entry._id}`, {
+                                                        method: 'DELETE',
+                                                        headers: {
+                                                            email: user.email,
+                                                            password: adminPassword
+                                                        }
+                                                    });
+
+                                                    if (!res.ok) {
+                                                        const errData = await res.json();
+                                                        throw new Error(errData.error || 'Failed to delete subsection');
+                                                    }
+
+                                                    fetchOtherImages();
+                                                } catch (err) {
+                                                    alert('Error: ' + err.message);
+                                                }
+                                            }}
+                                        >
+                                            Delete Subsection
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="gallery-grid">
+                                    {entry.urls.map((url, idx) => (
+                                        <div className="gallery-img-container-other" key={entry._id + '-' + idx}>
+                                            <div className="gallery-img-wrapper">
+                                                <img
+                                                    src={url}
+                                                    alt={`Other Image ${idx + 1}`}
+                                                    className="gallery-img-other"
+                                                />
+                                                {isAdmin && (
+                                                    <button
+                                                        className="gallery-delete-btn"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDeleteOtherImage(entry.subsection, url);
+                                                        }}
+                                                    >
+                                                        ×
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                         {/* Admin form (for both sections) */}
                         {isAdmin && (
                             <div className="gallery-admin-form">
+                                {/* Add new subsection */}
+                                <form
+                                    onSubmit={async e => {
+                                        e.preventDefault();
+                                        setSubmitting(true);
+                                        setFormMsg('');
+                                        try {
+                                            const adminPassword = prompt('Enter admin password:');
+                                            if (!adminPassword) throw new Error('Password is required');
+                                            if (!form.newSubsectionName) throw new Error('Name is required');
+                                            const res = await fetch(`${apiUrl}/images-subsections`, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    email: user.email,
+                                                    password: adminPassword
+                                                },
+                                                body: JSON.stringify({ name: form.newSubsectionName })
+                                            });
+                                            if (!res.ok) throw new Error('Failed to add subsection');
+                                            setFormMsg('Subsection added!');
+                                            setForm(f => ({ ...f, newSubsectionName: '' }));
+                                            fetchImagesSubsections();
+                                        } catch (err) {
+                                            setFormMsg('Error: ' + err.message);
+                                        }
+                                        setSubmitting(false);
+                                    }}
+                                    style={{ marginTop: 8, borderTop: '1px solid #ddd', paddingTop: 24 }}
+                                >
+                                    <h4>Add Gallery Subsection</h4>
+                                    <input
+                                        type="text"
+                                        placeholder="New subsection name"
+                                        value={form.newSubsectionName || ''}
+                                        onChange={e => setForm({ ...form, newSubsectionName: e.target.value })}
+                                        required
+                                    />
+                                    <button type="submit" disabled={submitting}>
+                                        {submitting ? 'Adding...' : 'Add Subsection'}
+                                    </button>
+                                </form>
                                 <form onSubmit={handleAddotherimages}>
-                                    <h3>Add Other Images</h3>
+                                    <h3>Add Images</h3>
                                     {/* Select subsection */}
                                     <select
                                         value={form.imagesSubsection}
@@ -373,81 +521,11 @@ const GalleryImages = () => {
                                         </div>
                                     )}
                                 </form>
-                                {/* Add new subsection */}
-                                <form
-                                    onSubmit={async e => {
-                                        e.preventDefault();
-                                        setSubmitting(true);
-                                        setFormMsg('');
-                                        try {
-                                            const adminPassword = prompt('Enter admin password:');
-                                            if (!adminPassword) throw new Error('Password is required');
-                                            if (!form.newSubsectionName) throw new Error('Name is required');
-                                            const res = await fetch(`${apiUrl}/images-subsections`, {
-                                                method: 'POST',
-                                                headers: {
-                                                    'Content-Type': 'application/json',
-                                                    email: user.email,
-                                                    password: adminPassword
-                                                },
-                                                body: JSON.stringify({ name: form.newSubsectionName })
-                                            });
-                                            if (!res.ok) throw new Error('Failed to add subsection');
-                                            setFormMsg('Subsection added!');
-                                            setForm(f => ({ ...f, newSubsectionName: '' }));
-                                            fetchImagesSubsections();
-                                        } catch (err) {
-                                            setFormMsg('Error: ' + err.message);
-                                        }
-                                        setSubmitting(false);
-                                    }}
-                                    style={{ marginTop: 32, borderTop: '1px solid #ddd', paddingTop: 24 }}
-                                >
-                                    <h4>Add Gallery Subsection</h4>
-                                    <input
-                                        type="text"
-                                        placeholder="New subsection name"
-                                        value={form.newSubsectionName || ''}
-                                        onChange={e => setForm({ ...form, newSubsectionName: e.target.value })}
-                                        required
-                                    />
-                                    <button type="submit" disabled={submitting}>
-                                        {submitting ? 'Adding...' : 'Add Subsection'}
-                                    </button>
-                                </form>
+
                             </div>
                         )}
 
-                        {/* Other Images Section (grouped by subsection) */}
-                        {otherImages.map((entry) => (
-                            <div key={entry._id} style={{ marginBottom: 32 }}>
-                                <div style={{ color: 'grey', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>{entry.subsection}</div>
-                                <div className="gallery-grid">
-                                    {entry.urls.map((url, idx) => (
-                                        <div className="gallery-img-container-other" key={entry._id + '-' + idx}>
-                                            <div className="gallery-img-wrapper">
-                                                <img
-                                                    src={url}
-                                                    alt={`Other Image ${idx + 1}`}
-                                                    className="gallery-img-other"
-                                                />
-                                                {isAdmin && (
-                                                    <button
-                                                        className="gallery-delete-btn"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            handleDeleteOtherImage(entry._id);
-                                                        }}
-                                                    >
-                                                        ×
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+
                     </>
                 )}
             </div>

@@ -31,7 +31,7 @@
 .footer-links-row {
     display: flex;
     justify-content: center;
-    gap: 120px;
+    gap: 180px;
     width: 100%;
     max-width: 1100px;
     margin-bottom: 64px;
@@ -40,17 +40,19 @@
 .footer-col {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 28px;
     font-family: 'open sans', sans-serif;
-    font-size: 20px;
+    font-size: 30px;
     color: #181818;
     font-weight: 400;
 }
 
 .footer-link {
     text-decoration: none;
-    color: #181818;
-    font-family: 'open sans', sans-serif;
+    color: #DD783C;
+    /* font-family: 'open sans', sans-serif;
+     */
+    font-family: 'alex brush', cursive;
     font-weight: 400;
 
 
