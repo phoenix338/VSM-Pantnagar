@@ -8,6 +8,7 @@ const Contribute = () => {
     const [activeTab, setActiveTab] = React.useState('volunteer');
     const [initiatives, setInitiatives] = React.useState([]);
     const [selectedEvent, setSelectedEvent] = React.useState('');
+    const [showDonateDetails, setShowDonateDetails] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -35,7 +36,7 @@ const Contribute = () => {
         }
 
         setSubmitting(true);
-
+        setShowDonateDetails(true);
         try {
             const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
             const response = await fetch(`${API_URL}/contact-contribute`, {
@@ -81,7 +82,7 @@ const Contribute = () => {
                     <img src={contributeGif} alt="contribute" className="contribute-gif" />
                 </div>
                 <div className="contribute-heading-section">
-                    <h1 className="contribute-heading">Your Contributions Can Make A Difference</h1>
+                    <h1 className="contribute-heading">Your Generous Contributions</h1>
                 </div>
                 <div className="contribute-tabs-section">
                     <div className="contribute-light-banner" style={{ background: '#D9D9D9', borderTopLeftRadius: 8, borderTopRightRadius: 8, border: '1px solid #bbb', borderBottom: 'none', textAlign: 'center', padding: '18px 0 8px 0' }}>
@@ -105,7 +106,7 @@ const Contribute = () => {
                         {activeTab === 'volunteer' && (
                             <div className="volunteer-content">
                                 <h2>Become a Volunteer</h2>
-                                <p>If you’re from outside Pantnagar, and interested in joining us, you can register for our <Link to='/our-events/6892319848e8f44bcb659a3e' className='volunteer-cap'>Campus Ambassador Program!</Link>  Please reach out to<br></br> <b>Ms. Shweta Gupta<br></br> Email: 19sg09@gmail.com<br></br> Contact: 91-7895309339 </b> and register today.</p>
+                                <p>If you’re from outside Pantnagar, and interested in joining us, you can register for our <Link to='/our-events/6892319848e8f44bcb659a3e' className='volunteer-cap'>Campus Ambassador Program!</Link>  Please reach out to<br></br> <b>Dr. Shweta Gupta<br></br> Email: 19sg09@gmail.com<br></br> Contact: 91-7895309339 </b> <br></br>and register today.</p>
                             </div>
                         )}
                         {activeTab === 'donate' && (
@@ -200,7 +201,7 @@ const Contribute = () => {
                                     {/* </div> */}
                                 </form>
 
-                                {selectedEvent && (
+                                {showDonateDetails && (
                                     <>
                                         <div className="donate-selected-event" style={{ paddingLeft: '10px', margin: '16px 0', fontWeight: 500, color: '#DD783C', fontFamily: 'open sans', fontWeight: '500' }}>
                                             You are contributing for: <span>{selectedEvent}</span>
@@ -224,7 +225,7 @@ const Contribute = () => {
                                             fontFamily: 'Times New Roman',
                                             fontWeight: '400',
                                             fontStyle: 'italic'
-                                        }}>It is not amount, it is Shraddha that matters.</p>
+                                        }}>It is not the amount, it is Shraddha that matters.</p>
 
                                     </>
                                 )}

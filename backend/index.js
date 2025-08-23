@@ -424,6 +424,22 @@ app.post('/patrons', adminAuth, upload.single('image'), async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+// Delete a patron (admin only)
+app.delete('/patrons/:id', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedPatron = await patron.findByIdAndDelete(id);
+    if (!deletedPatron) {
+      return res.status(404).json({ error: 'Patron not found' });
+    }
+
+    res.json({ success: true, message: 'Patron deleted', deletedPatron });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Get all team members
 app.get('/team', async (req, res) => {
   try {
@@ -1086,6 +1102,20 @@ app.post('/guest-testimonials', async (req, res) => {
     res.status(500).json({ error: 'Failed to submit testimonial.' });
   }
 });
+app.delete('/guest-testimonials/:id', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedTestimonial = await TestimonialFromGuest.findByIdAndDelete(id);
+    if (!deletedTestimonial) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+
+    res.json({ success: true, message: 'Testimonial deleted', deletedTestimonial });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 // Submit a new event review (logged-in user)
 app.post('/event-reviews', async (req, res) => {
   try {
@@ -1263,6 +1293,49 @@ app.post('/contact-contribute', async (req, res) => {
   } catch (error) {
     console.error('Email sending error:', error);
     res.status(500).json({ error: 'Failed to send message. Please try again.' });
+  }
+});
+const Faq = require('./Faq');
+
+// Get all FAQs
+app.get('/faq', async (req, res) => {
+  try {
+    const faqs = await Faq.find();
+    res.json(faqs);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Add FAQ
+app.post('/faq', async (req, res) => {
+  try {
+    const newFaq = new Faq(req.body);
+    await newFaq.save();
+    res.status(201).json(newFaq);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Edit FAQ
+app.put('/faq/:id', async (req, res) => {
+  try {
+    const updatedFaq = await Faq.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedFaq);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+app.delete('/faq/:id', async (req, res) => {
+  try {
+    const deletedFaq = await Faq.findByIdAndDelete(req.params.id);
+    if (!deletedFaq) {
+      return res.status(404).json({ error: "FAQ not found" });
+    }
+    res.json({ message: "FAQ deleted successfully", deletedFaq });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 app.listen(PORT, () => {

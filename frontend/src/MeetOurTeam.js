@@ -3,7 +3,7 @@ import { auth } from './firebase';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './MeetOurTeam.css';
-import MeetGIF from './assets/meet-our-team.gif';
+import MeetGIF from './assets/meetourteam.mp4';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -125,12 +125,35 @@ const MeetOurTeam = () => {
             alert('Error: ' + err.message);
         }
     };
+    const handlepatronDelete = async id => {
+        const adminPassword = prompt('Enter admin password:');
+        if (!adminPassword) return;
+        try {
+            const res = await fetch(`${API_URL}/patrons/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    email: user.email,
+                    password: adminPassword
+                }
+            });
+            if (!res.ok) throw new Error('Failed to delete');
+            setpatronMembers(m => m.filter(mem => mem._id !== id));
+        } catch (err) {
+            alert('Error: ' + err.message);
+        }
+    };
 
     return (
         <div className="meet-our-team-root">
             <Navbar />
             <div className="meetourteam-hero-section">
-                <img src={MeetGIF} alt="Timeline" className="meetourteam-gif" />
+                <video
+                    src={require('./assets/meetourteam.mp4')}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                />
             </div>
             <div className="meet-our-team-content">
                 <h1 className="meet-our-team-title">Our Team: Lantern bearers</h1>
@@ -165,11 +188,18 @@ const MeetOurTeam = () => {
                             <div className="team-member-designation">{mem.designation}</div>
                             {mem.link && (
                                 <div className="team-member-email">
-                                    <a href={mem.link} target='_blank'>{mem.link}</a>
+                                    <a href={mem.link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                                        {/* LinkedIn SVG */}
+                                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
+                                            <path fill="#0288D1" d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"></path>
+                                            <path fill="#FFF" d="M12 19H17V36H12zM14.485 17h-.028C12.965 17 12 15.888 12 14.499 12 13.08 12.995 12 14.514 12c1.521 0 2.458 1.08 2.486 2.499C17 15.887 16.035 17 14.485 17zM36 36h-5v-9.099c0-2.198-1.225-3.698-3.192-3.698-1.501 0-2.313 1.012-2.707 1.99C24.957 25.543 25 26.511 25 27v9h-5V19h5v2.616C25.721 20.5 26.85 19 29.738 19c3.578 0 6.261 2.25 6.261 7.274L36 36 36 36z"></path>
+                                        </svg>
+                                    </a>
+
                                 </div>
                             )}
                             {isAdmin && (
-                                <button className="team-member-delete-btn" onClick={() => handleDelete(mem._id)}>Delete</button>
+                                <button className="team-member-delete-btn" onClick={() => handlepatronDelete(mem._id)}>Delete</button>
                             )}
                         </div>
                     ))}

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useEffect } from "react";
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './ContactUs.css';
-import contactGif from './assets/gif/contact.gif';
+import contactGif from './assets/contactus.gif';
+import { auth } from "./firebase";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3002";
+const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 const ContactUs = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -11,7 +15,83 @@ const ContactUs = () => {
         subject: '',
         message: ''
     });
+    const [faqs, setFaqs] = useState([]);
+    const [expanded, setExpanded] = useState(null);
+    const [user, setUser] = useState(null);
+    const [form, setForm] = useState({ question: "", answer: "" });
+    const [formMsg, setFormMsg] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [editingFaq, setEditingFaq] = useState(null);  // which faq is being edited
+    const [editedQuestion, setEditedQuestion] = useState("");
+    const [editedAnswer, setEditedAnswer] = useState(""); // temporary input
+    useEffect(() => {
+        fetchFaqs();
+        const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
+        return () => unsubscribe();
+    }, []);
+
+    const fetchFaqs = async () => {
+        try {
+            const res = await fetch(`${API_URL}/faq`);
+            const data = await res.json();
+            setFaqs(data);
+        } catch {
+            setFaqs([]);
+        }
+    };
+
+    const isAdmin = user && user.email === ADMIN_EMAIL;
+
+    const handleAdd = async e => {
+        e.preventDefault();
+        setSubmitting(true);
+        try {
+            const res = await fetch(`${API_URL}/faq`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form)
+            });
+            if (!res.ok) throw new Error("Failed to add FAQ");
+            const newFaq = await res.json();
+            setFaqs([newFaq, ...faqs]);
+            setForm({ question: "", answer: "" });
+            setFormMsg("FAQ added!");
+        } catch (err) {
+            setFormMsg("Error: " + err.message);
+        }
+        setSubmitting(false);
+    };
+    const handleSave = async (faqId) => {
+        try {
+            const res = await fetch(`${API_URL}/faq/${faqId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ question: editedQuestion, answer: editedAnswer }),
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to update FAQ");
+            }
+
+            // update local state
+            setFaqs(faqs.map(f => f._id === faqId ? { ...f, question: editedQuestion, answer: editedAnswer } : f));
+            setEditingFaq(null);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleDelete = async id => {
+        if (!window.confirm("Delete this FAQ?")) return;
+        try {
+            await fetch(`${API_URL}/faq/${id}`, { method: "DELETE" });
+            setFaqs(faqs.filter(f => f._id !== id));
+        } catch (err) {
+            alert("Error deleting: " + err.message);
+        }
+    };
     const [expandedFaq, setExpandedFaq] = useState(null);
 
     const handleSubmit = async (e) => {
@@ -62,12 +142,12 @@ const ContactUs = () => {
         setExpandedFaq(expandedFaq === index ? null : index);
     };
 
-    const faqs = [
-        { question: "What are your office hours?", answer: "Our office is open Monday to Friday from 9:00 AM to 6:00 PM." },
-        { question: "How can I reach your team?", answer: "You can reach us via phone, email, or by visiting our office in Pantnagar." },
-        { question: "Do you offer online consultations?", answer: "Yes, we offer online consultations for remote clients." },
-        { question: "What services do you provide?", answer: "We provide a wide range of services including consultation, training, and support." }
-    ];
+    // const faqs = [
+    //     { question: "What are your office hours?", answer: "Our office is open Monday to Friday from 9:00 AM to 6:00 PM." },
+    //     { question: "How can I reach your team?", answer: "You can reach us via phone, email, or by visiting our office in Pantnagar." },
+    //     { question: "Do you offer online consultations?", answer: "Yes, we offer online consultations for remote clients." },
+    //     { question: "What services do you provide?", answer: "We provide a wide range of services including consultation, training, and support." }
+    // ];
 
     return (
         <>
@@ -245,6 +325,30 @@ const ContactUs = () => {
                             <div key={index} className="faq-item">
                                 <div className="faq-question" onClick={() => toggleFaq(index)}>
                                     <span>{faq.question}</span>
+                                    {isAdmin && (
+                                        <>
+                                            <button
+                                                className="faq-delete"
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    handleDelete(faq._id);
+                                                }}
+                                            >
+                                                Delete
+                                            </button>
+                                            <button
+                                                className="faq-edit"
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    setEditingFaq(faq._id); // track which FAQ is being edited
+                                                    setEditedQuestion(faq.question); // prefill current question
+                                                    setEditedAnswer(faq.answer); // prefill current answer
+                                                }}
+                                            >
+                                                Edit
+                                            </button>
+                                        </>
+                                    )}
                                     <svg
                                         className={`faq-icon ${expandedFaq === index ? 'expanded' : ''}`}
                                         width="24"
@@ -258,7 +362,43 @@ const ContactUs = () => {
                                 </div>
                                 {expandedFaq === index && (
                                     <div className="faq-answer">
-                                        {faq.answer}
+                                        {isAdmin && editingFaq === faq._id ? (
+                                            <div className="faq-edit-form">
+                                                <label style={{ fontWeight: 'bold', marginBottom: 4 }}>Question:</label>
+                                                <textarea
+                                                    value={editedQuestion}
+                                                    onChange={e => setEditedQuestion(e.target.value)}
+                                                    rows={2}
+                                                    style={{ width: '100%', marginBottom: 8 }}
+                                                />
+                                                <label style={{ fontWeight: 'bold', marginBottom: 4 }}>Answer:</label>
+                                                <textarea
+                                                    value={editedAnswer}
+                                                    onChange={e => setEditedAnswer(e.target.value)}
+                                                    rows={4}
+                                                    style={{ width: '100%', marginBottom: 8 }}
+                                                />
+                                                <button
+                                                    onClick={e => {
+                                                        e.stopPropagation();
+                                                        handleSave(faq._id);
+                                                    }}
+                                                    style={{ marginRight: 8 }}
+                                                >
+                                                    Save
+                                                </button>
+                                                <button
+                                                    onClick={e => {
+                                                        e.stopPropagation();
+                                                        setEditingFaq(null);
+                                                    }}
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            faq.answer
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -266,6 +406,32 @@ const ContactUs = () => {
                     </div>
                 </div>
             </div>
+            {isAdmin && (
+                <form className="admin-contact-form" onSubmit={handleAdd} style={{ marginTop: 20, maxWidth: 400 }}>
+                    <h3>Add FAQ</h3>
+                    <input
+                        type="text"
+                        placeholder="Question"
+                        value={form.question}
+                        onChange={e => setForm({ ...form, question: e.target.value })}
+                        required
+                    />
+                    <textarea
+                        placeholder="Answer"
+                        value={form.answer}
+                        onChange={e => setForm({ ...form, answer: e.target.value })}
+                        required
+                    />
+                    <button type="submit" disabled={submitting}>
+                        {submitting ? "Adding..." : "Add FAQ"}
+                    </button>
+                    {formMsg && (
+                        <div style={{ marginTop: 8, color: formMsg.startsWith("Error") ? "red" : "green" }}>
+                            {formMsg}
+                        </div>
+                    )}
+                </form>
+            )}
             <Footer />
         </>
     );

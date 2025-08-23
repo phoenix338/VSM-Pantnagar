@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaInstagram, FaFacebook, FaXTwitter, FaYoutube } from 'react-icons/fa6';
 import './Footer.css';
 import backToTopImg from './assets/backtotop.png';
-
+import { useEffect, useState } from 'react';
 const Footer = () => {
   const handleBackToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -12,7 +12,22 @@ const Footer = () => {
   const handleFooterLinkClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
+  const [resources, setResources] = useState({});
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const res = await fetch(process.env.REACT_APP_API_URL + '/resources');
+        if (res.ok) {
+          const data = await res.json();
+          setResources(data);
+        }
+      } catch (err) {
+        // Optionally handle error
+      }
+    };
+    fetchResources();
+  }, []);
+  // const newsletter = resources.eNewsletters
   return (
     <footer className="footer-container">
       <div className="footer-links-row">
@@ -25,9 +40,26 @@ const Footer = () => {
         <div className="footer-col">
           <Link to="/contribute" className="footer-link" onClick={handleFooterLinkClick}>Contribute</Link>
           <Link to="/books" className="footer-link" onClick={handleFooterLinkClick}>Our Publications</Link>
+          {/* <a href={newsletter.pdfUrl}
+            download={newsletter.title ? `${newsletter.title.replace(/\s+/g, '_')}.pdf` : 'newsletter.pdf'} className="footer-link" onClick={handleFooterLinkClick}>Newsletters</a> */}
+          {resources.eNewsletters?.length > 0 && (
+            <a
+              href={resources.eNewsletters[0].pdfUrl}
+              download={
+                resources.eNewsletters[0].title
+                  ? `${resources.eNewsletters[0].title.replace(/\s+/g, '_')}.pdf`
+                  : 'newsletter.pdf'
+              }
+              className="footer-link"
+            >
+              Newsletters
+            </a>
+          )}
         </div>
         <div className="footer-col right-col">
           <Link to="/#calendar" className="footer-link" onClick={handleFooterLinkClick}>Calendar<span className="footer-asterisk">*</span></Link>
+          <Link to="https://www.youthariseawake.org/" className="footer-link" onClick={handleFooterLinkClick} target='_blank'>Yuva</Link>
+          <Link to="https://vsmmotivation.in/" className="footer-link" onClick={handleFooterLinkClick} target='_blank'>VSM Motivation</Link>
 
         </div>
       </div>

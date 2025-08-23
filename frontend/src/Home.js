@@ -320,7 +320,7 @@ function Home() {
                     />
                     <audio
                         ref={audioRef}
-                        src={require('./assets/audio.mp3')}
+                        src={require('./assets/audio1.mp3')}
                         loop
                         style={{ display: 'none' }}
                     />
@@ -1252,6 +1252,36 @@ function Home() {
                                                     ))}
                                                 </div>
                                             </div>
+                                            {user && user.email === ADMIN_EMAIL && (
+                                                <button
+                                                    className="guest-testimonial-delete-btn"
+                                                    style={{ position: 'absolute', top: 8, right: 8, background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer', zIndex: 2 }}
+                                                    onClick={async e => {
+                                                        e.stopPropagation();
+                                                        const adminPassword = prompt('Enter admin password to delete this testimonial:');
+                                                        if (!adminPassword) return;
+                                                        try {
+                                                            const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3002'}/guest-testimonials/${item._id}`, {
+                                                                method: 'DELETE',
+                                                                headers: {
+                                                                    email: user.email,
+                                                                    password: adminPassword
+                                                                }
+                                                            });
+                                                            if (!res.ok) throw new Error('Failed to delete testimonial');
+                                                            // Refetch testimonials after deletion
+                                                            fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3002'}/guest-testimonials`)
+                                                                .then(res => res.json())
+                                                                .then(data => setGuestTestimonials(data || []));
+                                                        } catch (err) {
+                                                            alert('Error: ' + err.message);
+                                                        }
+                                                    }}
+                                                    title="Delete Testimonial"
+                                                >
+                                                    ×
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 ))}

@@ -114,6 +114,7 @@ const ReviewsSection = () => {
                                     — {reviews[selected].name}
                                 </div>
                             </div>
+
                         </>
                     ) : (
                         <>
@@ -145,7 +146,17 @@ const ReviewsSection = () => {
                                         </div>
                                     </div>
                                     {isAdmin && (
-                                        <button className="timeline-delete-btn" style={{ alignSelf: 'flex-end', position: 'static' }} onClick={e => { e.stopPropagation(); handleDelete(item._id); }}>Delete</button>
+                                        <button
+                                            className="reviews-delete-btn"
+                                            style={{ position: 'absolute', top: 8, right: 8, background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer', zIndex: 2 }}
+                                            onClick={e => {
+                                                e.stopPropagation();
+                                                handleDelete(item._id);
+                                            }}
+                                            title="Delete Review"
+                                        >
+                                            ×
+                                        </button>
                                     )}
                                 </div>
                             </div>
