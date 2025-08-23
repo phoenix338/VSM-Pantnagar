@@ -154,6 +154,43 @@ const Books = () => {
         }
     };
 
+    // Edit previewDescription state
+    const [editingPreviewBookId, setEditingPreviewBookId] = useState(null);
+    const [editingPreviewText, setEditingPreviewText] = useState('');
+    const [editingPreviewLoading, setEditingPreviewLoading] = useState(false);
+
+    const startEditPreview = (book) => {
+        setEditingPreviewBookId(book._id);
+        setEditingPreviewText(book.previewDescription || '');
+    };
+    const cancelEditPreview = () => {
+        setEditingPreviewBookId(null);
+        setEditingPreviewText('');
+    };
+    const saveEditPreview = async (book) => {
+        setEditingPreviewLoading(true);
+        try {
+            const adminPassword = prompt('Enter admin password:');
+            if (!adminPassword) throw new Error('Password is required');
+            const res = await fetch(`${API_URL}/books/${book._id}/description`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'email': user.email,
+                    'password': adminPassword
+                },
+                body: JSON.stringify({ previewDescription: editingPreviewText })
+            });
+            if (!res.ok) throw new Error('Failed to update preview description');
+            fetchBooks();
+            setEditingPreviewBookId(null);
+            setEditingPreviewText('');
+        } catch (err) {
+            alert('Error: ' + err.message);
+        }
+        setEditingPreviewLoading(false);
+    };
+
     const getGenreBooks = (genreId) => { // Modified signature
         return books.filter(book => book.genre && book.genre._id === genreId);
     };
@@ -252,9 +289,37 @@ const Books = () => {
                                                     <div className="book-preview-modal-inplace">
                                                         <div className="book-modal-content">
                                                             <div className="book-modal-info">
-                                                                <p className="book-modal-description">
-                                                                    {convertTextToLinks(previewBook.previewDescription)}
-                                                                </p>
+                                                                {isAdmin && editingPreviewBookId === previewBook._id ? (
+                                                                    <div className="book-preview-edit-form">
+                                                                        <textarea
+                                                                            value={editingPreviewText}
+                                                                            onChange={e => setEditingPreviewText(e.target.value)}
+                                                                            rows={6}
+                                                                            style={{ width: '100%', marginBottom: 8 }}
+                                                                        />
+                                                                        <button
+                                                                            onClick={() => saveEditPreview(previewBook)}
+                                                                            disabled={editingPreviewLoading}
+                                                                            style={{ marginRight: 8 }}
+                                                                        >
+                                                                            Save
+                                                                        </button>
+                                                                        <button onClick={cancelEditPreview} disabled={editingPreviewLoading}>Cancel</button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <p className="book-modal-description">
+                                                                        {convertTextToLinks(previewBook.previewDescription)}
+                                                                        {isAdmin && (
+                                                                            <button
+                                                                                className="impact-stat-edit-btn"
+                                                                                style={{ marginLeft: 12 }}
+                                                                                onClick={() => startEditPreview(previewBook)}
+                                                                            >
+                                                                                Edit
+                                                                            </button>
+                                                                        )}
+                                                                    </p>
+                                                                )}
                                                             </div>
                                                             <div className="book-modal-details" style={{ marginTop: 24, fontSize: 16, color: 'black', background: 'white' }}>
                                                                 <div>
@@ -279,9 +344,37 @@ const Books = () => {
                                                         <div className="book-preview-modal-inplace">
                                                             <div className="book-modal-content">
                                                                 <div className="book-modal-info">
-                                                                    <p className="book-modal-description">
-                                                                        {convertTextToLinks(selectedBook.previewDescription)}
-                                                                    </p>
+                                                                    {isAdmin && editingPreviewBookId === selectedBook._id ? (
+                                                                        <div className="book-preview-edit-form">
+                                                                            <textarea
+                                                                                value={editingPreviewText}
+                                                                                onChange={e => setEditingPreviewText(e.target.value)}
+                                                                                rows={6}
+                                                                                style={{ width: '100%', marginBottom: 8 }}
+                                                                            />
+                                                                            <button
+                                                                                onClick={() => saveEditPreview(selectedBook)}
+                                                                                disabled={editingPreviewLoading}
+                                                                                style={{ marginRight: 8 }}
+                                                                            >
+                                                                                Save
+                                                                            </button>
+                                                                            <button onClick={cancelEditPreview} disabled={editingPreviewLoading}>Cancel</button>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <p className="book-modal-description">
+                                                                            {convertTextToLinks(selectedBook.previewDescription)}
+                                                                            {isAdmin && (
+                                                                                <button
+                                                                                    className="impact-stat-edit-btn"
+                                                                                    style={{ marginLeft: 12 }}
+                                                                                    onClick={() => startEditPreview(selectedBook)}
+                                                                                >
+                                                                                    Edit
+                                                                                </button>
+                                                                            )}
+                                                                        </p>
+                                                                    )}
                                                                 </div>
                                                                 <div className="book-modal-details" style={{ marginTop: 24, fontSize: 16, color: 'black', background: 'white' }}>
                                                                     <div>

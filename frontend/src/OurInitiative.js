@@ -56,6 +56,7 @@ const OurInitiative = () => {
     const [formMsg, setFormMsg] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState({}); // Track current image for each event
+    const [selectedInitiativeForUpload, setSelectedInitiativeForUpload] = useState(''); // For admin upload
 
     useEffect(() => {
         fetch(`${API_URL}/initiatives`)
@@ -115,6 +116,79 @@ const OurInitiative = () => {
 
     const handleFileChange = e => {
         setImageFiles(Array.from(e.target.files));
+    };
+    const handleImageFilesChange = e => {
+        setImageFiles(Array.from(e.target.files));
+    };
+    const handleUploadImages = async () => {
+        if (!selectedInitiativeForUpload) return alert('Select an initiative/event');
+        if (imageFiles.length === 0) return alert('Select images to upload');
+
+        try {
+            setUploading(true);
+            const adminPassword = prompt('Enter admin password:');
+            if (!adminPassword) throw new Error('Password required');
+
+            const formData = new FormData();
+            imageFiles.forEach(img => formData.append('images', img));
+
+            const res = await fetch(`${API_URL}/${selectedInitiativeForUpload}/images`, {
+                method: 'PATCH',
+                headers: {
+                    email: user.email,
+                    password: adminPassword
+                },
+                body: formData
+            });
+
+            if (!res.ok) throw new Error('Failed to upload images');
+            const updatedInitiative = await res.json();
+            alert('Images uploaded successfully!');
+
+            // Update initiatives in state
+            setInitiatives(prev =>
+                prev.map(item => (item._id === updatedInitiative._id ? updatedInitiative : item))
+            );
+            setImageFiles([]);
+            setSelectedInitiativeForUpload('');
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setUploading(false);
+        }
+    };
+    const handleDeleteImage = async (initiativeId, imageUrl) => {
+        if (!isAdmin) return;
+        try {
+            const adminPassword = prompt("Enter admin password:");
+            if (!adminPassword) return;
+
+            const res = await fetch(`${API_URL}/${initiativeId}/images/delete`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    email: user.email,
+                    password: adminPassword
+                },
+                body: JSON.stringify({ urlsToDelete: [imageUrl] })
+            });
+
+            if (!res.ok) throw new Error("Failed to delete image");
+            const updatedInitiative = await res.json();
+
+            setInitiatives(prev =>
+                prev.map(item => (item._id === updatedInitiative._id ? updatedInitiative : item))
+            );
+
+            // Reset current index if needed
+            setCurrentImageIndex(prev => ({
+                ...prev,
+                [initiativeId]: Math.min(prev[initiativeId] || 0, updatedInitiative.imageUrls.length - 1)
+            }));
+
+        } catch (err) {
+            alert(err.message);
+        }
     };
 
     const handleAddInitiative = async e => {
@@ -258,6 +332,35 @@ const OurInitiative = () => {
                                                 alt="Event"
                                                 className="initiative-img"
                                             />
+                                            {isAdmin && item.imageUrls && item.imageUrls.length > 0 && (
+                                                <button
+                                                    onClick={() =>
+                                                        handleDeleteImage(
+                                                            item._id,
+                                                            item.imageUrls[currentImageIndex[item._id] || 0]
+                                                        )
+                                                    }
+                                                    style={{
+                                                        position: "absolute",
+                                                        top: 8,
+                                                        right: 8,
+                                                        background: "red",
+                                                        color: "#fff",
+                                                        border: "none",
+                                                        borderRadius: "50%",
+                                                        width: 24,
+                                                        height: 24,
+                                                        cursor: "pointer",
+                                                        fontSize: 16,
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        zIndex: 10
+                                                    }}
+                                                >
+                                                    ×
+                                                </button>
+                                            )}
                                             {item.imageUrls && item.imageUrls.length > 1 && (
                                                 <>
                                                     <button
@@ -311,6 +414,36 @@ const OurInitiative = () => {
                             <button type="submit" disabled={submitting || uploading}>{submitting ? 'Adding...' : 'Add Event'}</button>
                             {formMsg && <div style={{ color: formMsg.startsWith('Error') ? 'red' : 'green' }}>{formMsg}</div>}
                         </form>
+                    </div>
+
+                )
+
+
+                }
+                {isAdmin && (
+                    <div className='admin-initiative-form'>
+                        <h3>Upload Images to Initiative/Event</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 400 }}>
+
+                        <select
+                            value={selectedInitiativeForUpload}
+                            onChange={e => setSelectedInitiativeForUpload(e.target.value)}
+                            style={{ display: 'block', marginBottom: 12 }}
+                        >
+                            <option value="">-- Select Initiative/Event --</option>
+                            {initiatives.map(init => (
+                                <option key={init._id} value={init._id}>
+                                    {init.title}
+                                </option>
+                            ))}
+                        </select>
+
+                        <input type="file" multiple onChange={handleImageFilesChange} style={{ display: 'block', marginBottom: 12 }} />
+
+                        <button type='submit' onClick={handleUploadImages} disabled={uploading}>
+                            {uploading ? 'Uploading...' : 'Upload Images'}
+                        </button>
+                        </div>
                     </div>
                 )}
                 <Footer />

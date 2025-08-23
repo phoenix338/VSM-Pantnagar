@@ -1,14 +1,67 @@
-import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import contributeGif from './assets/contribute.gif';
 import './Contribute.css';
 import { Link } from "react-router-dom";
-
+import React, { useState } from 'react';
 const Contribute = () => {
     const [activeTab, setActiveTab] = React.useState('volunteer');
     const [initiatives, setInitiatives] = React.useState([]);
     const [selectedEvent, setSelectedEvent] = React.useState('');
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        amount: '',
+        event: ''
+    });
+    const [submitting, setSubmitting] = useState(false);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Copy selectedEvent into formData for validation & submission
+        const dataToSend = { ...formData, event: selectedEvent };
+
+        // Basic validation
+        if (!dataToSend.name.trim() || !dataToSend.email.trim() || !dataToSend.amount.trim() || !dataToSend.event.trim()) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(dataToSend.email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        setSubmitting(true);
+
+        try {
+            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+            const response = await fetch(`${API_URL}/contact-contribute`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToSend) // send the combined data
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Message sent successfully! We will get back to you soon.');
+                setFormData({ name: '', email: '', amount: '', event: '' });
+                setSelectedEvent(''); // reset selectedEvent too
+            } else {
+                alert(data.error || 'Failed to send message. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+            alert('Failed to send message. Please check your internet connection and try again.');
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     React.useEffect(() => {
         if (activeTab === 'donate') {
@@ -59,7 +112,7 @@ const Contribute = () => {
                             <div className="donate-content">
                                 <h2>Monetary Contributions</h2>
                                 <p>Your generous contributions to Vivekananda Swadhyay Mandal will help us bring our events to life and spread the spirit of service. <b>These contributions are eligible for exemption under Section 80G.</b></p>
-                                <div className="donate-event-dropdown">
+                                {/* <div className="donate-event-dropdown">
                                     <label htmlFor="event-select" style={{ fontFamily: 'open sans', fontWeight: '500' }}><b>Select Event:</b></label>
                                     <select
                                         id="event-select"
@@ -72,7 +125,81 @@ const Contribute = () => {
                                             <option key={event._id} value={event.title}>{event.title}</option>
                                         ))}
                                     </select>
-                                </div>
+                                </div> */}
+                                <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                    <label>
+                                        Name:
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                            required
+                                            style={{ padding: 6, borderRadius: 4, border: '1px solid #ccc', marginLeft: 31 }}
+                                        />
+                                    </label>
+
+                                    <label>
+                                        Email:
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                            required
+                                            style={{ padding: 6, borderRadius: 4, border: '1px solid #ccc', marginLeft: 31 }}
+                                        />
+                                    </label>
+
+                                    <label>
+                                        Amount:
+                                        <input
+                                            type="number"
+                                            name="amount"
+                                            value={formData.amount}
+                                            onChange={e => setFormData({ ...formData, amount: e.target.value })}
+                                            required
+                                            style={{ padding: 6, borderRadius: 4, border: '1px solid #ccc', marginLeft: 16 }}
+                                            min="1"
+                                        />
+                                    </label>
+
+                                    <label>
+                                        Event:
+                                        <select
+                                            name="event"
+                                            value={selectedEvent} // bind to selectedEvent
+                                            onChange={e => setSelectedEvent(e.target.value)} // update selectedEvent
+                                            required
+                                            style={{ padding: 6, borderRadius: 4, border: '1px solid #ccc', marginLeft: 31 }}
+                                        >
+                                            <option value="">-- Choose an event --</option>
+                                            {initiatives.map(event => (
+                                                <option key={event._id} value={event.title}>{event.title}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+
+                                    {/* <div style={{ textAlign: 'center', marginTop: 16 }}> */}
+                                    <button
+                                        type="submit"
+                                        disabled={submitting}
+                                        style={{
+                                            padding: 10,
+                                            borderRadius: 6,
+                                            backgroundColor: '#DD783C',
+                                            color: '#fff',
+                                            border: 'none',
+                                            cursor: 'pointer',
+                                            fontWeight: 'bold',
+
+                                        }}
+                                    >
+                                        {submitting ? 'Submitting...' : 'Contribute'}
+                                    </button>
+                                    {/* </div> */}
+                                </form>
+
                                 {selectedEvent && (
                                     <>
                                         <div className="donate-selected-event" style={{ paddingLeft: '10px', margin: '16px 0', fontWeight: 500, color: '#DD783C', fontFamily: 'open sans', fontWeight: '500' }}>
@@ -98,6 +225,7 @@ const Contribute = () => {
                                             fontWeight: '400',
                                             fontStyle: 'italic'
                                         }}>It is not amount, it is Shraddha that matters.</p>
+
                                     </>
                                 )}
                             </div>

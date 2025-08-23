@@ -146,7 +146,53 @@ app.delete('/initiatives/:id', adminAuth, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+app.patch('/:id/images', adminAuth, upload.array('images'), async (req, res) => {
+  try {
+    const initiativeId = req.params.id;
 
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'At least one image is required' });
+    }
+
+    const newUrls = req.files.map(file => file.path); // get Cloudinary URLs
+
+    const updatedInitiative = await Initiative.findByIdAndUpdate(
+      initiativeId,
+      { $push: { imageUrls: { $each: newUrls } } },
+      { new: true }
+    );
+
+    if (!updatedInitiative) return res.status(404).json({ error: 'Initiative not found' });
+
+    res.json(updatedInitiative);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// PATCH /initiatives/:id/images/delete
+app.patch('/:id/images/delete', adminAuth, async (req, res) => {
+  try {
+    const initiativeId = req.params.id;
+    const { urlsToDelete } = req.body;
+
+    if (!urlsToDelete || !Array.isArray(urlsToDelete) || urlsToDelete.length === 0) {
+      return res.status(400).json({ error: 'At least one image URL is required to delete' });
+    }
+
+    const initiative = await Initiative.findById(initiativeId);
+    if (!initiative) return res.status(404).json({ error: 'Initiative not found' });
+
+    // Remove specified images
+    initiative.imageUrls = initiative.imageUrls.filter(url => !urlsToDelete.includes(url));
+    await initiative.save();
+
+    res.json(initiative);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 // Models
 const ImagesSubsection = require('./ImagesSubsection');
 
@@ -738,6 +784,29 @@ app.delete('/books/:id', adminAuth, async (req, res) => {
     res.status(500).json({ error: 'Failed to delete book' });
   }
 });
+// PATCH /books/:id/description
+app.patch('/books/:id/description', async (req, res) => {
+  try {
+    const { previewDescription } = req.body;
+    if (!previewDescription) {
+      return res.status(400).json({ error: 'previewDescription is required' });
+    }
+
+    const updatedBook = await Book.findByIdAndUpdate(
+      req.params.id,
+      { previewDescription },
+      { new: true }
+    );
+
+    if (!updatedBook) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+
+    res.json(updatedBook);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update book description' });
+  }
+});
 
 // Get all videos
 app.get('/videos', async (req, res) => {
@@ -1146,7 +1215,56 @@ app.post('/contact', async (req, res) => {
     res.status(500).json({ error: 'Failed to send message. Please try again.' });
   }
 });
+app.post('/contact-contribute', async (req, res) => {
+  try {
+    const { name, email, event, amount } = req.body;
 
+    // console.log('Contact form submission:', { name, email, subject, message });
+
+    // Validate required fields
+    if (!name || !email || !event || !amount) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // Check if email configuration is set
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      // console.log('Email not configured. Logging contact form data to console:');
+      // console.log('Name:', name);
+      // console.log('Email:', email);
+      // console.log('Subject:', subject);
+      // console.log('Message:', message);
+      return res.json({ success: true, message: 'Message received! (Email service not configured - check server logs)' });
+    }
+
+    // Email content
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: process.env.CONTACT_EMAIL || process.env.EMAIL_USER, // Send to admin email
+      subject: `Donation from ${name} for ${event}`,
+      html: `
+        <h2>Donation Details</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Donation Amount:</strong> ${amount}</p>
+        <p><strong>Donation for selected event is:</strong></p>
+        <p>${event}</p>
+        <hr>
+        <p><em>This message was sent from the VSM Pantnagar contact form.</em></p>
+      `
+    };
+
+    console.log('Sending email to:', mailOptions.to);
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    console.log('Email sent successfully');
+    res.json({ success: true, message: 'Message sent successfully!' });
+  } catch (error) {
+    console.error('Email sending error:', error);
+    res.status(500).json({ error: 'Failed to send message. Please try again.' });
+  }
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
