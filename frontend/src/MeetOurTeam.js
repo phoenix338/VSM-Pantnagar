@@ -3,7 +3,7 @@ import { auth } from './firebase';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './MeetOurTeam.css';
-import MeetGIF from './assets/meetourteam.mp4';
+import MeetGIF from './assets/meetourteam1.mp4';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -148,7 +148,7 @@ const MeetOurTeam = () => {
             <Navbar />
             <div className="meetourteam-hero-section">
                 <video
-                    src={require('./assets/meetourteam.mp4')}
+                    src={require('./assets/meetourteam1.mp4')}
                     autoPlay
                     loop
                     muted

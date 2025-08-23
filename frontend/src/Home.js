@@ -320,8 +320,10 @@ function Home() {
                     />
                     <audio
                         ref={audioRef}
-                        src={require('./assets/audio1.mp3')}
+                        src={require('./assets/audio2.mp3')}
                         loop
+                        autoPlay
+
                         style={{ display: 'none' }}
                     />
                     <div
