@@ -88,7 +88,7 @@ const Contribute = () => {
                     />
                 </div>
                 <div className="contribute-heading-section">
-                    <h1 className="contribute-heading">Your Generous Contributions</h1>
+                    <h1 className="contribute-heading">Your Generous Contributions Will Make A Big Difference!</h1>
                 </div>
                 <div className="contribute-tabs-section">
                     <div className="contribute-light-banner" style={{ background: '#D9D9D9', borderTopLeftRadius: 8, borderTopRightRadius: 8, border: '1px solid #bbb', borderBottom: 'none', textAlign: 'center', padding: '18px 0 8px 0' }}>

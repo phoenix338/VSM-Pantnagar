@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaInstagram, FaFacebook, FaXTwitter, FaYoutube } from 'react-icons/fa6';
+import { FaInstagram, FaFacebook, FaLinkedin, FaYoutube } from 'react-icons/fa6';
 import './Footer.css';
 import backToTopImg from './assets/backtotop.png';
 import { useEffect, useState } from 'react';
@@ -73,10 +73,39 @@ const Footer = () => {
           </div>
           <div className="footer-social">
             <b>Don't miss the chance to be a part of</b>
-            <FaInstagram className="footer-icon" />
-            <FaFacebook className="footer-icon" />
-            {/* <FaXTwitter className="footer-icon" /> */}
-            <FaYoutube className="footer-icon" />
+            <a
+              href="https://www.instagram.com/vsmpantnagar/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram className="footer-icon" />
+            </a>
+            <a
+              href="https://www.facebook.com/VSMPantnagar/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebook className="footer-icon" />
+
+            </a>
+            <a
+              href="https://www.linkedin.com/company/vivekananda-swadhyay-mandal/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaLinkedin className="footer-icon" />
+
+
+            </a>
+
+            <a
+              href="https://www.youtube.com/@vsmpantnagarchannel"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaYoutube className="footer-icon" />
+
+            </a>
           </div>
         </div>
         <div className="footer-copyright">
