@@ -1360,7 +1360,7 @@ const videoStorage = new CloudinaryStorage({
 
 const uploadImage = multer({ storage: imageStorage });
 const uploadVideo = multer({ storage: videoStorage });
-const QuoteSection = require('./QuoteSection');
+const QuoteSection = require('./quoteSection');
 
 // Get current quoteSection
 app.get('/quote-section', async (req, res) => {
