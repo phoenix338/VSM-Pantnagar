@@ -28,6 +28,20 @@ const testimonials = [
 function Home() {
     // Admin user state
     const [user, setUser] = useState(null);
+    const [quoteData, setQuoteData] = useState({ image: "", video: "" });
+
+    useEffect(() => {
+        async function fetchQuoteSection() {
+            try {
+                const res = await fetch("/quote-section");
+                const data = await res.json();
+                setQuoteData(data);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchQuoteSection();
+    }, []);
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(setUser);
         return () => unsubscribe();
@@ -107,6 +121,7 @@ function Home() {
     const [currentStep, setCurrentStep] = useState(0); // 0: initial, 1: vision, 2: mission, 3: values
     const [audioPlayed, setAudioPlayed] = useState(false);
     const audioRef = useRef(null);
+
     // Handle location state for intro video
     useEffect(() => {
         if (location.state && location.state.skipIntro === false) {
@@ -218,6 +233,7 @@ function Home() {
             prev === 0 ? upcomingEvents.length - 1 : prev - 1
         );
     };
+    const isAdmin = user && user.email === ADMIN_EMAIL;
 
     const goToEvent = (index) => {
         setCurrentEventIndex(index);
@@ -253,6 +269,53 @@ function Home() {
             playAudio();
         }, 500);
     };
+    function EditButton({ type, current, setQuoteData }) {
+        const handleFileChange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append(type, file);
+
+            try {
+                const res = await fetch(`/quote-section/${type}`, {
+                    method: "PUT",
+                    body: formData,
+                });
+
+                if (!res.ok) throw new Error("Upload failed");
+
+                const data = await res.json();
+                setQuoteData(data); // update parent state with new URL
+            } catch (err) {
+                console.error(err);
+                alert("Upload failed");
+            }
+        };
+
+        return (
+            <div style={{ marginTop: 8 }}>
+                <label
+                    style={{
+                        cursor: "pointer",
+                        padding: "6px 12px",
+                        backgroundColor: "#DD783C",
+                        color: "#fff",
+                        borderRadius: 6,
+                        fontWeight: 500,
+                    }}
+                >
+                    Edit {type}
+                    <input
+                        type="file"
+                        hidden
+                        onChange={handleFileChange}
+                        accept={type === "image" ? "image/*" : "video/*"}
+                    />
+                </label>
+            </div>
+        );
+    }
 
     useEffect(() => {
         if (showLandingVideo) {
@@ -303,6 +366,105 @@ function Home() {
                 console.error('Impact fetch error:', err);
             });
     }, []);
+    const RotatingQuoteSection = ({ quoteOfTheDay, quoteAuthor }) => {
+        const [activeIndex, setActiveIndex] = React.useState(0);
+
+        const items = [
+            // ✅ Quote Card
+            <div key="quote" className="quote-frosted" style={{
+                zIndex: 3,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'stretch',
+                width: '40vw',
+                maxWidth: '40vw',
+                minHeight: '40vh',
+                background: 'rgba(255,255,255,0.7)',
+                borderRadius: 18,
+                boxShadow: '0 2px 16px #DD783C22',
+                padding: '32px 24px',
+                margin: '0 auto',
+                position: 'relative',
+                transition: 'opacity 0.8s ease-in-out',
+            }}>
+                {/* Left Section: Quote */}
+                <div style={{ flex: 1, paddingRight: 24, borderRight: '1.5px solid #e0e0e0' }}>
+                    <div style={{
+                        fontFamily: 'Alex Brush, cursive',
+                        fontSize: '2vw',
+                        color: '#DD783C',
+                        fontWeight: 500,
+                    }}>Quote Of The Day</div>
+                    <div style={{
+                        fontFamily: 'open sans',
+                        fontSize: '1.5vw',
+                        color: '#333',
+                        lineHeight: 1.5,
+                    }}>{quoteOfTheDay}</div>
+                    {quoteAuthor && (
+                        <div style={{
+                            fontFamily: 'open sans',
+                            fontSize: '1.5vw',
+                            color: '#888',
+                            marginTop: 6,
+                        }}>— {quoteAuthor}</div>
+                    )}
+                </div>
+                {/* Right Section: Calendar */}
+                <div style={{ flex: 1, paddingLeft: 24 }}>
+                    <div style={{
+                        fontFamily: 'Alex Brush, cursive',
+                        fontSize: '2.2vw',
+                        color: '#DD783C',
+                        fontWeight: 500,
+                    }}>Calendar</div>
+                    <div style={{
+                        fontFamily: 'open sans',
+                        fontSize: '1.5vw',
+                        color: '#333',
+                    }}>
+                        <HinduCalendar hindi={true} />
+                    </div>
+                </div>
+            </div>,
+
+            // ✅ Video
+            <div key="video">
+                <video
+                    src={quoteData.video}
+                    autoPlay
+                    muted
+                    loop
+                    style={{ width: "100%", height: "100%", borderRadius: 18, objectFit: "contain" }}
+                />
+            </div>,
+
+            // ✅ Image
+            <div key="image" style={{ width: "40vw", height: "60vh" }}>
+                <img
+                    src={quoteData.image}
+                    alt="Rotating Visual"
+                    style={{ width: "100%", height: "100%", borderRadius: 18, objectFit: "contain" }}
+                />
+            </div>
+
+        ];
+
+        // Auto-rotate every 4s
+        React.useEffect(() => {
+            const interval = setInterval(() => {
+                setActiveIndex(prev => (prev + 1) % items.length);
+            }, 10000);
+            return () => clearInterval(interval);
+        }, []);
+
+        return (
+            <div style={{ zIndex: 3, transition: "opacity 0.8s ease-in-out" }}>
+                {items[activeIndex]}
+            </div>
+        );
+    };
 
     // First: Video overlay
     if (showLandingVideo) {
@@ -713,15 +875,14 @@ function Home() {
                     <button
                         className="register-btn"
                         onClick={() => {
-                            if (upcomingEvents.length > 0 && upcomingEvents[currentEventIndex].googleFormLink) {
-                                window.open(upcomingEvents[currentEventIndex].googleFormLink, '_blank');
-                            }
+                            window.open("https://docs.google.com/forms/d/e/1FAIpQLSevfBO_TI6uAbQ3pTooYBr--FBFoGWF2PM5ivbgFwjXtt1eng/viewform?usp=sharing&ouid=108138510169097439172", '_blank');
                         }}
                     >
                         Register
                     </button>
                 </div>
                 {/* Quote of the Day Section - New Design */}
+                {/* Quote of the Day Section - Rotating Content */}
                 <section id="calendar" style={{
                     width: '100vw',
                     minHeight: 700,
@@ -735,128 +896,17 @@ function Home() {
                 }}>
                     {/* Background Image */}
                     <img src={require('./assets/qouteoftheday.jpg')} alt="Quote Background" className="quote-bg" />
-                    {/* Quote GIF - above bg, below card */}
-                    {/* Frosted Glass Card - Two Column Layout */}
-                    <div className="quote-frosted" style={{
-                        zIndex: 3,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'stretch',
-                        gap: 0,
-                        width: '40vw',
-                        maxWidth: '40vw',
-                        minHeight: '40vh',
-                        background: 'rgba(255,255,255,0.7)',
-                        borderRadius: 18,
-                        boxShadow: '0 2px 16px #DD783C22',
-                        padding: '32px 24px',
-                        margin: '0 auto',
-                        position: 'relative',
-                    }}>
-                        {/* Left Section: Quote Title and Quote */}
-                        <div style={{
-                            flex: 1,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-start',
-                            paddingRight: 24,
-                            borderRight: '1.5px solid #e0e0e0',
-                        }}>
-                            <div className="quote-title" style={{
-                                fontFamily: 'Alex Brush, cursive',
-                                fontSize: '2vw',
-                                color: '#DD783C',
-                                fontWeight: 500,
-                                padding: 4,
-                            }}>Quote Of The Day</div>
-                            <div className="quote-main" style={{
-                                fontFamily: 'open sans',
-                                fontSize: '1.5vw',
-                                color: '#333',
-                                fontWeight: 400,
-                                marginBottom: 0,
-                                lineHeight: 1.5,
-                            }}>{quoteOfTheDay}</div>
-                            {quoteAuthor && (
-                                <div className="quote-author" style={{
-                                    fontFamily: 'open sans',
-                                    fontSize: '1.5vw',
-                                    color: '#888',
-                                    fontWeight: 400,
-                                    marginTop: 6,
-                                }}>— {quoteAuthor}</div>
-                            )}
-                        </div>
-                        {/* Right Section: Calendar Info in Hindi */}
-                        <div style={{
-                            flex: 1,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'flex-start',
-                            alignItems: 'flex-start',
-                            paddingLeft: 24,
-                        }}>
-                            <div style={{
-                                fontFamily: 'Alex Brush, cursive',
-                                fontSize: '2.2vw',
-                                color: '#DD783C',
-                                fontWeight: 500,
-                                marginBottom: 0,
-                            }}>Calendar</div>
-                            {/* <div
-                                className="quote-date"
-                                style={{
-                                    fontFamily: 'open sans',
-                                    fontSize: 18,
-                                    color: '#333',
-                                    fontWeight: 400,
-                                    marginBottom: 8,
-                                }}
-                            >
-                                {new Date().toLocaleDateString('hi-IN-u-nu-deva', {
-                                    day: 'numeric',
-                                    month: 'long',
-                                    year: 'numeric'
-                                })}
-                            </div> */}
-                            <div className="quote-hindu" style={{
-                                fontFamily: 'open sans',
-                                fontSize: '1.5vw',
-                                color: '#333',
-                                fontWeight: 400,
-                                marginBottom: 0,
-                            }}>
-                                <HinduCalendar hindi={true} />
-                            </div>
-                        </div>
-                        {/* Responsive stacking for mobile */}
-                        <style>{`
-                            @media (max-width: 600px) {
-                                .quote-frosted {
-                                    flex-direction: column !important;
-                                    padding: 16px 6px !important;
-                                    min-height: 0 !important;
-                                }
-                                .quote-frosted > div {
-                                    padding: 0 !important;
-                                    border: none !important;
-                                }
-                                .quote-title {
-                                    font-size: 22px !important;
-                                    margin-bottom: 8px !important;
-                                }
-                                .quote-main {
-                                    font-size: 15px !important;
-                                }
-                                .quote-author {
-                                    font-size: 13px !important;
-                                }
-                            }
-                        `}</style>
-                    </div>
-                </section>
 
+                    {/* Rotating Content */}
+                    <RotatingQuoteSection quoteOfTheDay={quoteOfTheDay} quoteAuthor={quoteAuthor} />
+
+                </section>
+                {isAdmin && (
+                    <div style={{ marginTop: 16, display: "flex", gap: "1rem", justifyContent: 'center', alignItems: 'center' }}>
+                        <EditButton type="video" current={quoteData.video} setQuoteData={setQuoteData} />
+                        <EditButton type="image" current={quoteData.image} setQuoteData={setQuoteData} />
+                    </div>
+                )}
                 {/* Vision, Mission and Values Section */}
                 <div
                     ref={setVisionMissionRef}

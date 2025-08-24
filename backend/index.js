@@ -1338,6 +1338,71 @@ app.delete('/faq/:id', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+// For images
+const imageStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'quoteSection',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif'],
+  },
+});
+
+// For videos
+const videoStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'quoteSection',
+    resource_type: 'video',
+    allowed_formats: ['mp4', 'mov', 'avi'],
+  },
+});
+
+const uploadImage = multer({ storage: imageStorage });
+const uploadVideo = multer({ storage: videoStorage });
+const QuoteSection = require('./QuoteSection');
+
+// Get current quoteSection
+app.get('/quote-section', async (req, res) => {
+  try {
+    let section = await QuoteSection.findOne();
+    if (!section) section = {};
+    res.json(section);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update image (admin only)
+app.put('/quote-section/image', uploadImage.single('image'), async (req, res) => {
+  try {
+    const image = req.file.path;
+    let section = await QuoteSection.findOne();
+    if (!section) section = new QuoteSection({ image });
+    else section.image = image;
+    section.updatedAt = Date.now();
+    await section.save();
+    res.json(section);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update video (admin only)
+app.put('/quote-section/video', uploadVideo.single('video'), async (req, res) => {
+  try {
+    const video = req.file.path;
+    let section = await QuoteSection.findOne();
+    if (!section) section = new QuoteSection({ video });
+    else section.video = video;
+    section.updatedAt = Date.now();
+    await section.save();
+    res.json(section);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
