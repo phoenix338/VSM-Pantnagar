@@ -453,7 +453,8 @@ function Home() {
                 <video
                     ref={videoRef}
                     src={quoteData.video}
-                    muted
+                    muted={muted}
+                    playsInline
                     style={{ width: "40vw", height: "60vh", borderRadius: 18, objectFit: "contain" }}
                 />
                 {/* Mute/Unmute button */}
@@ -499,7 +500,11 @@ function Home() {
                 const video = videoRef.current;
                 if (video) {
                     video.currentTime = 0;
-                    video.play();
+                    video.play().catch(err => {
+                        console.log("Video play blocked:", err);
+                        // fallback → just skip to next item
+                        setActiveIndex(prev => (prev + 1) % items.length);
+                    });
                     // Move to next item when video ends
                     video.onended = () => setActiveIndex(prev => (prev + 1) % items.length);
                 }
