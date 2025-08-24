@@ -446,16 +446,16 @@ function PDFFlipbookViewer({ url, title }) {
             >
                 {numPages && (
                     <HTMLFlipBook
-                        width={500}
-                        height={700}
+                        width={700}
+                        height={900}
                         showCover={true}
                         maxShadowOpacity={0.5}
                         className="pdf-flipbook"
                         size="stretch"
-                        minWidth={500}
-                        maxWidth={500}
-                        minHeight={700}
-                        maxHeight={700}
+                        minWidth={700}
+                        maxWidth={700}
+                        minHeight={900}
+                        maxHeight={900}
                         drawShadow={true}
                         flippingTime={600}
                         useMouseEvents={true}
@@ -469,7 +469,7 @@ function PDFFlipbookViewer({ url, title }) {
                             <div key={`page_${index + 1}`} className="pdf-flipbook-page">
                                 <Page
                                     pageNumber={index + 1}
-                                    width={500}
+                                    width={700}
                                     renderTextLayer={false}
                                     renderAnnotationLayer={false}
                                 />

@@ -443,7 +443,6 @@ function Home() {
                 <video
                     src={quoteData.video}
                     autoPlay
-                    muted
                     loop
                     style={{ width: "100%", height: "100%", borderRadius: 18, objectFit: "contain" }}
                 />
@@ -464,7 +463,7 @@ function Home() {
         React.useEffect(() => {
             const interval = setInterval(() => {
                 setActiveIndex(prev => (prev + 1) % items.length);
-            }, 5000);
+            }, 8000);
             return () => clearInterval(interval);
         }, []);
 
