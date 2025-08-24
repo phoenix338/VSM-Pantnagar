@@ -33,7 +33,7 @@ function Home() {
     useEffect(() => {
         async function fetchQuoteSection() {
             try {
-                const res = await fetch("/quote-section");
+                const res = await fetch(`${API_URL}/quote-section`);
                 const data = await res.json();
                 setQuoteData(data);
             } catch (err) {
@@ -274,19 +274,27 @@ function Home() {
             const file = e.target.files[0];
             if (!file) return;
 
+            const adminPassword = prompt('Enter admin password:');
+            if (!adminPassword) return;
+
             const formData = new FormData();
             formData.append(type, file);
 
             try {
-                const res = await fetch(`/quote-section/${type}`, {
+                const res = await fetch((process.env.REACT_APP_API_URL || 'http://localhost:3002') + `/quote-section/${type}`, {
                     method: "PUT",
+                    headers: {
+                        email: window.user?.email || '',
+                        password: adminPassword
+                    },
                     body: formData,
                 });
 
                 if (!res.ok) throw new Error("Upload failed");
 
                 const data = await res.json();
-                setQuoteData(data); // update parent state with new URL
+                // Only update the relevant field in quoteData
+                setQuoteData(prev => ({ ...prev, [type]: data[type] }));
             } catch (err) {
                 console.error(err);
                 alert("Upload failed");
@@ -431,6 +439,7 @@ function Home() {
 
             // ✅ Video
             <div key="video">
+
                 <video
                     src={quoteData.video}
                     autoPlay
@@ -455,7 +464,7 @@ function Home() {
         React.useEffect(() => {
             const interval = setInterval(() => {
                 setActiveIndex(prev => (prev + 1) % items.length);
-            }, 10000);
+            }, 5000);
             return () => clearInterval(interval);
         }, []);
 

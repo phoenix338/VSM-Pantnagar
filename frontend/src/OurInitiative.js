@@ -304,7 +304,7 @@ const OurInitiative = () => {
                                 <div className="initiative-content-row">
                                     <div className="initiative-text">
                                         {item.text && (
-                                            <p style={{ padding:'0px',marginTop: '0px', fontSize: '1.7vw', lineHeight: 1.4, textAlign: 'left' }}>
+                                            <p style={{ rpadding: '0px', marginTop: '0px', fontSize: '1.7vw', lineHeight: 1.4, textAlign: 'left' }}>
                                                 {(() => {
                                                     // First, split by 'Contribute page' and render as Link
                                                     const parts = item.text.split('Contribute page');
@@ -331,6 +331,7 @@ const OurInitiative = () => {
                                                     : item.imageUrl}
                                                 alt="Event"
                                                 className="initiative-img"
+
                                             />
                                             {isAdmin && item.imageUrls && item.imageUrls.length > 0 && (
                                                 <button
@@ -425,24 +426,24 @@ const OurInitiative = () => {
                         <h3>Upload Images to Initiative/Event</h3>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 400 }}>
 
-                        <select
-                            value={selectedInitiativeForUpload}
-                            onChange={e => setSelectedInitiativeForUpload(e.target.value)}
-                            style={{ display: 'block', marginBottom: 12 }}
-                        >
-                            <option value="">-- Select Initiative/Event --</option>
-                            {initiatives.map(init => (
-                                <option key={init._id} value={init._id}>
-                                    {init.title}
-                                </option>
-                            ))}
-                        </select>
+                            <select
+                                value={selectedInitiativeForUpload}
+                                onChange={e => setSelectedInitiativeForUpload(e.target.value)}
+                                style={{ display: 'block', marginBottom: 12 }}
+                            >
+                                <option value="">-- Select Initiative/Event --</option>
+                                {initiatives.map(init => (
+                                    <option key={init._id} value={init._id}>
+                                        {init.title}
+                                    </option>
+                                ))}
+                            </select>
 
-                        <input type="file" multiple onChange={handleImageFilesChange} style={{ display: 'block', marginBottom: 12 }} />
+                            <input type="file" multiple onChange={handleImageFilesChange} style={{ display: 'block', marginBottom: 12 }} />
 
-                        <button type='submit' onClick={handleUploadImages} disabled={uploading}>
-                            {uploading ? 'Uploading...' : 'Upload Images'}
-                        </button>
+                            <button type='submit' onClick={handleUploadImages} disabled={uploading}>
+                                {uploading ? 'Uploading...' : 'Upload Images'}
+                            </button>
                         </div>
                     </div>
                 )}

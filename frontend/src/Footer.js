@@ -57,7 +57,7 @@ const Footer = () => {
           )}
         </div>
         <div className="footer-col right-col">
-          <Link to="/#calendar" className="footer-link" onClick={handleFooterLinkClick}>Calendar<span className="footer-asterisk">*</span></Link>
+          <Link to="/#calendar" className="footer-link" onClick={handleFooterLinkClick}>Calendar</Link>
           <Link to="https://www.youthariseawake.org/" className="footer-link" onClick={handleFooterLinkClick} target='_blank'>Yuva</Link>
           <Link to="https://vsmmotivation.in/" className="footer-link" onClick={handleFooterLinkClick} target='_blank'>VSM Motivation</Link>
 
