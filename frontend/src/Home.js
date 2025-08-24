@@ -14,6 +14,7 @@ import ImpactStats from './ImpactStats';
 import HinduCalendar from './HinduCalendar';
 import './QuoteOfTheDay.css';
 import { auth } from './firebase';
+
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -376,7 +377,16 @@ function Home() {
     }, []);
     const RotatingQuoteSection = ({ quoteOfTheDay, quoteAuthor }) => {
         const [activeIndex, setActiveIndex] = React.useState(0);
+        const [muted, setMuted] = useState(true);
+        const videoRef = useRef(null);
 
+        const toggleMute = () => {
+            const video = videoRef.current;
+            if (video) {
+                video.muted = !muted;
+                setMuted(!muted);
+            }
+        };
         const items = [
             // ✅ Quote Card
             <div key="quote" className="quote-frosted" style={{
@@ -441,11 +451,33 @@ function Home() {
             <div key="video">
 
                 <video
+                    ref={videoRef}
                     src={quoteData.video}
-                    autoPlay
-                    loop
-                    style={{ width: "100%", height: "100%", borderRadius: 18, objectFit: "contain" }}
+                    muted
+                    style={{ width: "40vw", height: "60vh", borderRadius: 18, objectFit: "contain" }}
                 />
+                {/* Mute/Unmute button */}
+                <button
+                    onClick={toggleMute}
+                    style={{
+                        position: "absolute",
+                        bottom: 12,
+                        right: 12,
+                        background: "rgba(0,0,0,0.5)",
+                        border: "none",
+                        borderRadius: "50%",
+                        width: 40,
+                        height: 40,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        color: "white",
+                        fontSize: 18,
+                    }}
+                >
+                    {muted ? "🔇" : "🔊"}
+                </button>
             </div>,
 
             // ✅ Image
@@ -461,11 +493,28 @@ function Home() {
 
         // Auto-rotate every 4s
         React.useEffect(() => {
-            const interval = setInterval(() => {
-                setActiveIndex(prev => (prev + 1) % items.length);
-            }, 8000);
-            return () => clearInterval(interval);
-        }, []);
+            let timer;
+
+            if (activeIndex === 1) { // video at 2nd position
+                const video = videoRef.current;
+                if (video) {
+                    video.currentTime = 0;
+                    video.play();
+                    // Move to next item when video ends
+                    video.onended = () => setActiveIndex(prev => (prev + 1) % items.length);
+                }
+            } else {
+                // Other items: rotate after 8 seconds
+                timer = setTimeout(() => {
+                    setActiveIndex(prev => (prev + 1) % items.length);
+                }, 8000);
+            }
+
+            return () => {
+                clearTimeout(timer);
+                if (videoRef.current) videoRef.current.onended = null; // cleanup
+            };
+        }, [activeIndex, items.length]);
 
         return (
             <div style={{ zIndex: 3, transition: "opacity 0.8s ease-in-out" }}>
@@ -483,7 +532,6 @@ function Home() {
                     <video
                         src={require('./assets/diyaa.mp4')}
                         autoPlay
-                        loop
                         muted
                         playsInline
                         style={{ position: 'absolute', inset: 0, width: '100vw', height: '100vh', objectFit: 'cover', zIndex: 1 }}
