@@ -242,7 +242,7 @@ const UpcomingEvents = () => {
             <Navbar />
             <div className="events-page">
                 <div className="events-gif-wrapper">
-                    <h1 className="events-heading">Events: Lights Ahead</h1>
+                    <h1 className="events-heading">Upcoming and Previous Events</h1>
 
                     {/* <img src={eventsGif} alt="Events" className="events-gif" /> */}
                 </div>

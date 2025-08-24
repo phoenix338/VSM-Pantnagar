@@ -79,7 +79,13 @@ const Contribute = () => {
             <div className="contribute-root">
                 <Navbar />
                 <div className="contribute-hero-section">
-                    <img src={contributeGif} alt="contribute" className="contribute-gif" />
+                    <video
+                        src={require('./assets/contribute.mp4')}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    />
                 </div>
                 <div className="contribute-heading-section">
                     <h1 className="contribute-heading">Your Generous Contributions</h1>
