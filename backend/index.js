@@ -35,6 +35,7 @@ const Resource = require('./Resource');
 const TestimonialFromGuest = require('./TestimonialFromGuest');
 const EventReview = require('./EventReview');
 const ImageSubsection = require('./ImagesSubsection');
+const Setting = require('./Setting');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -1398,6 +1399,29 @@ app.put('/quote-section/video', uploadVideo.single('video'), async (req, res) =>
     section.updatedAt = Date.now();
     await section.save();
     res.json(section);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get("/form-link", async (req, res) => {
+  try {
+    const setting = await Setting.findOne({ key: "googleFormLink" });
+    res.json({ link: setting ? setting.value : "" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update Google Form link
+app.put("/form-link", async (req, res) => {
+  try {
+    const { link } = req.body;
+    let setting = await Setting.findOneAndUpdate(
+      { key: "googleFormLink" },
+      { value: link },
+      { new: true, upsert: true }
+    );
+    res.json({ success: true, link: setting.value });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

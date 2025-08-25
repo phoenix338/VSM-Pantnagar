@@ -527,7 +527,32 @@ function Home() {
             </div>
         );
     };
+    const [formLink, setFormLink] = useState("");
+    const [newLink, setNewLink] = useState("");
 
+    // Fetch the current Google Form link
+    useEffect(() => {
+        fetch(`${API_URL}/form-link`)
+            .then((res) => res.json())
+            .then((data) => setFormLink(data.link))
+            .catch((err) => console.error("Error fetching form link:", err));
+    }, []);
+
+    // Update the link in MongoDB
+    const updateLink = async () => {
+        try {
+            const res = await fetch(`${API_URL}/form-link`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ link: newLink }),
+            });
+            const data = await res.json();
+            setFormLink(data.link);
+            setNewLink("");
+        } catch (err) {
+            console.error("Error updating form link:", err);
+        }
+    };
     // First: Video overlay
     if (showLandingVideo) {
         return (
@@ -932,12 +957,37 @@ function Home() {
                         style={{ width: '100vw', display: 'block', margin: 0, padding: 0, objectFit: 'cover' }}
                     />
                 )}
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '32px 0' }}>
+                <div
+                    style={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        margin: "32px 0",
+                    }}
+                >
+                    {/* Admin edit option */}
+                    {isAdmin && (
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "16px", width: '50vw' }}>
+
+                            <input
+                                type="text"
+                                value={newLink}
+                                onChange={(e) => setNewLink(e.target.value)}
+                                placeholder="Enter new Google Form link"
+                                style={{ marginBottom: "12px", padding: "8px", width: "50vw" }}
+                            />
+                            <button onClick={updateLink} style={{ marginBottom: "16px" }}>
+                                Save Link
+                            </button>
+                        </div>
+                    )}
+
+
+                    {/* Register button */}
                     <button
                         className="register-btn"
-                        onClick={() => {
-                            window.open("https://docs.google.com/forms/d/e/1FAIpQLSevfBO_TI6uAbQ3pTooYBr--FBFoGWF2PM5ivbgFwjXtt1eng/viewform?usp=sharing&ouid=108138510169097439172", '_blank');
-                        }}
+                        onClick={() => window.open(formLink, "_blank")}
                     >
                         Register
                     </button>
