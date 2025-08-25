@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { auth } from './firebase';
 import './GalleryImages.css';
-
+import Footer from './Footer';
 const RENDER_API_URL = process.env.REACT_APP_API_URL;
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
@@ -528,7 +528,10 @@ const GalleryImages = () => {
 
                     </>
                 )}
-            </div>
+
+            </div >
+            <Footer />
+
         </>
     );
 };

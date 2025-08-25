@@ -462,7 +462,7 @@ function Home() {
                     />
                 </div>
                 {/* Mute/Unmute button */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', position: 'absolute', inset: 0 }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', position: 'absolute', inset: 0, marginBottom: '3vh' }}>
                     <button
                         onClick={toggleMute}
                         style={{
@@ -470,8 +470,8 @@ function Home() {
                             background: "rgba(0,0,0,0.5)",
                             border: "none",
                             borderRadius: "50%",
-                            width: 40,
-                            height: 40,
+                            width: '5vh',
+                            height: '5vh',
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -480,7 +480,7 @@ function Home() {
                             fontSize: 18,
                         }}
                     >
-                        <div style={{ fontSize: "32px" }}>
+                        <div style={{ fontSize: "4vh" }}>
                             {muted ? "🔇" : "🔊"}
                         </div>
                     </button>
@@ -1002,7 +1002,7 @@ function Home() {
                 {/* Quote of the Day Section - Rotating Content */}
                 <section id="calendar" style={{
                     width: '100vw',
-                    minHeight: 700,
+                    height: '85vh',
                     position: 'relative',
                     display: 'flex',
                     alignItems: 'center',
