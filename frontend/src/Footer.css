@@ -123,6 +123,19 @@
     font-family: 'Nunito', sans-serif;
 }
 
+.footer-developers {
+    color: #7B6E6A;
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    text-decoration: none;
+    margin-left: 5px;
+
+}
+
+.footer-developers:hover {
+    color: #DD783C;
+}
+
 .footer-social {
     display: flex;
     align-items: center;

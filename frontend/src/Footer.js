@@ -109,7 +109,17 @@ const Footer = () => {
           </div>
         </div>
         <div className="footer-copyright">
-          <span style={{ marginRight: 8 }}>&copy;</span> All Rights Reserved | Developed By ....
+          <span style={{ marginRight: 8 }}>&copy;</span> All Rights Reserved | Developed By
+          <a href="https://www.linkedin.com/in/mahir-yadav-545273230/" target="_blank" rel="noopener noreferrer" className='footer-developers'>Mahir Yadav </a>
+          <span style={{ marginLeft: '5px' }}>and Designed By</span>
+          <a href="https://www.linkedin.com/in/parsh-jain/" target="_blank" rel="noopener noreferrer" className='footer-developers'>Parsh Jain,</a>
+          <a href="https://www.linkedin.com/in/chandrama-mallick-74a7a3224/" target="_blank" rel="noopener noreferrer" className='footer-developers'>Chandrama Mallick</a>
+          <span style={{ marginLeft: '5px' }}>and</span>
+
+          <a href="https://www.linkedin.com/in/parsh-jain/" target="_blank" rel="noopener noreferrer" className='footer-developers'>Priyanshu Pandey.</a>
+
+
+
         </div>
       </div>
       {/* Responsive styles for mobile */}
