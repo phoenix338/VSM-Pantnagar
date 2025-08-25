@@ -383,8 +383,11 @@ function Home() {
         const toggleMute = () => {
             const video = videoRef.current;
             if (video) {
-                video.muted = !muted;
-                setMuted(!muted);
+                setMuted((prevMuted) => {
+                    const newMuted = !prevMuted;
+                    video.muted = newMuted;
+                    return newMuted;
+                });
             }
         };
         const items = [
@@ -448,37 +451,40 @@ function Home() {
             </div>,
 
             // ✅ Video
-            <div key="video">
-
-                <video
-                    ref={videoRef}
-                    src={quoteData.video}
-                    muted={muted}
-                    playsInline
-                    style={{ width: "40vw", height: "60vh", borderRadius: 18, objectFit: "contain" }}
-                />
+            <div key="video" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', width: "40vw", height: "60vh" }}>
+                <div>
+                    <video
+                        ref={videoRef}
+                        src={quoteData.video}
+                        muted={muted}
+                        playsInline
+                        style={{ width: "40vw", height: "60vh", borderRadius: 18, objectFit: "contain" }}
+                    />
+                </div>
                 {/* Mute/Unmute button */}
-                <button
-                    onClick={toggleMute}
-                    style={{
-                        position: "absolute",
-                        bottom: 12,
-                        right: 12,
-                        background: "rgba(0,0,0,0.5)",
-                        border: "none",
-                        borderRadius: "50%",
-                        width: 40,
-                        height: 40,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        color: "white",
-                        fontSize: 18,
-                    }}
-                >
-                    {muted ? "🔇" : "🔊"}
-                </button>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', position: 'absolute', inset: 0 }}>
+                    <button
+                        onClick={toggleMute}
+                        style={{
+                            position: "absolute",
+                            background: "rgba(0,0,0,0.5)",
+                            border: "none",
+                            borderRadius: "50%",
+                            width: 40,
+                            height: 40,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            color: "white",
+                            fontSize: 18,
+                        }}
+                    >
+                        <div style={{ fontSize: "32px" }}>
+                            {muted ? "🔇" : "🔊"}
+                        </div>
+                    </button>
+                </div>
             </div>,
 
             // ✅ Image

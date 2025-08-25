@@ -1273,14 +1273,14 @@ app.post('/contact-contribute', async (req, res) => {
       to: process.env.CONTACT_EMAIL || process.env.EMAIL_USER, // Send to admin email
       subject: `Donation from ${name} for ${event}`,
       html: `
-        <h2>Donation Details</h2>
+        <p><em>${name} has initiated the donation of Rs ${amount}. However, if the donation has been completed or not has to be verified through the bank statement. This email does NOT notify the completion of the payment.</p>
+
+      <h2>Donation Details</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Donation Amount:</strong> ${amount}</p>
-        <p><strong>Donation for selected event is:</strong></p>
-        <p>${event}</p>
+        <p><strong>Donation for selected event is:  ${event}</strong></p>
         <hr>
-        <p><em>This message was sent from the VSM Pantnagar contact form.</em></p>
       `
     };
 
