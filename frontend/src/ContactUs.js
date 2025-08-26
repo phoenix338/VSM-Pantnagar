@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './ContactUs.css';
-import contactGif from './assets/contactus.gif';
+// import contactGif from './assets/contactus.gif';
 import { auth } from "./firebase";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3002";
@@ -154,7 +154,13 @@ const ContactUs = () => {
             <Navbar />
             <div className="contact-page">
                 <div className="contact-gif-wrapper">
-                    <img src={contactGif} alt="Contact" className="contact-gif" />
+                    <video
+                        src={require('./assets/contactus.mp4')}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    />
                 </div>
 
                 <div className="contact-heading-section">
