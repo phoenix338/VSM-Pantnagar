@@ -242,11 +242,19 @@ const UpcomingEvents = () => {
             <Navbar />
             <div className="events-page">
                 <div className="events-gif-wrapper">
-                    <h1 className="events-heading">Upcoming and Previous Events</h1>
-
+                    <video
+                        src={require('./assets/upevents.mp4')}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="video-size"
+                    />
                     {/* <img src={eventsGif} alt="Events" className="events-gif" /> */}
                 </div>
                 <div className="events-container">
+                    <h1 className="events-heading">Upcoming and Previous Events</h1>
+
                     <div className="events-header">
                         <h2>Upcoming Events</h2>
                     </div>

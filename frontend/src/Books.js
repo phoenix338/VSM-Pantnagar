@@ -237,12 +237,20 @@ const Books = () => {
             <Navbar />
             <div className="books-page main-content-gap">
                 <div className="books-gif-wrapper">
+                    <video
+                        src={require('./assets/publication.mp4')}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="video-book-size"
+                    />
                     {/* <img src={booksGif} alt="Books" className="books-gif" /> */}
-                    <h1 className="books-heading">Our Publications</h1>
 
                 </div>
                 <div className="books-content">
 
+                    <h1 className="books-heading">Our Publications</h1>
 
                     {/* Genre Sections */}
                     <div className="genres-sections">
