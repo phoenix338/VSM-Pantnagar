@@ -24,8 +24,9 @@ const ContactUs = () => {
     const [editingFaq, setEditingFaq] = useState(null);  // which faq is being edited
     const [editedQuestion, setEditedQuestion] = useState("");
     const [editedAnswer, setEditedAnswer] = useState(""); // temporary input
+    const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
-    const [contact, setContact] = useState("");
+    const [contact, setContact] = useState({});
     const [isEditingEmail, setIsEditingEmail] = useState(false);
     const [isEditingContact, setIsEditingContact] = useState(false);
 
@@ -45,9 +46,13 @@ const ContactUs = () => {
         }
     };
     useEffect(() => {
-        fetch(`${API_URL}/contact`) // calls your Express backend
+        fetch(`${API_URL}/contact`)
             .then((res) => res.json())
-            .then((data) => setContact(data))
+            .then((data) => {
+                setContact(data);
+                setPhone(data.phone || "");
+                setEmail(data.email || "");
+            })
             .catch((err) => console.error("Error fetching contact:", err));
     }, []);
     useEffect(() => {
@@ -228,18 +233,22 @@ const ContactUs = () => {
                                             <>
                                                 <input
                                                     type="text"
-                                                    value={contact.phone}
-                                                    onChange={e => setContact(e.target.value)}
+                                                    value={phone}
+                                                    onChange={e => setPhone(e.target.value)}
                                                 />
                                                 <button
                                                     onClick={() => {
-                                                        updateField("phone", contact);
+                                                        updateField("phone", phone);
                                                         setIsEditingContact(false);
+                                                        setContact({ ...contact, phone });
                                                     }}
                                                 >
                                                     Save
                                                 </button>
-                                                <button onClick={() => setIsEditingContact(false)}>
+                                                <button onClick={() => {
+                                                    setIsEditingContact(false);
+                                                    setPhone(contact.phone || "");
+                                                }}>
                                                     Cancel
                                                 </button>
                                             </>
@@ -247,7 +256,10 @@ const ContactUs = () => {
                                             <>
                                                 <span className='changeable'>{contact.phone}</span>
                                                 {isAdmin && (
-                                                    <button onClick={() => setIsEditingContact(true)}>
+                                                    <button onClick={() => {
+                                                        setIsEditingContact(true);
+                                                        setPhone(contact.phone || "");
+                                                    }}>
                                                         Edit
                                                     </button>
                                                 )}
@@ -271,18 +283,22 @@ const ContactUs = () => {
                                             <>
                                                 <input
                                                     type="text"
-                                                    value={contact.email}
-                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    value={email}
+                                                    onChange={e => setEmail(e.target.value)}
                                                 />
                                                 <button
                                                     onClick={() => {
                                                         updateField("email", email);
                                                         setIsEditingEmail(false);
+                                                        setContact({ ...contact, email });
                                                     }}
                                                 >
                                                     Save
                                                 </button>
-                                                <button onClick={() => setIsEditingEmail(false)}>
+                                                <button onClick={() => {
+                                                    setIsEditingEmail(false);
+                                                    setEmail(contact.email || "");
+                                                }}>
                                                     Cancel
                                                 </button>
                                             </>
@@ -290,7 +306,10 @@ const ContactUs = () => {
                                             <>
                                                 <span className='changeable'>{contact.email}</span>
                                                 {isAdmin && (
-                                                    <button onClick={() => setIsEditingEmail(true)}>
+                                                    <button onClick={() => {
+                                                        setIsEditingEmail(true);
+                                                        setEmail(contact.email || "");
+                                                    }}>
                                                         Edit
                                                     </button>
                                                 )}
