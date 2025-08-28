@@ -24,6 +24,32 @@ const ContactUs = () => {
     const [editingFaq, setEditingFaq] = useState(null);  // which faq is being edited
     const [editedQuestion, setEditedQuestion] = useState("");
     const [editedAnswer, setEditedAnswer] = useState(""); // temporary input
+    const [email, setEmail] = useState("");
+    const [contact, setContact] = useState("");
+    const [isEditingEmail, setIsEditingEmail] = useState(false);
+    const [isEditingContact, setIsEditingContact] = useState(false);
+
+    // PATCH function
+    const updateField = async (field, value) => {
+        try {
+            const res = await fetch(`${API_URL}/contact`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ [field]: value }),
+            });
+
+            if (!res.ok) throw new Error("Update failed");
+            // console.log(`${field} updated successfully`);
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+    useEffect(() => {
+        fetch(`${API_URL}/contact`) // calls your Express backend
+            .then((res) => res.json())
+            .then((data) => setContact(data))
+            .catch((err) => console.error("Error fetching contact:", err));
+    }, []);
     useEffect(() => {
         fetchFaqs();
         const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
@@ -171,7 +197,7 @@ const ContactUs = () => {
                     <div className="contact-content">
                         <div className="contact-info-section">
                             <h2>Get in Touch</h2>
-                            <p className="contact-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <p className="contact-description">You can reach out to us at</p>
                             <div className="contact-details">
                                 <div className="contact-item">
                                     <div className="contact-icon">
@@ -196,7 +222,37 @@ const ContactUs = () => {
                                     </div>
                                     <div className="contact-text">
                                         <h3>Phone Number</h3>
-                                        <p>+91 1234567890</p>
+                                        {/* <p>+91 1234567890</p>
+                                         */}
+                                        {isEditingContact ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    value={contact.phone}
+                                                    onChange={e => setContact(e.target.value)}
+                                                />
+                                                <button
+                                                    onClick={() => {
+                                                        updateField("phone", contact);
+                                                        setIsEditingContact(false);
+                                                    }}
+                                                >
+                                                    Save
+                                                </button>
+                                                <button onClick={() => setIsEditingContact(false)}>
+                                                    Cancel
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className='changeable'>{contact.phone}</span>
+                                                {isAdmin && (
+                                                    <button onClick={() => setIsEditingContact(true)}>
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
                                         <p className="hours">Mon - Fri: 9:00 AM - 6:00 PM</p>
                                     </div>
                                 </div>
@@ -211,7 +267,36 @@ const ContactUs = () => {
                                     </div>
                                     <div className="contact-text">
                                         <h3>Email Address</h3>
-                                        <p>info@vsmpantnagar.org</p>
+                                        {isEditingEmail ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    value={contact.email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                />
+                                                <button
+                                                    onClick={() => {
+                                                        updateField("email", email);
+                                                        setIsEditingEmail(false);
+                                                    }}
+                                                >
+                                                    Save
+                                                </button>
+                                                <button onClick={() => setIsEditingEmail(false)}>
+                                                    Cancel
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className='changeable'>{contact.email}</span>
+                                                {isAdmin && (
+                                                    <button onClick={() => setIsEditingEmail(true)}>
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
+                                        {/* <p>info@vsmpantnagar.org</p> */}
                                     </div>
                                 </div>
                             </div>
@@ -429,7 +514,7 @@ const ContactUs = () => {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div >
             {isAdmin && (
                 <form className="admin-contact-form" onSubmit={handleAdd} style={{ marginTop: 20, maxWidth: 400 }}>
                     <h3>Add FAQ</h3>
@@ -455,7 +540,8 @@ const ContactUs = () => {
                         </div>
                     )}
                 </form>
-            )}
+            )
+            }
             <Footer />
         </>
     );

@@ -36,6 +36,8 @@ const TestimonialFromGuest = require('./TestimonialFromGuest');
 const EventReview = require('./EventReview');
 const ImageSubsection = require('./ImagesSubsection');
 const Setting = require('./Setting');
+const Contact = require('./contact');
+
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -559,6 +561,45 @@ app.delete('/news/:id', adminAuth, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete news' });
+  }
+});
+
+
+// Get contact info
+app.get('/contact', async (req, res) => {
+  try {
+    let contact = await Contact.findOne();
+    if (!contact) {
+      // if no record, create default
+      contact = new Contact({
+        phone: '+91-7895309339',
+        email: 'vsmpantnagar@gmail.com'
+      });
+      await contact.save();
+    }
+    res.json(contact);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update contact info (admin only, PATCH for partial update)
+app.patch('/contact', async (req, res) => {
+  try {
+    const { phone, email } = req.body;
+    let contact = await Contact.findOne();
+
+    if (!contact) {
+      contact = new Contact({});
+    }
+
+    if (phone !== undefined) contact.phone = phone;
+    if (email !== undefined) contact.email = email;
+
+    await contact.save();
+    res.json(contact);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
