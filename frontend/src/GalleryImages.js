@@ -354,7 +354,7 @@ const GalleryImages = () => {
 
                         {/* Other Images Section (grouped by subsection) */}
                         {otherImages.map((entry) => (
-                            <div key={entry._id} style={{ marginBottom: 32 }}>
+                            <div key={entry._id} style={{ marginBottom: 48 }}>
                                 <div style={{ position: 'relative', color: 'grey', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>{entry.subsection}
                                     {isAdmin && (
                                         <button
