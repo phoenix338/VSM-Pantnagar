@@ -144,7 +144,7 @@ const Login = () => {
                     <FacebookIcon /> Sign in with Facebook
                 </button>
                 <div className="signup-link">
-                    Don't you have an account? <Link to="/signup">Sign up</Link>
+                    Don't you have an account? <Link to="/signup" className='signuplink'>Sign up</Link>
                 </div>
             </div>
             <div className="login-image-section">

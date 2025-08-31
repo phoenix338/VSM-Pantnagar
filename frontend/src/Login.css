@@ -173,6 +173,12 @@ body,
     font-size: 1rem;
 }
 
+.signuplink {
+    cursor: pointer;
+
+}
+
+
 .signup-link a {
     color: #C39C84;
     text-decoration: none;
