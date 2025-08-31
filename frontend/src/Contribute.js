@@ -15,7 +15,9 @@ const Contribute = () => {
         amount: '',
         event: ''
     });
+
     const [submitting, setSubmitting] = useState(false);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -63,7 +65,9 @@ const Contribute = () => {
             setSubmitting(false);
         }
     };
-
+    React.useEffect(() => {
+        document.title = "Contribute | VSM";
+    }, []);
     React.useEffect(() => {
         if (activeTab === 'donate') {
             const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';

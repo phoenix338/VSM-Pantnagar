@@ -20,7 +20,9 @@ const Books = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [bookPreviewModal, setBookPreviewModal] = useState({ show: false, book: null, genreId: null, currentPage: 1, totalPages: 1 });
-
+    useEffect(() => {
+        document.title = "Our Publications | VSM";
+    }, []);
     useEffect(() => {
         fetchGenres();
         fetchBooks();

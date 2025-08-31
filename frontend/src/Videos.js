@@ -15,7 +15,9 @@ const Videos = () => {
     const [formMsg, setFormMsg] = useState('');
     const [apiUrl, setApiUrl] = useState(RENDER_API_URL);
     const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
-
+    useEffect(() => {
+        document.title = "Flowing Moments | VSM";
+    }, []);
     useEffect(() => {
         fetchVideos();
         const unsubscribe = auth.onAuthStateChanged(setUser);

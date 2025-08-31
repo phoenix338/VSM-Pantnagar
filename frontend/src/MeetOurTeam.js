@@ -16,7 +16,9 @@ const MeetOurTeam = () => {
     const [editingId, setEditingId] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [formMsg, setFormMsg] = useState('');
-
+    useEffect(() => {
+        document.title = "Meet Our Team | VSM";
+    }, []);
     useEffect(() => {
         fetch(`${API_URL}/team`)
             .then(res => res.json())

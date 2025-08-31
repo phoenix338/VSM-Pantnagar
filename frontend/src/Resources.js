@@ -18,7 +18,9 @@ const Resources = () => {
     const [submitting, setSubmitting] = useState(false);
     const [formMsg, setFormMsg] = useState('');
     const [apiUrl, setApiUrl] = useState(RENDER_API_URL);
-
+    useEffect(() => {
+        document.title = "Resources | VSM";
+    }, []);
     useEffect(() => {
         fetchResources();
         const unsubscribe = auth.onAuthStateChanged(setUser);

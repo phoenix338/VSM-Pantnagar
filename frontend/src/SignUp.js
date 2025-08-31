@@ -4,7 +4,7 @@ import { GoogleIcon, FacebookIcon } from './Login';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from './firebase';
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut } from 'firebase/auth';
-
+import { useEffect } from 'react';
 const SignUp = () => {
     const [step, setStep] = useState(1);
     const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
@@ -17,7 +17,9 @@ const SignUp = () => {
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
-
+    useEffect(() => {
+        document.title = "Sign Up | VSM";
+    }, []);
     const handleContinue = (e) => {
         e.preventDefault();
         setFade('fade-out');

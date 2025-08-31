@@ -122,7 +122,9 @@ function Home() {
     const [currentStep, setCurrentStep] = useState(0); // 0: initial, 1: vision, 2: mission, 3: values
     const [audioPlayed, setAudioPlayed] = useState(false);
     const audioRef = useRef(null);
-
+    useEffect(() => {
+        document.title = "VSM";
+    }, []);
     // Handle location state for intro video
     useEffect(() => {
         if (location.state && location.state.skipIntro === false) {

@@ -57,7 +57,9 @@ const OurInitiative = () => {
     const [submitting, setSubmitting] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState({}); // Track current image for each event
     const [selectedInitiativeForUpload, setSelectedInitiativeForUpload] = useState(''); // For admin upload
-
+    useEffect(() => {
+        document.title = "Events Board | VSM";
+    }, []);
     useEffect(() => {
         fetch(`${API_URL}/initiatives`)
             .then(res => res.json())

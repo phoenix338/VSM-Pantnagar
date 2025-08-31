@@ -18,7 +18,9 @@ const GalleryImages = () => {
     const [apiUrl, setApiUrl] = useState(RENDER_API_URL);
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
     const fileInputRef = React.useRef();
-
+    useEffect(() => {
+        document.title = "Frozen Moments | VSM";
+    }, []);
     useEffect(() => {
         fetchGalleryImages();
         fetchOtherImages();

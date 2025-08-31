@@ -25,7 +25,9 @@ const UpcomingEvents = () => {
     const [submitting, setSubmitting] = useState(false);
     const location = useLocation();
     const previousEventsRef = useRef(null);
-
+    useEffect(() => {
+        document.title = "Upcoming and Previous Events | VSM";
+    }, []);
     useEffect(() => {
         fetchEvents();
         const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
@@ -33,6 +35,7 @@ const UpcomingEvents = () => {
     }, []);
 
     useEffect(() => {
+        
         // Scroll to previous events section if specified
         if (location.state?.scrollTo === 'previous') {
             setTimeout(() => {

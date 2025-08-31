@@ -29,7 +29,9 @@ const ContactUs = () => {
     const [contact, setContact] = useState({});
     const [isEditingEmail, setIsEditingEmail] = useState(false);
     const [isEditingContact, setIsEditingContact] = useState(false);
-
+    useEffect(() => {
+        document.title = "Contact Us | VSM";
+    }, []);
     // PATCH function
     const updateField = async (field, value) => {
         try {
