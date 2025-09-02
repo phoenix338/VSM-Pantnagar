@@ -116,7 +116,7 @@ const Footer = () => {
           <a href="https://www.linkedin.com/in/chandrama-mallick-74a7a3224/" target="_blank" rel="noopener noreferrer" className='footer-developers'>Chandrama Mallick</a>
           <span style={{ marginLeft: '5px' }}>and</span>
 
-          <a href="https://www.linkedin.com/in/parsh-jain/" target="_blank" rel="noopener noreferrer" className='footer-developers'>Priyanshu Pandey.</a>
+          <a href="https://www.linkedin.com/in/priyaanshuu/" target="_blank" rel="noopener noreferrer" className='footer-developers'>Priyanshu Pandey.</a>
 
 
 

@@ -39,7 +39,7 @@
     color: #DD783C;
     font-weight: 300;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .video-book-size {
@@ -57,7 +57,7 @@
     justify-content: center;
     align-items: center;
     background: #80807F;
-    height: 73vh;
+    height: 76vh;
 }
 
 /* .books-gif {
