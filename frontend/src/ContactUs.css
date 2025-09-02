@@ -13,7 +13,7 @@
     justify-content: center;
     align-items: center;
     /* background: #fdf6f1; */
-    background: #bcbcbc;
+    background: #D6D6D5;
     height: 80vh;
 }
 
@@ -35,11 +35,11 @@
 }
 
 .contact-heading-section h1 {
-    font-size: 4rem;
+    font-size: 100px;
     color: #dd783c;
     margin: 0;
     font-family: 'alex brush', cursive;
-    font-weight: 300;
+    font-weight: 500;
 
 }
 

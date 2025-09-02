@@ -41,19 +41,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fdf6f1;
-  height: 50vh;
+  background: #fdebe6;
+
+  height: 70vh;
   margin-top: -50px;
-  margin-bottom: 50px;
+
 }
 
 .videos-heading {
   font-size: 100px;
   font-family: 'Alex Brush', cursive;
   color: #DD783C;
-  margin-bottom: 80px;
+  /* margin-bottom: 80px; */
   font-weight: 500;
-  margin-top: 120px;
+  margin-top: 20px;
 }
 
 .resource-container {

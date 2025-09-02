@@ -317,10 +317,18 @@ const GalleryImages = () => {
                 ) : (
                     <>
                         <div className="gallery-gif-wrapper">
+                            <video
+                                src={require('./assets/contactus.mp4')}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                            />
                             {/* <img src={booksGif} alt="Books" className="books-gif" /> */}
-                            <h1 className="gallery-heading">Frozen Moments</h1>
 
                         </div>
+                        <h1 className="gallery-heading">Frozen Moments</h1>
+
                         <div style={{ color: 'grey', fontSize: '40px', marginBottom: 12, fontFamily: 'alex brush', textAlign: 'center', paddingTop: '50px', paddingBottom: '30px' }}>Dignitaries Who Graced VSM</div>
                         <div className="gallery-grid">
                             {galleryImages.map((item, index) => (

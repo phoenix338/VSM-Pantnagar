@@ -188,7 +188,7 @@ const ContactUs = () => {
             <div className="contact-page">
                 <div className="contact-gif-wrapper">
                     <video
-                        src={require('./assets/contactus.mp4')}
+                        src={require('./assets/new-contactus.mp4')}
                         autoPlay
                         loop
                         muted

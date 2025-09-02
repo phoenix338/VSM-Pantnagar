@@ -158,11 +158,20 @@ const Resources = () => {
             <Navbar resources={resources} />
             <div className="videos-page">
                 <div className="resources-gif-wrapper">
+                    <video
+                        src={require('./assets/publication.mp4')}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="video-book-size"
+                    />
                     {/* <img src={booksGif} alt="Books" className="books-gif" /> */}
-                    <h1 className="videos-heading">Resources</h1>
 
                 </div>
                 <div className="resource-section">
+                    <h1 className="videos-heading">Resources</h1>
+
                     <h2 id="videos" style={{ scrollMarginTop: 120 }}>Talks by Dignitaries</h2>
                     <div className="videos-grid">
                         {resources.talksByDignitaries?.map((resource, idx) => (

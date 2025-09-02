@@ -240,7 +240,7 @@ const Books = () => {
             <div className="books-page main-content-gap">
                 <div className="books-gif-wrapper">
                     <video
-                        src={require('./assets/publication.mp4')}
+                        src={require('./assets/new-books.mp4')}
                         autoPlay
                         loop
                         muted
