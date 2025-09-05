@@ -211,7 +211,7 @@ const MeetOurTeam = () => {
                         <h2>Add Team Member</h2>
                         <form className="team-member-form" onSubmit={handleSubmit}>
                             <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
-                            <input name="designation" placeholder="Designation" value={form.designation} onChange={handleChange} required />
+                            <input name="designation" placeholder="Occupation/Position" value={form.designation} onChange={handleChange} required />
                             <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} />
                             <input name="contactNumber" type="tel" placeholder="Contact Number" value={form.contactNumber} onChange={handleChange} />
                             <input name="image" type="file" accept="image/*" onChange={handleChange} required />
@@ -225,7 +225,7 @@ const MeetOurTeam = () => {
                         <h2>Add Patron Member</h2>
                         <form className="team-member-form" onSubmit={handleSubmitPatron}>
                             <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
-                            <input name="designation" placeholder="Designation" value={form.designation} onChange={handleChange} required />
+                            <input name="designation" placeholder="Occupation/Position" value={form.designation} onChange={handleChange} required />
                             <input name="link" type="text" placeholder="link" value={form.link} onChange={handleChange} />
                             <input name="image" type="file" accept="image/*" onChange={handleChange} required />
                             <button type="submit" disabled={submitting}>{submitting ? 'Adding...' : 'Add Member'}</button>
