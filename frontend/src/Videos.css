@@ -310,18 +310,20 @@
     justify-content: center;
     align-items: center;
     background: #C8C8C6;
-    height: 89vh;
+    height: 93vh;
     margin-top: -220px;
-    margin-bottom: 50px;
+    margin-bottom: 0px;
 }
 
-.videos-heading {
+.videos-heading1 {
     font-size: 6rem;
     font-family: 'Alex Brush', cursive;
     color: #DD783C;
     margin-bottom: 80px;
     font-weight: 300;
-    /* margin-top: 0px; */
+    margin-top: 20px;
+    justify-content: center;
+    text-align: center;
 }
 
 .videos-video-details h3 {

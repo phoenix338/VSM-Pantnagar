@@ -158,7 +158,7 @@ const MeetOurTeam = () => {
                 />
             </div>
             <div className="meet-our-team-content">
-                <h1 className="meet-our-team-title">Our Team: Lantern bearers</h1>
+                <h1 className="meet-our-team-title">Our Team: Lantern Bearers</h1>
                 <div className="meet-our-team-grid">
                     {members.map((mem, idx) => (
                         <div className="team-member-card" key={mem._id || idx}>

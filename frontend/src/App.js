@@ -19,7 +19,8 @@ import PreviousEvents from './PreviousEvents';
 import Resources from './Resources';
 import Contribute from './Contribute';
 import './App.css';
-import { Analytics } from "@vercel/analytics/react"
+// import { Analytics } from "@vercel/analytics/react"
+import { useEffect } from 'react';
 function App() {
   return (
     <Router>
@@ -44,9 +45,10 @@ function App() {
         <Route path="/events/previous" element={<PreviousEvents />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/contribute" element={<Contribute />} />
-
       </Routes>
+      {/* <Analytics /> */}
     </Router>
+
   );
 }
 

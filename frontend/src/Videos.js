@@ -151,7 +151,7 @@ const Videos = () => {
                                 Back
                             </button>
 
-                            <h1 className="videos-heading">Flowing Moments</h1>
+                            <h1 className="videos-heading1">Flowing Moments</h1>
 
                             <div className="videos-header-nav">
                                 <button
@@ -221,7 +221,7 @@ const Videos = () => {
                             {/* <img src={booksGif} alt="Books" className="books-gif" /> */}
 
                         </div>
-                        <h1 className="videos-heading">Flowing Moments</h1>
+                        <h1 className="videos-heading1">Flowing Moments</h1>
 
                         <div className="videos-grid">
                             {videos.map((video, index) => (
