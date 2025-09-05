@@ -19,7 +19,7 @@ import PreviousEvents from './PreviousEvents';
 import Resources from './Resources';
 import Contribute from './Contribute';
 import './App.css';
-
+import { Analytics } from "@vercel/analytics/react"
 function App() {
   return (
     <Router>
