@@ -257,7 +257,6 @@ app.post('/other-images', adminAuth, upload.array('images', 10), async (req, res
 });
 
 // PATCH endpoint to append images to an existing subsection
-// PATCH endpoint to append images or create subsection if not exists
 app.patch('/other-images/append', adminAuth, upload.array('images', 10), async (req, res) => {
   try {
     const { subsection } = req.body;
@@ -275,11 +274,9 @@ app.patch('/other-images/append', adminAuth, upload.array('images', 10), async (
     let entry = await OtherImages.findOne({ subsection });
 
     if (entry) {
-      // ✅ Subsection found → append images
       entry.urls = [...entry.urls, ...newUrls];
       await entry.save();
     } else {
-      // ❌ Subsection not found → create new
       entry = new OtherImages({
         subsection,
         urls: newUrls
@@ -324,7 +321,6 @@ app.patch('/other-images/delete', adminAuth, async (req, res) => {
 
 
 // Delete an other images entry by id (admin only)
-// DELETE endpoint to remove an entire subsection
 app.delete('/other-images/:id', adminAuth, async (req, res) => {
   try {
     const { id } = req.params;
@@ -914,22 +910,21 @@ const ebookPdfUpload = require('./ebookPdfUpload');
 app.use('/upload-ebook-pdf', ebookPdfUpload);
 
 // PDF upload endpoint for eNewsletters (reuse logic, different folder)
-// ===== eNewsletters PDF Upload (as "image" so Cloudinary treats like an image) =====
 const enewsletterPdfUpload = express.Router();
 
 const enewsletterStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'enewsletters',
-    resource_type: 'image',            // Treat PDF as image
+    resource_type: 'image',           
     use_filename: true,
     unique_filename: false,
     format: 'pdf',
     allowed_formats: ['pdf'],
     public_id: (req, file) => {
       return file.originalname
-        .replace(/\.[^/.]+$/, "")       // remove extension
-        .replace(/[^a-zA-Z0-9_-]/g, "_"); // safe chars only
+        .replace(/\.[^/.]+$/, "")       
+        .replace(/[^a-zA-Z0-9_-]/g, "_"); 
     }
   },
 });
@@ -945,18 +940,12 @@ enewsletterPdfUpload.post('/', enewsletterUpload.single('pdf'), async (req, res)
     const originalName = req.file.originalname.replace(/\.[^/.]+$/, "");
     const safeDownloadName = originalName.replace(/[^a-zA-Z0-9_-]/g, "_");
 
-    // Construct Cloudinary "image" PDF download URL
     const downloadUrl = req.file.path.replace(
       "/upload/",
       `/upload/fl_attachment:`
     );
 
-    // Save to DB
-    // const newNewsletter = new ENewsletter({
-    //   title: originalName,
-    //   pdfUrl: downloadUrl
-    // });
-    // await newNewsletter.save();
+
 
     res.status(201).json({
       title: originalName,
@@ -1119,9 +1108,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Contact form endpoint
-// Guest testimonial submission endpoint
-// Get all guest testimonials
+
 app.get('/guest-testimonials', async (req, res) => {
   try {
     const testimonials = await TestimonialFromGuest.find().sort({ createdAt: -1 });
@@ -1189,8 +1176,6 @@ app.get('/event-reviews', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-// Get approved event reviews (signed-in users)
-// Get ALL reviews for a specific event (no restrictions)
 app.get('/event-reviews/:eventId', async (req, res) => {
   try {
     const { eventId } = req.params;

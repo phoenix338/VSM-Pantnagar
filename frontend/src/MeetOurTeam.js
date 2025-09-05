@@ -184,7 +184,7 @@ const MeetOurTeam = () => {
                 <h1 className="meet-our-team-title">Our Patrons</h1>
                 <div className="meet-our-team-grid">
                     {patronmembers.map((mem, idx) => (
-                        <div className="team-member-card" key={mem._id || idx}>
+                        <div className="team-member-card1" key={mem._id || idx}>
                             <img src={mem.imageUrl} alt={mem.name} className="team-member-img" />
                             <div className="team-member-name">{mem.name}</div>
                             <div className="team-member-designation">{mem.designation}</div>

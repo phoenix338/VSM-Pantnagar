@@ -6,7 +6,7 @@ const OtherImagesSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    urls: [{ type: String, required: true }], // Array of image URLs
+    urls: [{ type: String, required: true }], 
 }, { timestamps: true });
 
 module.exports = mongoose.model('OtherImages', OtherImagesSchema);
