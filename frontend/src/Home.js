@@ -164,6 +164,11 @@ function Home() {
         };
     }, [audioPlayed, showLandingVideo]);
 
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3002'}/visit-counter/increment`, {
+            method: 'POST'
+        });
+    }, []);
     // Fetch upcoming events for hero image
     useEffect(() => {
         const fetchUpcomingEvents = async () => {

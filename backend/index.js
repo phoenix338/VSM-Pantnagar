@@ -37,6 +37,7 @@ const EventReview = require('./EventReview');
 const ImageSubsection = require('./ImagesSubsection');
 const Setting = require('./Setting');
 const Contact = require('./contact');
+const VisitCounter = require('./VisitCounter');
 
 
 cloudinary.config({
@@ -172,7 +173,6 @@ app.patch('/:id/images', adminAuth, upload.array('images'), async (req, res) => 
     res.status(500).json({ error: err.message });
   }
 });
-
 
 // PATCH /initiatives/:id/images/delete
 app.patch('/:id/images/delete', adminAuth, async (req, res) => {
@@ -340,6 +340,31 @@ app.delete('/other-images/:id', adminAuth, async (req, res) => {
   }
 });
 
+// Increment visit counter on site load
+app.post('/visit-counter/increment', async (req, res) => {
+  try {
+    let counter = await VisitCounter.findOne();
+    if (!counter) {
+      counter = new VisitCounter({ count: 1 });
+    } else {
+      counter.count += 1;
+    }
+    await counter.save();
+    res.json({ count: counter.count });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to increment visit counter' });
+  }
+});
+
+// Get current visit count
+app.get('/visit-counter', async (req, res) => {
+  try {
+    const counter = await VisitCounter.findOne();
+    res.json({ count: counter ? counter.count : 0 });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch visit counter' });
+  }
+});
 
 // Get impact values
 app.get('/impact', async (req, res) => {
@@ -916,15 +941,15 @@ const enewsletterStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'enewsletters',
-    resource_type: 'image',           
+    resource_type: 'image',
     use_filename: true,
     unique_filename: false,
     format: 'pdf',
     allowed_formats: ['pdf'],
     public_id: (req, file) => {
       return file.originalname
-        .replace(/\.[^/.]+$/, "")       
-        .replace(/[^a-zA-Z0-9_-]/g, "_"); 
+        .replace(/\.[^/.]+$/, "")
+        .replace(/[^a-zA-Z0-9_-]/g, "_");
     }
   },
 });
