@@ -101,6 +101,7 @@
     position: relative;
     transition: box-shadow 0.2s, border 0.2s;
     justify-self: center;
+    margin-bottom: 130px;
 }
 
 .team-member-card1 {
