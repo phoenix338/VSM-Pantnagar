@@ -13,7 +13,11 @@ const OurImpact = () => {
         <div className="our-impact-root">
             <Navbar />
             <section className="our-impact-hero">
-                <video src={require('./assets/new-ourimpact.mp4')} autoPlay loop muted playsInline />
+                <video
+                    src={require('./assets/new-ourimpact.mp4')}
+                    autoPlay loop muted playsInline
+                    style={{ width: '100%', height: '100%' }}
+                />
             </section> <div className="about-container">
                 <h2>About Us</h2>
                 <p className='about-heading'> Vivekanand Swadhyay Mandal (VSM): A Mission of Youth Empowerment and Nation Building </p>

@@ -14,7 +14,7 @@
     align-items: center;
     /* background: #fdf6f1; */
     background: #D6D6D5;
-    height: 80vh;
+    height: 78vh;
 }
 
 .contact-gif {
@@ -35,11 +35,12 @@
 }
 
 .contact-heading-section h1 {
-    font-size: 100px;
+    font-size: 6rem;
     color: #dd783c;
     margin: 0;
     font-family: 'alex brush', cursive;
-    font-weight: 500;
+    font-weight: 300;
+    margin-bottom: 60px;
 
 }
 

@@ -6,12 +6,12 @@
 
 .our-impact-hero {
     width: 100vw;
-    min-height: 80vh;
+    height: 80vh;
     background: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 64px 0 48px 0;
+    /* padding: 64px 0 48px 0; */
 }
 
 .our-impact-gif {
@@ -80,18 +80,20 @@
 .about-container {
     max-width: 1250px;
     margin: 0 auto;
-    padding: 20px;
+    /* padding: 20px; */
     font-family: 'open sans', sans-serif;
     line-height: 1.6;
 }
 
 .about-container h2 {
-    font-size: 64px;
+    font-size: 6rem;
     color: #e68346;
-    font-weight: 500;
+    font-weight: 300;
     font-family: 'alex brush', cursive;
     text-align: center;
     margin-bottom: 20px;
+    padding: 0;
+    margin-top: 0px;
 }
 
 

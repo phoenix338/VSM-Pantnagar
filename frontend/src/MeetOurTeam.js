@@ -165,7 +165,7 @@ const MeetOurTeam = () => {
                             <img src={mem.imageUrl} alt={mem.name} className="team-member-img" />
                             <div className="team-member-name">{mem.name}</div>
                             <div className="team-member-designation">{mem.designation}</div>
-                            {mem.email && (
+                            {/* {mem.email && (
                                 <div className="team-member-email">
                                     Email: <a href={`mailto:${mem.email}`}>{mem.email}</a>
                                 </div>
@@ -174,7 +174,7 @@ const MeetOurTeam = () => {
                                 <div className="team-member-contact">
                                     Contact: <a href={`tel:${mem.contactNumber}`}>{mem.contactNumber}</a>
                                 </div>
-                            )}
+                            )} */}
                             {isAdmin && (
                                 <button className="team-member-delete-btn" onClick={() => handleDelete(mem._id)}>Delete</button>
                             )}

@@ -89,6 +89,7 @@ const Contribute = () => {
                         loop
                         muted
                         playsInline
+                        style={{ width: '90%', height: '90%'}}
                     />
                 </div>
                 <div className="contribute-heading-section">

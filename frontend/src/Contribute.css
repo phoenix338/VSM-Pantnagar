@@ -131,7 +131,8 @@
 
 .contribute-hero-section {
     width: 100vw;
-    min-height: 40vh;
+    /* min-height: 40vh; */
+    height: 78vh;
     background: #fdf6f1;
     display: flex;
     align-items: center;
@@ -158,18 +159,21 @@
 
 .contribute-heading {
     font-family: 'Alex Brush', cursive;
-    font-size: 64px;
+    font-size: 6rem;
     color: #DD783C;
     text-align: center;
-    font-weight: 500;
+    font-weight: 300;
     margin: 0;
     letter-spacing: 2px;
+    margin-bottom: 60px;
 }
-.volunteer-cap{
+
+.volunteer-cap {
     text-decoration: none;
     color: black;
 
 }
-.volunteer-cap:hover{
-    color:#DD783C;
+
+.volunteer-cap:hover {
+    color: #DD783C;
 }

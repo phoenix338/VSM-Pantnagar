@@ -47,7 +47,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1;
+  height: 70vh;
 }
 
 .initiative-gif {
@@ -80,7 +80,7 @@
 .our-initiative-heading {
   font-family: 'alex brush', cursive;
   font-size: 6rem;
-  font-weight: 500;
+  font-weight: 300;
   color: black;
   text-align: center;
   margin: 32px 0 80px 0;

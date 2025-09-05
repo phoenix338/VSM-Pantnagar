@@ -289,10 +289,12 @@ const OurInitiative = () => {
                         loop
                         muted
                         playsInline
+                        style={{ width: '100%', height: '100%' }}
                     />
                 </div>
-                <h1 className="our-initiative-heading">Our Events</h1>
                 <div className="initiatives-list">
+                    <h1 className="our-initiative-heading">Our Events</h1>
+
                     {loading && <div>Loading events...</div>}
                     {error && <div style={{ color: 'red' }}>{error}</div>}
                     {initiatives.map((item, idx) => (

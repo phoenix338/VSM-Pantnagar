@@ -30,11 +30,11 @@
 
 .meet-our-team-title {
     font-family: 'Alex Brush', cursive;
-    font-size: 64px;
+    font-size: 6rem;
     color: #DD783C;
     text-align: center;
-    font-weight: 500;
-    letter-spacing: 2px;
+    font-weight: 300;
+    margin-top: 40px;
 }
 
 .team-founder-card {
@@ -92,7 +92,7 @@
     box-shadow: 0 2px 12px #0001;
     border: 1.5px solid #eceae7;
     width: 260px;
-    height: 350px;
+    height: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
